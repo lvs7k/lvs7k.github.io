@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.49" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+
+    <link rel="stylesheet" href='https://lvs7k.github.io/css/all.min.css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="lvs7k&#39;s blog" href='https://lvs7k.github.io/index.xml' />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://lvs7k.github.io/">lvs7k&#39;s blog</a></h1>
+            <h2 class="brand-tagline"> Just a Memo </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/lvs7k">
+                        <i class="fa fa-twitter"></i> Twitter
+                    </a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/lvs7k">
+                        <i class="fa fa-github-alt"></i> Github
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/index.xml'>
+                        <i class="fa fa-rss"></i> rss
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/menu/about'>
+                        <i class="fa fa-user"></i> about
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/categories'>
+                        <i class="fa fa-folder"></i> categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/tags'>
+                        <i class="fa fa-tag"></i> tags
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">12 Nov 2018, 21:47</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/" class="post-title">Haskellで動的計画法（準備編）</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-description">
+                        
+
+<h2 id="知りたいこと">知りたいこと</h2>
+
+<ul>
+<li>Haskellで動的計画法を書く時にどういう書き方をすればいいのか</li>
+</ul>
+
+<h2 id="試してみたこと">試してみたこと</h2>
+
+<ul>
+<li><code>f(n) = f(n - 1) + 1</code></li>
+<li>初項1、公差1の等差数列の和を<code>n = 10 ^ 6</code>と<code>n = 10 ^ 7</code>で計算</li>
+<li>PowerShellの<code>Measure-Command</code>で時間を計測</li>
+<li>時間計測時に<code>stack run</code>や<code>stack exec</code>を使うと200ms~400ms余計に時間がかかった</li>
+</ul>
+
+<h2 id="結論">結論</h2>
+
+<ul>
+<li><code>f1</code>でTLEにならないなら<code>f1</code></li>
+<li>ボトムアップに配列埋める場合は<code>f2</code></li>
+<li><code>f1</code>では間に合わないがメモ化再帰したい場合は<code>f3</code></li>
+<li>間違ったこと言ってたらごめんなさい</li>
+</ul>
+
+<h2 id="コード">コード</h2>
+
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns #-}
+
+import Control.Monad
+import Control.Monad.ST
+import Data.List
+import Data.Array
+import Data.Array.ST
+import qualified Data.IntMap.Strict as IMS
+import Control.Monad.Trans.Class
+import Control.Monad.Trans.Cont
+
+-- f(n) = f(n - 1) + 1
+-- stack build
+-- Measure-Command { ./stack-work/~.exe | Out-Default } | Select-Object TotalMilliseconds
+
+-- n = 10 ^ 6 :  477 ms
+-- n = 10 ^ 7 : 4308 ms
+f1 :: Int -&gt; Int
+f1 n = go n
+  where
+    memo = listArray (1, n) (fmap go [1 .. n])
+    go 1 = 1
+    go k = memo ! (k - 1) + 1
+</code></pre>
+
+<ul>
+<li>メモ化再帰 (<code>Array</code>)</li>
+<li>これ以下の速度のものは使う必要がない</li>
+</ul>
+
+<pre><code class="language-haskell">-- n = 10 ^ 6 :  14 ms
+-- n = 10 ^ 7 :  97 ms
+f2 :: Int -&gt; Int
+f2 n = runST $ do
+    a &lt;- newArray (1, n) 1 :: ST s (STUArray s Int Int)
+    forM_ [2 .. n] $ \i -&gt; do
+        b &lt;- readArray a (i - 1)
+        writeArray a i (b + 1)
+    readArray a n
+</code></pre>
+
+<ul>
+<li>動的計画法 (<code>UArray</code>)</li>
+<li>最速</li>
+</ul>
+
+<pre><code class="language-haskell">-- n = 10 ^ 6 :  159 ms
+-- n = 10 ^ 7 : 1850 ms
+f3 :: Int -&gt; Int
+f3 n = runST $ do
+    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
+    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
+    writeArray m 1 True
+    go a m n
+  where
+    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
+    go a m i = do
+        evaluated &lt;- readArray m i
+        if evaluated
+            then readArray a i
+            else do
+                b &lt;- go a m (i - 1)
+                writeArray a i (b + 1)
+                writeArray m i True
+                return (b + 1)
+</code></pre>
+
+<ul>
+<li>メモ化再帰 (<code>UArray</code>)</li>
+<li>関数呼び出しのオーバーヘッドなのか大分遅くなる</li>
+</ul>
+
+<pre><code class="language-haskell">-- n = 10 ^ 6 :  192 ms
+-- n = 10 ^ 7 : 1654 ms
+f4 :: Int -&gt; Int
+f4 n = runST $ do
+    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
+    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
+    writeArray m 1 True
+    go a m n
+  where
+    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
+    go a m i = evalContT . callCC $ \cc -&gt; do
+        evaluated &lt;- lift $ readArray m i
+        when evaluated $ do
+            b &lt;- lift $ readArray a i
+            cc b
+        c &lt;- lift $ go a m (i - 1)
+        lift $ writeArray a i (c + 1)
+        lift $ writeArray m i True
+        return (c + 1)
+</code></pre>
+
+<ul>
+<li>速さとは関係ないがインデントが深くなるのが嫌なら<code>Cont</code>モナドを使う</li>
+</ul>
+
+<pre><code class="language-haskell">-- n = 10 ^ 6 :  404 ms
+-- n = 10 ^ 7 : 4369 ms
+f5 :: Int -&gt; Int
+f5 n = runST $ do
+    a &lt;- newArray (1, n) Nothing :: ST s (STArray s Int (Maybe Int))
+    writeArray a 1 (Just 1)
+    go a n
+    Just i &lt;- readArray a n
+    return i
+  where
+    go :: STArray s Int (Maybe Int) -&gt; Int -&gt; ST s Int
+    go a i = do
+        mi &lt;- readArray a i
+        case mi of
+            Just b  -&gt; return b
+            Nothing -&gt; do
+                c &lt;- go a (i - 1)
+                writeArray a i (Just (c + 1))
+                return (c + 1)
+</code></pre>
+
+<ul>
+<li>メモ化再帰 (<code>Array</code>)</li>
+<li>計算済みかどうかを<code>Array</code>に<code>Maybe Int</code>を入れて判断した場合</li>
+</ul>
+
+<pre><code class="language-haskell">-- n = 10 ^ 6 :  459 ms
+-- n = 10 ^ 7 : 3615 ms
+f6 :: Int -&gt; Int
+f6 n = (foldl' f im [2 .. n]) IMS.! n
+  where
+    im = IMS.singleton 1 1 :: IMS.IntMap Int
+    f m i = let b = m IMS.! (i - 1)
+            in IMS.insert i (b + 1) m
+</code></pre>
+
+<ul>
+<li>動的計画法 (<code>IntMap.Strict</code>)</li>
+<li><code>Lazy</code>はこれより大分遅かったので省略</li>
+</ul>
+
+<pre><code class="language-haskell">-- n = 10 ^ 6 :  516 ms
+-- n = 10 ^ 7 : 4380 ms
+f7 :: Int -&gt; Int
+f7 n = (go im n) IMS.! n
+  where
+    im = IMS.singleton 1 1 :: IMS.IntMap Int
+    go !m i
+        | Just _ &lt;- IMS.lookup i m = m
+        | otherwise                = IMS.insert i (b + 1) m'
+      where
+        m' = go m (i - 1)
+        b  = m' IMS.! (i - 1)
+</code></pre>
+
+<ul>
+<li>メモ化再帰 (<code>IntMap.Strict</code>)</li>
+<li><code>Lazy</code>はこれより大分遅かったので省略</li>
+</ul>
+
+                    </div>
+                    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "lvs7k" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src='https://lvs7k.github.io/js/all.min.js'></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

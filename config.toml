@@ -1,0 +1,14 @@
+baseURL = "https://lvs7k.github.io/"
+languageCode = "ja-jp"
+title = "lvs7k's blog"
+theme = "purehugo"
+Paginate = 10
+disqusShortname = "lvs7k"
+publishDir = "docs"
+
+[params]
+  author = "lvs7k"
+  twitterName = "lvs7k"
+  githubName = "lvs7k"
+  description = "Just a Memo"
+  hideShareOptions = true

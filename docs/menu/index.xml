@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Menus on lvs7k&#39;s blog</title>
+    <link>https://lvs7k.github.io/menu/</link>
+    <description>Recent content in Menus on lvs7k&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-jp</language>
+    <lastBuildDate>Sat, 10 Nov 2018 17:00:00 +0900</lastBuildDate>
+    
+	<atom:link href="https://lvs7k.github.io/menu/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>https://lvs7k.github.io/menu/about/</link>
+      <pubDate>Sat, 10 Nov 2018 17:00:00 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/menu/about/</guid>
+      <description>  Twitter GitHub AtCoder  趣味  アニメ 聖地巡礼 自転車 競技プログラミング Haskell Crypt of the NecroDancer  </description>
+    </item>
+    
+  </channel>
+</rss>
