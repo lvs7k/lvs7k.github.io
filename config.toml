@@ -12,3 +12,4 @@ publishDir = "docs"
   githubName = "lvs7k"
   description = "Just a Memo"
   hideShareOptions = true
+  google_analytics = "UA-129286122-1"
