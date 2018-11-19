@@ -6,10 +6,40 @@
     <description>Recent content in Posts on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Mon, 12 Nov 2018 21:47:14 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 19 Nov 2018 22:09:54 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Haskellで蟻本（初級編） - 動的計画法</title>
+      <link>https://lvs7k.github.io/posts/2018/pccb-easy-3/</link>
+      <pubDate>Mon, 19 Nov 2018 22:09:54 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-3/</guid>
+      <description>※蟻本の入力例でしかテストしていません
+{-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Data.List import qualified Data.ByteString.Char8 as B import Control.Monad.ST import Data.Array.ST import Data.Array import qualified Data.Map.Strict as M -- 01 ナップサック問題 q1 :: Int -&amp;gt; Int -&amp;gt; [(Int, Int)] -&amp;gt; Int q1 n m wvs = go n m where wva = listArray (1, n) wvs memo = listArray ((0, 0), (n, m)) [go i j | i &amp;lt;- [0 .. n], j &amp;lt;- [0 .</description>
+    </item>
+    
+    <item>
+      <title>Haskellで蟻本（初級編） - 貪欲法</title>
+      <link>https://lvs7k.github.io/posts/2018/pccb-easy-2/</link>
+      <pubDate>Sun, 18 Nov 2018 12:39:46 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-2/</guid>
+      <description>※蟻本の入力例でしかテストしていません
+{-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Data.List import Control.Monad.ST import Data.Array.ST import Data.STRef import Data.Array (Array) import Data.Array.Unboxed (UArray) import Data.Array.IArray import qualified Data.Set as S -- 硬貨の問題 q1 :: Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int q1 n c1 c5 c10 c50 c100 c500 = go 0 n cs where cs = zip [500, 100, 50, 10, 5, 1] [c500, c100, c50, c10, c5, c1] go !</description>
+    </item>
+    
+    <item>
+      <title>Haskellで蟻本（初級編） - 全探索</title>
+      <link>https://lvs7k.github.io/posts/2018/pccb-easy-1/</link>
+      <pubDate>Sat, 17 Nov 2018 20:40:14 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-1/</guid>
+      <description>※蟻本の入力例でしかテストしていません
+{-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Control.Monad.ST import Data.Array.ST import Data.Array.Unboxed (UArray) import Data.Array.IArray import Data.STRef import qualified Data.Set as S -- 部分和問題 q1 :: Int -&amp;gt; Int -&amp;gt; [Int] -&amp;gt; Bool q1 n k as = go 0 as where go !i [] | i == k = True | otherwise = False go !i (b:bs) = go (i + b) bs || go i bs q1&#39; :: Int -&amp;gt; Int -&amp;gt; [Int] -&amp;gt; Bool q1&#39; n k as = go k as where go !</description>
+    </item>
     
     <item>
       <title>Haskellで動的計画法（準備編）</title>
@@ -17,7 +47,7 @@
       <pubDate>Mon, 12 Nov 2018 21:47:14 +0900</pubDate>
       
       <guid>https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/</guid>
-      <description>知りたいこと  Haskellで動的計画法を書く時にどういう書き方をすればいいのか  試してみたこと  f(n) = f(n - 1) + 1 初項1、公差1の等差数列の和をn = 10 ^ 6とn = 10 ^ 7で計算 PowerShellのMeasure-Commandで時間を計測 時間計測時にstack runやstack execを使うと200ms~400ms余計に時間がかかった  結論  f1でTLEにならないならf1 ボトムアップに配列埋める場合はf2 f1では間に合わないがメモ化再帰したい場合はf3 間違ったこと言ってたらごめんなさい  コード {-# LANGUAGE BangPatterns #-} import Control.Monad import Control.Monad.ST import Data.List import Data.Array import Data.Array.ST import qualified Data.IntMap.Strict as IMS import Control.Monad.Trans.Class import Control.Monad.Trans.Cont -- f(n) = f(n - 1) + 1 -- stack build -- Measure-Command { .</description>
+      <description>知りたいこと  Haskellで動的計画法を書く時にどういう書き方をすればいいのか  試してみたこと  f(n) = f(n - 1) + 1 初項1、公差1の等差数列の和をn = 10 ^ 6とn = 10 ^ 7で計算 PowerShellのMeasure-Commandで時間を計測 時間計測時にstack runやstack execを使うと200ms~400ms余計に時間がかかった  結論  f1でTLEにならないならf1 ボトムアップに配列埋める場合はf2 f1では間に合わないがメモ化再帰したい場合はf3 間違ったこと言ってたらごめんなさい  {-# LANGUAGE BangPatterns #-} import Control.Monad import Control.Monad.ST import Data.List import Data.Array import Data.Array.ST import qualified Data.IntMap.Strict as IMS import Control.Monad.Trans.Class import Control.Monad.Trans.Cont -- f(n) = f(n - 1) + 1 -- stack build -- Measure-Command { .</description>
     </item>
     
     <item>

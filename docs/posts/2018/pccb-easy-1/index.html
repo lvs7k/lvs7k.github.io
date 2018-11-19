@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog</title>
+    <title>Haskellで蟻本（初級編） - 全探索 &middot; lvs7k&#39;s blog</title>
 
     <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.49" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog">
+    <meta name="twitter:title" content="Haskellで蟻本（初級編） - 全探索 &middot; lvs7k&#39;s blog">
     <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog">
+    <meta property="og:title" content="Haskellで蟻本（初級編） - 全探索 &middot; lvs7k&#39;s blog">
     <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -83,11 +83,11 @@
         <div>
             
             <div class="posts">
-                <h1 class="content-subhead">12 Nov 2018, 21:47</h1>
+                <h1 class="content-subhead">17 Nov 2018, 20:40</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/" class="post-title">Haskellで動的計画法（準備編）</a>
+                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-1/" class="post-title">Haskellで蟻本（初級編） - 全探索</a>
 
                         <p class="post-meta">
                             
@@ -109,187 +109,123 @@
                     </header>
                     
                     <div class="post-description">
-                        
+                        <p>※蟻本の入力例でしかテストしていません</p>
 
-<h2 id="知りたいこと">知りたいこと</h2>
-
-<ul>
-<li>Haskellで動的計画法を書く時にどういう書き方をすればいいのか</li>
-</ul>
-
-<h2 id="試してみたこと">試してみたこと</h2>
-
-<ul>
-<li><code>f(n) = f(n - 1) + 1</code></li>
-<li>初項1、公差1の等差数列の和を<code>n = 10 ^ 6</code>と<code>n = 10 ^ 7</code>で計算</li>
-<li>PowerShellの<code>Measure-Command</code>で時間を計測</li>
-<li>時間計測時に<code>stack run</code>や<code>stack exec</code>を使うと200ms~400ms余計に時間がかかった</li>
-</ul>
-
-<h2 id="結論">結論</h2>
-
-<ul>
-<li><code>f1</code>でTLEにならないなら<code>f1</code></li>
-<li>ボトムアップに配列埋める場合は<code>f2</code></li>
-<li><code>f1</code>では間に合わないがメモ化再帰したい場合は<code>f3</code></li>
-<li>間違ったこと言ってたらごめんなさい</li>
-</ul>
-
-<pre><code class="language-haskell">{-# LANGUAGE BangPatterns #-}
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
 
 import Control.Monad
 import Control.Monad.ST
-import Data.List
-import Data.Array
 import Data.Array.ST
-import qualified Data.IntMap.Strict as IMS
-import Control.Monad.Trans.Class
-import Control.Monad.Trans.Cont
+import Data.Array.Unboxed (UArray)
+import Data.Array.IArray
+import Data.STRef
+import qualified Data.Set as S
 
--- f(n) = f(n - 1) + 1
--- stack build
--- Measure-Command { ./stack-work/~.exe | Out-Default } | Select-Object TotalMilliseconds
-
--- n = 10 ^ 6 :  477 ms
--- n = 10 ^ 7 : 4308 ms
-f1 :: Int -&gt; Int
-f1 n = go n
+-- 部分和問題
+q1 :: Int -&gt; Int -&gt; [Int] -&gt; Bool
+q1 n k as = go 0 as
   where
-    memo = listArray (1, n) (fmap go [1 .. n])
-    go 1 = 1
-    go k = memo ! (k - 1) + 1
+    go !i []
+        | i == k    = True
+        | otherwise = False
+    go !i (b:bs) = go (i + b) bs || go i bs
+
+q1' :: Int -&gt; Int -&gt; [Int] -&gt; Bool
+q1' n k as = go k as
+  where
+    go !i []
+        | i == 0    = True
+        | otherwise = False
+    go !i (b:bs) = go (i - b) bs || go i bs
+
+q1'' :: Int -&gt; Int -&gt; [Int] -&gt; Bool
+q1'' n k as = any (== k) $ do
+    bs &lt;- sequence (replicate n [True, False])
+    let cs = [a | (a, True) &lt;- zip as bs]
+    return (sum cs)
 </code></pre>
 
 <ul>
-<li>メモ化再帰 (<code>Array</code>)</li>
-<li>これ以下の速度のものは使う必要がない</li>
+<li><code>q1''</code>はビットを使った状態の列挙</li>
 </ul>
 
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  14 ms
--- n = 10 ^ 7 :  97 ms
-f2 :: Int -&gt; Int
-f2 n = runST $ do
-    a &lt;- newArray (1, n) 1 :: ST s (STUArray s Int Int)
-    forM_ [2 .. n] $ \i -&gt; do
-        b &lt;- readArray a (i - 1)
-        writeArray a i (b + 1)
-    readArray a n
-</code></pre>
-
-<ul>
-<li>動的計画法 (<code>UArray</code>)</li>
-<li>最速</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  159 ms
--- n = 10 ^ 7 : 1850 ms
-f3 :: Int -&gt; Int
-f3 n = runST $ do
-    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
-    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
-    writeArray m 1 True
-    go a m n
+<pre><code class="language-haskell">-- Lake Counting (POJ No.2386)
+q2 :: Int -&gt; Int -&gt; [String] -&gt; Int
+q2 n m xss = runST $ do
+    as &lt;- newListArray ((1, 1), (n, m)) (concat xss) :: ST s (STUArray s (Int, Int) Char)
+    refc &lt;- newSTRef 0
+    forM_ [1 .. n] $ \i -&gt; do
+        forM_ [1 .. m] $ \j -&gt; do
+            c &lt;- readArray as (i, j)
+            when (c == 'W') $ do
+                dfs as (i, j)
+                modifySTRef' refc (+ 1)
+    readSTRef refc
   where
-    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
-    go a m i = do
-        evaluated &lt;- readArray m i
-        if evaluated
-            then readArray a i
-            else do
-                b &lt;- go a m (i - 1)
-                writeArray a i (b + 1)
-                writeArray m i True
-                return (b + 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>UArray</code>)</li>
-<li>関数呼び出しのオーバーヘッドなのか大分遅くなる</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  192 ms
--- n = 10 ^ 7 : 1654 ms
-f4 :: Int -&gt; Int
-f4 n = runST $ do
-    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
-    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
-    writeArray m 1 True
-    go a m n
-  where
-    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
-    go a m i = evalContT . callCC $ \cc -&gt; do
-        evaluated &lt;- lift $ readArray m i
-        when evaluated $ do
-            b &lt;- lift $ readArray a i
-            cc b
-        c &lt;- lift $ go a m (i - 1)
-        lift $ writeArray a i (c + 1)
-        lift $ writeArray m i True
-        return (c + 1)
-</code></pre>
-
-<ul>
-<li>速さとは関係ないがインデントが深くなるのが嫌なら<code>Cont</code>モナドを使う</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  404 ms
--- n = 10 ^ 7 : 4369 ms
-f5 :: Int -&gt; Int
-f5 n = runST $ do
-    a &lt;- newArray (1, n) Nothing :: ST s (STArray s Int (Maybe Int))
-    writeArray a 1 (Just 1)
-    go a n
-    Just i &lt;- readArray a n
-    return i
-  where
-    go :: STArray s Int (Maybe Int) -&gt; Int -&gt; ST s Int
-    go a i = do
-        mi &lt;- readArray a i
-        case mi of
-            Just b  -&gt; return b
-            Nothing -&gt; do
-                c &lt;- go a (i - 1)
-                writeArray a i (Just (c + 1))
-                return (c + 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>Array</code>)</li>
-<li>計算済みかどうかを<code>Array</code>に<code>Maybe Int</code>を入れて判断した場合</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  459 ms
--- n = 10 ^ 7 : 3615 ms
-f6 :: Int -&gt; Int
-f6 n = (foldl' f im [2 .. n]) IMS.! n
-  where
-    im = IMS.singleton 1 1 :: IMS.IntMap Int
-    f m i = let b = m IMS.! (i - 1)
-            in IMS.insert i (b + 1) m
-</code></pre>
-
-<ul>
-<li>動的計画法 (<code>IntMap.Strict</code>)</li>
-<li><code>Lazy</code>はこれより大分遅かったので省略</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  516 ms
--- n = 10 ^ 7 : 4380 ms
-f7 :: Int -&gt; Int
-f7 n = (go im n) IMS.! n
-  where
-    im = IMS.singleton 1 1 :: IMS.IntMap Int
-    go !m i
-        | Just _ &lt;- IMS.lookup i m = m
-        | otherwise                = IMS.insert i (b + 1) m'
+    dfs as (i, j) = do
+        c &lt;- readArray as (i, j)
+        case c of
+            '.' -&gt; return ()
+            _   -&gt; do
+                writeArray as (i, j) '.'
+                mapM_ (dfs as) next
       where
-        m' = go m (i - 1)
-        b  = m' IMS.! (i - 1)
+        next = do
+            s &lt;- [i - 1, i, i + 1]
+            t &lt;- [j - 1, j, j + 1]
+            guard (inRange ((1, 1), (n, m)) (s, t))
+            return (s, t)
+</code></pre>
+
+<pre><code class="language-haskell">-- 迷路の最短路
+q3 :: Int -&gt; Int -&gt; [String] -&gt; Int
+q3 n m xss = fst . head $ dropWhile ((/= goal) . snd) queue
+  where
+    (start, _) = head . filter ((== 'S') . snd)
+               $ zip [(i, j) | i &lt;- [1 .. n], j &lt;- [1 .. m]] (concat xss)
+    (goal, _)  = head . filter ((== 'G') . snd)
+               $ zip [(i, j) | i &lt;- [1 .. n], j &lt;- [1 .. m]] (concat xss)
+    maze = listArray ((1, 1), (n, m)) (concat xss) :: UArray (Int, Int) Char
+    queue = (0, start) : go (S.singleton start) queue
+    go s ((dist, (i, j)):qs) = next' ++ go s' qs
+      where
+        next  = filter f2 $ filter f1 [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]
+        next' = [(dist + 1, p) | p &lt;- next]
+        s' = foldr S.insert s next
+        f1 pos
+            | inRange ((1, 1), (n, m)) pos
+            , (maze ! pos) `elem` ['.', 'G'] = True
+            | otherwise                      = False
+        f2 = (`S.notMember` s)
 </code></pre>
 
 <ul>
-<li>メモ化再帰 (<code>IntMap.Strict</code>)</li>
-<li><code>Lazy</code>はこれより大分遅かったので省略</li>
+<li>コード汚いけど…</li>
+<li>余再帰を使って無限リスト<code>queue</code>を作っている
+
+<ul>
+<li>余再帰よく理解できてない</li>
+<li><a href="https://kazu-yamamoto.hatenablog.jp/entry/20121107/1352259739">なぜ Haskell ではキューが軽んじられているか？</a></li>
+</ul></li>
+<li>既にその場所を訪れたかの判定に<code>Data.Set</code>を渡している</li>
+<li>最後に無限リスト<code>queue</code>からゴール取り出して終了</li>
+</ul>
+
+<p>キューが空になったら…っていうのがやりたいときは</p>
+
+<ul>
+<li><code>go</code>の引数でキューの中身の数を管理して<code>0</code>になったら終了
+
+<ul>
+<li><code>[]</code>でパターンマッチはできないことに注意</li>
+</ul></li>
+<li>素直に<code>Data.Sequence</code>を使う</li>
+<li>自分で<code>data Queue a = Queue [a] [a]</code>みたいにキューを作る
+
+<ul>
+<li>左側から取り出して右側に追加する</li>
+<li>左側から取り出す時に空だったら右側を<code>reverse</code>して左側にセットする</li>
+</ul></li>
 </ul>
 
                     </div>

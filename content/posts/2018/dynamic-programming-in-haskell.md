@@ -2,7 +2,7 @@
 title: "Haskellで動的計画法（準備編）"
 date: 2018-11-12T21:47:14+09:00
 draft: false
-categories: ["programming"]
+categories: ["competitive"]
 tags: ["haskell"]
 ---
 
@@ -27,8 +27,6 @@ tags: ["haskell"]
 - `f1`では間に合わないがメモ化再帰したい場合は`f3`
 - 間違ったこと言ってたらごめんなさい
 
-
-## コード
 
 ```haskell
 {-# LANGUAGE BangPatterns #-}
