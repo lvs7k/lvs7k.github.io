@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog</title>
+    <title>Haskellで蟻本（初級編） - 貪欲法 &middot; lvs7k&#39;s blog</title>
 
     <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.49" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog">
+    <meta name="twitter:title" content="Haskellで蟻本（初級編） - 貪欲法 &middot; lvs7k&#39;s blog">
     <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Haskellで動的計画法（準備編） &middot; lvs7k&#39;s blog">
+    <meta property="og:title" content="Haskellで蟻本（初級編） - 貪欲法 &middot; lvs7k&#39;s blog">
     <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -83,11 +83,11 @@
         <div>
             
             <div class="posts">
-                <h1 class="content-subhead">12 Nov 2018, 21:47</h1>
+                <h1 class="content-subhead">18 Nov 2018, 12:39</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/" class="post-title">Haskellで動的計画法（準備編）</a>
+                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-2/" class="post-title">Haskellで蟻本（初級編） - 貪欲法</a>
 
                         <p class="post-meta">
                             
@@ -109,187 +109,77 @@
                     </header>
                     
                     <div class="post-description">
-                        
+                        <p>※蟻本の入力例でしかテストしていません</p>
 
-<h2 id="知りたいこと">知りたいこと</h2>
-
-<ul>
-<li>Haskellで動的計画法を書く時にどういう書き方をすればいいのか</li>
-</ul>
-
-<h2 id="試してみたこと">試してみたこと</h2>
-
-<ul>
-<li><code>f(n) = f(n - 1) + 1</code></li>
-<li>初項1、公差1の等差数列の和を<code>n = 10 ^ 6</code>と<code>n = 10 ^ 7</code>で計算</li>
-<li>PowerShellの<code>Measure-Command</code>で時間を計測</li>
-<li>時間計測時に<code>stack run</code>や<code>stack exec</code>を使うと200ms~400ms余計に時間がかかった</li>
-</ul>
-
-<h2 id="結論">結論</h2>
-
-<ul>
-<li><code>f1</code>でTLEにならないなら<code>f1</code></li>
-<li>ボトムアップに配列埋める場合は<code>f2</code></li>
-<li><code>f1</code>では間に合わないがメモ化再帰したい場合は<code>f3</code></li>
-<li>間違ったこと言ってたらごめんなさい</li>
-</ul>
-
-<pre><code class="language-haskell">{-# LANGUAGE BangPatterns #-}
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
 
 import Control.Monad
-import Control.Monad.ST
 import Data.List
-import Data.Array
+
+import Control.Monad.ST
 import Data.Array.ST
-import qualified Data.IntMap.Strict as IMS
-import Control.Monad.Trans.Class
-import Control.Monad.Trans.Cont
+import Data.STRef
+import Data.Array         (Array)
+import Data.Array.Unboxed (UArray)
+import Data.Array.IArray
+import qualified Data.Set as S
 
--- f(n) = f(n - 1) + 1
--- stack build
--- Measure-Command { ./stack-work/~.exe | Out-Default } | Select-Object TotalMilliseconds
-
--- n = 10 ^ 6 :  477 ms
--- n = 10 ^ 7 : 4308 ms
-f1 :: Int -&gt; Int
-f1 n = go n
+-- 硬貨の問題
+q1 :: Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int
+q1 n c1 c5 c10 c50 c100 c500 = go 0 n cs
   where
-    memo = listArray (1, n) (fmap go [1 .. n])
-    go 1 = 1
-    go k = memo ! (k - 1) + 1
+    cs = zip [500, 100, 50, 10, 5, 1] [c500, c100, c50, c10, c5, c1]
+    go !k a [] = k
+    go !k a ((s, t):ds)
+        | a &gt;= s &amp;&amp; t &gt; 0 = go (k + 1) (a - s) ((s, t - 1):ds)
+        | otherwise       = go k a ds
 </code></pre>
 
-<ul>
-<li>メモ化再帰 (<code>Array</code>)</li>
-<li>これ以下の速度のものは使う必要がない</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  14 ms
--- n = 10 ^ 7 :  97 ms
-f2 :: Int -&gt; Int
-f2 n = runST $ do
-    a &lt;- newArray (1, n) 1 :: ST s (STUArray s Int Int)
-    forM_ [2 .. n] $ \i -&gt; do
-        b &lt;- readArray a (i - 1)
-        writeArray a i (b + 1)
-    readArray a n
+<pre><code class="language-haskell">-- 区間スケジューリング問題
+q2 :: Int -&gt; [(Int, Int)] -&gt; Int
+q2 n ss = go 0 (sortOn snd ss)
+  where
+    go !k [] = k
+    go !k ((s, t):ts) = go (k + 1) (filter ((&gt;= t) . fst) ts)
 </code></pre>
 
-<ul>
-<li>動的計画法 (<code>UArray</code>)</li>
-<li>最速</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  159 ms
--- n = 10 ^ 7 : 1850 ms
-f3 :: Int -&gt; Int
-f3 n = runST $ do
-    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
-    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
-    writeArray m 1 True
-    go a m n
+<pre><code class="language-haskell">-- Best Cow Line (POJ 3617)
+q3 :: Int -&gt; String -&gt; String
+q3 n ss = reverse $ go &quot;&quot; ss
   where
-    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
-    go a m i = do
-        evaluated &lt;- readArray m i
-        if evaluated
-            then readArray a i
-            else do
-                b &lt;- go a m (i - 1)
-                writeArray a i (b + 1)
-                writeArray m i True
-                return (b + 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>UArray</code>)</li>
-<li>関数呼び出しのオーバーヘッドなのか大分遅くなる</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  192 ms
--- n = 10 ^ 7 : 1654 ms
-f4 :: Int -&gt; Int
-f4 n = runST $ do
-    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
-    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
-    writeArray m 1 True
-    go a m n
-  where
-    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
-    go a m i = evalContT . callCC $ \cc -&gt; do
-        evaluated &lt;- lift $ readArray m i
-        when evaluated $ do
-            b &lt;- lift $ readArray a i
-            cc b
-        c &lt;- lift $ go a m (i - 1)
-        lift $ writeArray a i (c + 1)
-        lift $ writeArray m i True
-        return (c + 1)
-</code></pre>
-
-<ul>
-<li>速さとは関係ないがインデントが深くなるのが嫌なら<code>Cont</code>モナドを使う</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  404 ms
--- n = 10 ^ 7 : 4369 ms
-f5 :: Int -&gt; Int
-f5 n = runST $ do
-    a &lt;- newArray (1, n) Nothing :: ST s (STArray s Int (Maybe Int))
-    writeArray a 1 (Just 1)
-    go a n
-    Just i &lt;- readArray a n
-    return i
-  where
-    go :: STArray s Int (Maybe Int) -&gt; Int -&gt; ST s Int
-    go a i = do
-        mi &lt;- readArray a i
-        case mi of
-            Just b  -&gt; return b
-            Nothing -&gt; do
-                c &lt;- go a (i - 1)
-                writeArray a i (Just (c + 1))
-                return (c + 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>Array</code>)</li>
-<li>計算済みかどうかを<code>Array</code>に<code>Maybe Int</code>を入れて判断した場合</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  459 ms
--- n = 10 ^ 7 : 3615 ms
-f6 :: Int -&gt; Int
-f6 n = (foldl' f im [2 .. n]) IMS.! n
-  where
-    im = IMS.singleton 1 1 :: IMS.IntMap Int
-    f m i = let b = m IMS.! (i - 1)
-            in IMS.insert i (b + 1) m
-</code></pre>
-
-<ul>
-<li>動的計画法 (<code>IntMap.Strict</code>)</li>
-<li><code>Lazy</code>はこれより大分遅かったので省略</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  516 ms
--- n = 10 ^ 7 : 4380 ms
-f7 :: Int -&gt; Int
-f7 n = (go im n) IMS.! n
-  where
-    im = IMS.singleton 1 1 :: IMS.IntMap Int
-    go !m i
-        | Just _ &lt;- IMS.lookup i m = m
-        | otherwise                = IMS.insert i (b + 1) m'
+    go !ts &quot;&quot; = ts
+    go !ts us
+        | us &lt;= us' = go (head us  : ts) (tail us)
+        | otherwise = go (head us' : ts) (tail us')
       where
-        m' = go m (i - 1)
-        b  = m' IMS.! (i - 1)
+        us' = reverse us
+</code></pre>
+
+<pre><code class="language-haskell">-- Saruman's Army (POJ 3069)
+q4 :: Int -&gt; Int -&gt; [Int] -&gt; Int
+q4 n r xs = go 0 (sort xs)
+  where
+    go !k []     = k
+    go !k (y:ys) = go (k + 1) cs
+      where
+        (as, bs) = span (&lt;= y + r) (y:ys)
+        cs = dropWhile (&lt;= last as + r) bs
+</code></pre>
+
+<pre><code class="language-haskell">-- Fence Repair (POJ 3253)
+q5 :: Int -&gt; [Int] -&gt; Int
+q5 n ls = go 0 n (S.fromList $ zip ls [1 ..])
+  where
+    go !k m s
+        | Just ((v1, _), s')  &lt;- S.minView s
+        , Just ((v2, _), s'') &lt;- S.minView s'
+            = go (k + v1 + v2) (m + 1) (S.insert (v1 + v2, m + 1) s'')
+        | otherwise = k
 </code></pre>
 
 <ul>
-<li>メモ化再帰 (<code>IntMap.Strict</code>)</li>
-<li><code>Lazy</code>はこれより大分遅かったので省略</li>
+<li><code>Data.Set</code>を優先度付きキューとして使用している</li>
+<li>値が重複しないように<code>(&lt;値&gt;, &lt;識別番号&gt;)</code>を入れている</li>
 </ul>
 
                     </div>
