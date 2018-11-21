@@ -6,10 +6,24 @@
     <description>Recent content in Posts on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Mon, 19 Nov 2018 22:09:54 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 20 Nov 2018 21:01:17 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Haskellで蟻本（初級編） - データ構造</title>
+      <link>https://lvs7k.github.io/posts/2018/pccb-easy-4/</link>
+      <pubDate>Tue, 20 Nov 2018 21:01:17 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-4/</guid>
+      <description>※蟻本の入力例でしかテストしていません
+優先度付きキュー  多くのプログラミング言語では効率的に実装されたプライオリティキューが標準で含まれています。
+ と書かれているが、Haskellには標準で含まれていない。
+じゃあどうするかというと
+ containersのMapかSetのMin/Maxの関数で頑張る 自分で作る  の2択になると思う。
+Leftist Heap module Heap ( Heap (..) , meld , push , pop ) where import Control.Monad data Heap a = Empty | Node !Int !a !(Heap a) !(Heap a) deriving Show rank :: Heap a -&amp;gt; Int rank Empty = 0 rank (Node s _ _ _) = s heap :: a -&amp;gt; Heap a -&amp;gt; Heap a -&amp;gt; Heap a heap x a b | ra &amp;lt; rb = Node (ra + 1) x b a | otherwise = Node (rb + 1) x a b where ra = rank a rb = rank b meld :: Ord a =&amp;gt; Heap a -&amp;gt; Heap a -&amp;gt; Heap a meld a Empty = a meld Empty b = b meld a@(Node _ ax al ar) b@(Node _ bx bl br) | ax &amp;lt; bx = heap ax al (meld ar b) | otherwise = heap bx bl (meld br a) push :: Ord a =&amp;gt; a -&amp;gt; Heap a -&amp;gt; Heap a push x a = meld a (Node 1 x Empty Empty) pop :: Ord a =&amp;gt; Heap a -&amp;gt; Maybe (a, Heap a) pop Empty = Nothing pop (Node _ x l r) = Just (x, meld l r) test :: (Show a, Ord a) =&amp;gt; [a] -&amp;gt; IO () test xs = do heap &amp;lt;- flip (flip foldM Empty) xs $ \h i -&amp;gt; do let h&#39; = push i h print h&#39; return h&#39; putStrLn &amp;quot;--------------------&amp;quot; flip (flip foldM_ heap) [1 .</description>
+    </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - 動的計画法</title>
