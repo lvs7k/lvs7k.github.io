@@ -191,8 +191,8 @@ q2 n ls = go 0 (foldr push Empty ls)
   where
     go !k s
         | Just (x1, s1) <- pop s
-        , Just (x2, s2) <- pop s1 =
-            let x = x1 + x2 in go (k + x) (push x s2)
+        , Just (x2, s2) <- pop s1
+            = let x = x1 + x2 in go (k + x) (push x s2)
         | otherwise = k
 ```
 
