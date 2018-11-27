@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haskellで蟻本（初級編） - 数学的な問題を解くコツ &middot; lvs7k&#39;s blog</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.49" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Haskellで蟻本（初級編） - 数学的な問題を解くコツ &middot; lvs7k&#39;s blog">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Haskellで蟻本（初級編） - 数学的な問題を解くコツ &middot; lvs7k&#39;s blog">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+
+    <link rel="stylesheet" href='https://lvs7k.github.io/css/all.min.css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="lvs7k&#39;s blog" href='https://lvs7k.github.io/index.xml' />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://lvs7k.github.io/">lvs7k&#39;s blog</a></h1>
+            <h2 class="brand-tagline"> Just a Memo </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/lvs7k">
+                        <i class="fa fa-twitter"></i> Twitter
+                    </a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/lvs7k">
+                        <i class="fa fa-github-alt"></i> Github
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/index.xml'>
+                        <i class="fa fa-rss"></i> rss
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/menu/about'>
+                        <i class="fa fa-user"></i> about
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/categories'>
+                        <i class="fa fa-folder"></i> categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/tags'>
+                        <i class="fa fa-tag"></i> tags
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">27 Nov 2018, 22:42</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-6/" class="post-title">Haskellで蟻本（初級編） - 数学的な問題を解くコツ</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-description">
+                        
+
+<h2 id="参考資料">参考資料</h2>
+
+<ul>
+<li><a href="http://tad311.xsrv.jp/hsmath/">大学数学へのかけ橋！『高校数学＋α ：基礎と論理の物語』</a>
+
+<ul>
+<li>文系社会人が高校数学やり直すために何冊か本買ったけどこれが一番好き</li>
+<li>PDFが無料でダウンロードできます</li>
+</ul></li>
+</ul>
+
+<hr />
+
+<p>※蟻本の入力例でしかテストしていません</p>
+
+<h2 id="ユークリッド互除法">ユークリッド互除法</h2>
+
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns #-}
+
+import qualified Data.IntMap.Strict as IM
+
+-- ユークリッド互除法
+gcd' :: Int -&gt; Int -&gt; Int
+gcd' x y = go x y
+  where
+    go a 0 = a
+    go a b = go b (a `mod` b)
+
+-- 線分上の格子点の個数
+q1 :: (Int, Int) -&gt; (Int, Int) -&gt; Int
+q1 (x1, y1) (x2, y2) = gcd' (abs $ x1 - x2) (abs $ y1 - y2) - 1
+</code></pre>
+
+<ul>
+<li>参考資料の「1.10.2.1 ユークリッドの互除法」を読む</li>
+<li>証明も理解する</li>
+</ul>
+
+<h3 id="拡張ユークリッド互除法">拡張ユークリッド互除法</h3>
+
+<pre><code class="language-haskell">-- 拡張ユークリッド互除法
+extgcd :: Int -&gt; Int -&gt; (Int, Int)
+extgcd x y = go x y
+  where
+    go a 0 = (1, 0)
+    go a b = (t, s - q * t)
+      where
+        (q, r) = a `divMod` b
+        (s, t) = extgcd b r
+
+-- 双六
+q2 :: Int -&gt; Int -&gt; Maybe (Int, Int, Int, Int)
+q2 a b
+    | gcd' a b == 1 = case () of
+        _ | x &lt; 0, y &lt; 0 -&gt; Just (0, 0, abs x, abs y)
+          | x &lt; 0        -&gt; Just (0, y, abs x, 0)
+          | y &lt; 0        -&gt; Just (x, 0, 0, abs y)
+          | otherwise    -&gt; Just (x, y, 0, 0)
+    | otherwise     = Nothing
+  where
+    (x, y) = extgcd a b
+</code></pre>
+
+<ul>
+<li><p>拡張ユークリッド互除法で何ができるの？</p>
+
+<ul>
+<li><code>ax + by = gcd(a, b)</code>の整数解、<code>(x, y)</code>を求めることができる</li>
+</ul></li>
+
+<li><p>上記のプログラムが理解できないんだけど？（蟻本の解説本が欲しいんだけど？）</p>
+
+<pre><code>参考資料の「1.10.3 整数論の基本定理」を読む
+整数a，b が互いに素のとき ax + by = 1 は整数解をもつ
+整数a，b が互いに素のとき ax + by = c は整数解をもつ
+整数a, b が互いに素でなくても c が gcd(a, b) で割り切れるなら ax + by = c は整数解をもつ
+ということはax + by = gcd(a, b) は整数解をもつ
+a を b で割って a = bq + r として上に式に代入すると
+b(qx + y) + rx = gcd(a, b)
+s = qx + y, x = t とおいて bs + rt = gcd(s, t) = gcd(a, b)
+(b, r) は (a, b) よりも小さいため再帰的に解くことができる
+(s, t) がわかっているなら上の式で元の解(x, y) がわかる
+停止条件は r == 0 のとき bs + 0t = gcd(b, 0) の解(s, t) = (1, 0)
+</code></pre></li>
+</ul>
+
+<hr />
+
+<h2 id="素数に関する基本的なアルゴリズム">素数に関する基本的なアルゴリズム</h2>
+
+<pre><code class="language-haskell">-- 素数判定
+isPrime :: Int -&gt; Bool
+isPrime n = all ((/= 0) . (n `mod`)) $ takeWhile ((&lt;= n) . (^ 2)) (primes n)
+
+-- n以下の素数
+primes :: Int -&gt; [Int]
+primes n = 2 : 3 : filter isPrime xs
+  where
+    xs = takeWhile (&lt;= n) [6 * i + j | i &lt;- [1 ..], j &lt;- [-1, 1]]
+
+-- 約数の列挙
+divisor :: Int -&gt; [Int]
+divisor n = foldr f [] $ takeWhile ((&lt;= n) . (^ 2)) [1 .. n]
+  where
+    f x ds
+        | r == 0, q /= x = x : q : ds
+        | r == 0         = x : ds
+        | otherwise      = ds
+      where
+        (q, r) = n `divMod` x
+
+-- 素因数分解
+primeFactor :: Int -&gt; IM.IntMap Int
+primeFactor n = go IM.empty n $ takeWhile ((&lt;= n) . (^ 2)) (primes n)
+  where
+    go im 1  _  = im
+    go im !k [] = IM.insertWith (+) k 1 im
+    go im !k (p:ps)
+        | r == 0    = go (IM.insertWith (+) p 1 im) q (p:ps)
+        | otherwise = go im k ps
+      where
+        (q, r) = k `divMod` p
+</code></pre>
+
+<h3 id="エラトステネスの篩">エラトステネスの篩</h3>
+
+<pre><code class="language-haskell">-- エラトステネスの篩
+sieve :: Int -&gt; [Int]
+sieve n = takeWhile (&lt;= n) (sieve' [2 ..])
+  where
+    sieve' (x:xs) = x : sieve' (filter ((/= 0) . (`mod` x)) xs)
+
+-- 区間内の素数の個数
+q5 :: Int -&gt; Int -&gt; Int
+q5 a b = go [a .. b - 1] (takeWhile ((&lt; b) . (^ 2)) [2 ..])
+  where
+    go !ps []     = length ps
+    go !ps (x:xs) = go (f ps) (f xs)
+      where
+        f as = filter ((/= 0) . (`mod` x)) as
+</code></pre>
+
+<ul>
+<li>Haskellっぽくてかっこいいけど遅い、多分TLE</li>
+</ul>
+
+<hr />
+
+<h2 id="べき乗を高速に計算する">べき乗を高速に計算する</h2>
+
+<pre><code class="language-haskell">-- べき乗を高速に計算する
+modPow' :: Int -&gt; Int -&gt; Int -&gt; Int
+modPow' x n m = go 1 x n
+  where
+    go !k !_ 0 = k
+    go !k !p q
+        | r == 1    = go (k * p `mod` m) (p ^ 2 `mod` m) q'
+        | otherwise = go k               (p ^ 2 `mod` m) q'
+      where
+        (q', r) = q `divMod` 2
+
+modPow :: Int -&gt; Int -&gt; Int -&gt; Int
+modPow x n m = go n
+  where
+    go 0 = 1
+    go k
+        | odd k     = (t * x) `mod` m
+        | otherwise = t
+      where
+        s = go (k `div` 2)
+        t = (s * s) `mod` m
+
+-- Carmichael Numbers (UVa No.10006)
+q6 :: Int -&gt; Bool
+q6 n
+    | isPrime n = False
+    | otherwise = all f [2 .. n - 1]
+  where
+    f x = modPow x n n == x `mod` n
+</code></pre>
+
+<ul>
+<li><code>modPow</code>のほうが分かりやすくて好き</li>
+</ul>
+
+                    </div>
+                    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "lvs7k" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src='https://lvs7k.github.io/js/all.min.js'></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-129286122-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
