@@ -6,10 +6,21 @@
     <description>Recent content in Competitive on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Tue, 27 Nov 2018 22:42:23 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 29 Nov 2018 22:06:10 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/categories/competitive/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Haskellで蟻本（初級編） - GCJの問題に挑戦してみよう（１）</title>
+      <link>https://lvs7k.github.io/posts/2018/pccb-easy-7/</link>
+      <pubDate>Thu, 29 Nov 2018 22:06:10 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-7/</guid>
+      <description>※蟻本の入力例でしかテストしていません
+下2つはコンテストで出たとして解けなそう…。
+Minimum Scalar Product {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Control.Monad.ST import Data.Array import Data.Array.ST import Data.STRef import Data.List -- Minimum Scalar Product (2008 Round1A A) q1 :: Int -&amp;gt; [Int] -&amp;gt; [Int] -&amp;gt; Int q1 n xs ys = sum $ zipWith (*) xs&#39; ys&#39; where xs&#39; = sort xs ys&#39; = sortBy (flip compare) ys   蟻本の解説参照  Crazy Rows -- Crazy Rows (2009 Round2 A) q2 :: Int -&amp;gt; [String] -&amp;gt; Int q2 n xss = runST $ do a &amp;lt;- newListArray (1, n) (fmap last1 xss) :: ST s (STUArray s Int Int) ans &amp;lt;- newSTRef 0 forM_ [1 .</description>
+    </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - 数学的な問題を解くコツ</title>
