@@ -1001,7 +1001,9 @@ publishDir = &quot;docs&quot;
 <ol>
 <li><p>デプロイ用のPowerShellスクリプト作成(<code>deploy.ps1</code>)</p>
 
-<pre><code class="language-powershell">Write-Output &quot;Deploying updates to GitHub...&quot;
+<pre><code class="language-powershell">$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+
+Write-Output &quot;Deploying updates to GitHub...&quot;
 
 # Build the project.
 hugo

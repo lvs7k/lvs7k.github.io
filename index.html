@@ -209,6 +209,21 @@ local-programs-path: D:\stack\
 <li><code>scoop install hugo</code></li>
 </ul>
 
+<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
+
+<ul>
+<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーになってしまうので</li>
+<li><code>pacman -S winpty</code></li>
+<li><code>winpty stack ghci</code></li>
+</ul>
+
+<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
+
+<ul>
+<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
+<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
+</ul>
+
                     </div>
                 </section>
                 
