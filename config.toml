@@ -2,7 +2,7 @@ baseURL = "https://lvs7k.github.io/"
 languageCode = "ja-jp"
 title = "lvs7k's blog"
 theme = "purehugo"
-Paginate = 10
+Paginate = 5
 disqusShortname = "lvs7k"
 publishDir = "docs"
 
