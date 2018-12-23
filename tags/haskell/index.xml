@@ -6,10 +6,19 @@
     <description>Recent content in Haskell on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Thu, 29 Nov 2018 22:06:10 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 23 Dec 2018 12:50:53 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2018年12月 開発環境構築メモ(Windows7)</title>
+      <link>https://lvs7k.github.io/posts/2018/set-up-dev-env/</link>
+      <pubDate>Sun, 23 Dec 2018 12:50:53 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/set-up-dev-env/</guid>
+      <description>ユーザ環境変数 PATH = C:\PortableGit\cmd;D:\stack\local\bin;D:\scoop\shims; MSYS2_PATH_TYPE = inherit SCOOP = D:\scoop STACK_ROOT = D:\sr  インストール  PortableGit MSYS2 Scoop The Haskell Tool Stack Visual Studio Code  Stack  $STACK_ROOT/config.yaml  # This file contains default non-project-specific settings for &#39;stack&#39;, used # in all projects. For more information about stack&#39;s configuration, see # http://docs.haskellstack.org/en/stable/yaml_configuration/ # The following parameters are used by &amp;quot;stack new&amp;quot; to automatically fill fields # in the cabal config.</description>
+    </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - GCJの問題に挑戦してみよう（１）</title>
