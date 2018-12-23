@@ -111,6 +111,8 @@ tags: ["hugo"]
 1. デプロイ用のPowerShellスクリプト作成(`deploy.ps1`)
 
     ```powershell
+    $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+
     Write-Output "Deploying updates to GitHub..."
 
     # Build the project.

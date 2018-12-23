@@ -1,3 +1,5 @@
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+
 Write-Output "Deploying updates to GitHub..."
 
 # Build the project.

@@ -105,3 +105,16 @@ local-programs-path: D:\stack\
 
 - `stack setup`
 - `scoop install hugo`
+
+
+## GHCiでctrl-cが動作しない
+
+- `stack exec -- ghcii.sh`は`invalid argument`エラーになってしまうので
+- `pacman -S winpty`
+- `winpty stack ghci`
+
+
+## VSCode拡張のSimple GHCが動作しない
+
+- ファイルパスにスペースが含まれていると動作しないバグあり
+- [Space in file path causes breakage](https://github.com/dramforever/vscode-ghc-simple/issues/14)
