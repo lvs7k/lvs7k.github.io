@@ -148,7 +148,7 @@ STACK_ROOT = D:\sr
 templates:
   params:
     author-name: lvs7k
-    author-email: k.takano.7.000@gmail.com
+    author-email: lvs7k@example.com
     category: Your Projects Category
     copyright: 'Copyright (c) 2018 lvs7k'
     github-username: lvs7k
@@ -206,6 +206,48 @@ local-programs-path: D:\stack\
     },
 }
 </code></pre>
+
+<ul>
+<li><code>keybindings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
+[
+// ctrl+enterで行末へ移動
+{
+  &quot;key&quot;: &quot;ctrl+enter&quot;,
+  &quot;command&quot;: &quot;cursorEnd&quot;,
+  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+},
+// ターミナルの切り替え
+{
+  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
+  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
+  &quot;when&quot;: &quot;terminalFocus&quot;
+},
+{
+  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
+  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
+  &quot;when&quot;: &quot;terminalFocus&quot;
+}
+]
+</code></pre>
+
+<h2 id="msys2">MSYS2</h2>
+
+<ul>
+<li><code>~/.bashrc</code></li>
+</ul>
+
+<pre><code class="language-bash">source ~/git-completion.bash
+eval &quot;$(stack --bash-completion-script stack)&quot;
+</code></pre>
+
+<ul>
+<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
+<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
+<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
+</ul>
 
 <h2 id="その他">その他</h2>
 
