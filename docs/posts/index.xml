@@ -6,10 +6,19 @@
     <description>Recent content in Posts on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Sun, 23 Dec 2018 12:50:53 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 01 Jan 2019 22:09:19 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Haskellのマルチスレッドプログラミングについてメモ</title>
+      <link>https://lvs7k.github.io/posts/2019/what-i-struggled-with-concurrent-haskell/</link>
+      <pubDate>Tue, 01 Jan 2019 22:09:19 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2019/what-i-struggled-with-concurrent-haskell/</guid>
+      <description> Haskellによる並列・並行プログラミング学習中  随時更新 多分相当レベル低いこと書いてる  サブスレッドで発生した例外はメインスレッドへ伝播しない main :: IO () main = do e &amp;lt;- try $ do forkIO $ throwIO UserInterrupt return () print (e :: Either SomeException ())  *Main&amp;gt; :main &amp;lt;interactive&amp;gt;: user interrupt Right ()  race_ getLine (return ())は入力があるまで終了しない  入力を待たずに終了させるいい方法があったら教えてください  main :: IO () main = do (race_ (putStrLn =&amp;lt;&amp;lt; getLine) (return ())) `finally` (putStrLn &amp;quot;end&amp;quot;)  *Main&amp;gt; :main hello end  </description>
+    </item>
     
     <item>
       <title>2018年12月 開発環境構築メモ(Windows7)</title>

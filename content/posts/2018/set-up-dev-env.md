@@ -41,7 +41,7 @@ STACK_ROOT = D:\sr
 templates:
   params:
     author-name: lvs7k
-    author-email: k.takano.7.000@gmail.com
+    author-email: lvs7k@example.com
     category: Your Projects Category
     copyright: 'Copyright (c) 2018 lvs7k'
     github-username: lvs7k
@@ -99,6 +99,45 @@ local-programs-path: D:\stack\
     },
 }
 ```
+
+- `keybindings.json`
+
+```json
+// 既定値を上書きするには、このファイル内にキー バインドを挿入します
+[
+// ctrl+enterで行末へ移動
+{
+  "key": "ctrl+enter",
+  "command": "cursorEnd",
+  "when": "editorTextFocus && !editorReadonly"
+},
+// ターミナルの切り替え
+{
+  "key": "ctrl+shift+j",
+  "command": "workbench.action.terminal.focusNext",
+  "when": "terminalFocus"
+},
+{
+  "key": "ctrl+shift+k",
+  "command": "workbench.action.terminal.focusPrevious",
+  "when": "terminalFocus"
+}
+]
+```
+
+
+## MSYS2
+
+- `~/.bashrc`
+
+```bash
+source ~/git-completion.bash
+eval "$(stack --bash-completion-script stack)"
+```
+
+- `git`と`stack.exe`でTAB補完が効くようにする
+- `stack.exe`でないと補完が効かない（`stack`ではダメ）
+- [git-completion.bash](https://github.com/git/git/tree/master/contrib/completion)
 
 
 ## その他

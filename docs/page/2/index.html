@@ -84,6 +84,328 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">20 Nov 2018, 21:01</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-4/" class="post-title">Haskellで蟻本（初級編） - データ構造</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>※蟻本の入力例でしかテストしていません</p>
+
+<h2 id="優先度付きキュー">優先度付きキュー</h2>
+
+<blockquote>
+<p>多くのプログラミング言語では効率的に実装されたプライオリティキューが標準で含まれています。</p>
+</blockquote>
+
+<p>と書かれているが、Haskellには標準で含まれていない。</p>
+
+<p>じゃあどうするかというと</p>
+
+<ol>
+<li><code>containers</code>の<code>Map</code>か<code>Set</code>の<code>Min/Max</code>の関数で頑張る</li>
+<li>自分で作る</li>
+</ol>
+
+<p>の2択になると思う。</p>
+
+<hr />
+
+<h2 id="leftist-heap">Leftist Heap</h2>
+
+<pre><code class="language-haskell">module Heap
+    ( Heap (..)
+    , meld
+    , push
+    , pop
+    ) where
+
+import Control.Monad
+
+data Heap a
+    = Empty
+    | Node !Int !a !(Heap a) !(Heap a)
+    deriving Show
+
+rank :: Heap a -&gt; Int
+rank Empty          = 0
+rank (Node s _ _ _) = s
+
+heap :: a -&gt; Heap a -&gt; Heap a -&gt; Heap a
+heap x a b
+    | ra &lt; rb   = Node (ra + 1) x b a
+    | otherwise = Node (rb + 1) x a b
+  where
+    ra = rank a
+    rb = rank b
+
+meld :: Ord a =&gt; Heap a -&gt; Heap a -&gt; Heap a
+meld a     Empty = a
+meld Empty b     = b
+meld a@(Node _ ax al ar) b@(Node _ bx bl br)
+    | ax &lt; bx   = heap ax al (meld ar b)
+    | otherwise = heap bx bl (meld br a)
+
+push :: Ord a =&gt; a -&gt; Heap a -&gt; Heap a
+push x a = meld a (Node 1 x Empty Empty)
+
+pop :: Ord a =&gt; Heap a -&gt; Maybe (a, Heap a)
+pop Empty          = Nothing
+pop (Node _ x l r) = Just (x, meld l r)
+
+test :: (Show a, Ord a) =&gt; [a] -&gt; IO ()
+test xs = do
+    heap &lt;- flip (flip foldM Empty) xs $ \h i -&gt; do
+        let h' = push i h
+        print h'
+        return h'
+    putStrLn &quot;--------------------&quot;
+    flip (flip foldM_ heap) [1 .. length xs] $ \h _ -&gt; do
+        print h
+        let Just (_, h') = pop h
+        return h'
+</code></pre>
+
+<pre><code>*Heap&gt; test [4,1,2,5,3]
+Node 1 4 Empty Empty
+Node 1 1 (Node 1 4 Empty Empty) Empty
+Node 2 1 (Node 1 4 Empty Empty) (Node 1 2 Empty Empty)
+Node 2 1 (Node 1 4 Empty Empty) (Node 1 2 (Node 1 5 Empty Empty) Empty)
+Node 2 1 (Node 2 2 (Node 1 5 Empty Empty) (Node 1 3 Empty Empty)) (Node 1 4 Empty Empty)
+--------------------
+Node 2 1 (Node 2 2 (Node 1 5 Empty Empty) (Node 1 3 Empty Empty)) (Node 1 4 Empty Empty)
+Node 2 2 (Node 1 5 Empty Empty) (Node 1 3 (Node 1 4 Empty Empty) Empty)
+Node 2 3 (Node 1 4 Empty Empty) (Node 1 5 Empty Empty)
+Node 1 4 (Node 1 5 Empty Empty) Empty
+Node 1 5 Empty Empty
+</code></pre>
+
+<hr />
+
+<h2 id="skew-heap">Skew Heap</h2>
+
+<ul>
+<li>Leftist Heapから木のバランスを取る処理を除いたもの</li>
+<li>実装が軽いのに速さもそんな変わらないというのをどこかで見た</li>
+<li>大きい順に取り出したいときは要修正</li>
+</ul>
+
+<pre><code class="language-haskell">module Skew
+    ( Skew (..)
+    , meld
+    , push
+    , pop
+    ) where
+
+import Control.Monad
+
+data Skew a
+    = Empty
+    | Node !a !(Skew a) !(Skew a)
+    deriving Show
+
+meld :: Ord a =&gt; Skew a -&gt; Skew a -&gt; Skew a
+meld a     Empty = a
+meld Empty b     = b
+meld a@(Node ax al ar) b@(Node bx bl br)
+    | ax &lt; bx   = Node ax al (meld ar b)
+    | otherwise = Node bx bl (meld br a)
+
+push :: Ord a =&gt; a -&gt; Skew a -&gt; Skew a
+push x a = meld a (Node x Empty Empty)
+
+pop :: Ord a =&gt; Skew a -&gt; Maybe (a, Skew a)
+pop Empty        = Nothing
+pop (Node x l r) = Just (x, meld l r)
+
+test :: (Show a, Ord a) =&gt; [a] -&gt; IO ()
+test xs = do
+    skew &lt;- flip (flip foldM Empty) xs $ \h i -&gt; do
+        let h' = push i h
+        print h'
+        return h'
+    putStrLn &quot;--------------------&quot;
+    flip (flip foldM_ skew) [1 .. length xs] $ \h _ -&gt; do
+        print h
+        let Just (_, h') = pop h
+        return h'
+</code></pre>
+
+<pre><code>*Skew&gt; test [4,1,2,5,3]
+Node 4 Empty Empty
+Node 1 Empty (Node 4 Empty Empty)
+Node 1 Empty (Node 2 Empty (Node 4 Empty Empty))
+Node 1 Empty (Node 2 Empty (Node 4 Empty (Node 5 Empty Empty)))
+Node 1 Empty (Node 2 Empty (Node 3 Empty (Node 4 Empty (Node 5 Empty Empty))))
+--------------------
+Node 1 Empty (Node 2 Empty (Node 3 Empty (Node 4 Empty (Node 5 Empty Empty))))
+Node 2 Empty (Node 3 Empty (Node 4 Empty (Node 5 Empty Empty)))
+Node 3 Empty (Node 4 Empty (Node 5 Empty Empty))
+Node 4 Empty (Node 5 Empty Empty)
+Node 5 Empty Empty
+</code></pre>
+
+<hr />
+
+<h2 id="プライオリティキューを用いる問題">プライオリティキューを用いる問題</h2>
+
+<pre><code class="language-haskell">-- Expedition (POJ 2431)
+q1 :: Int -&gt; Int -&gt; Int -&gt; [Int] -&gt; [Int] -&gt; Int
+q1 n l p as bs = go 0 p Empty (zip bs as)
+  where
+    go !k fuel pque bas
+        | fuel &gt;= l    = k
+        | Just ((g, _), pque'') &lt;- pop pque'
+            = go (k + 1) (fuel + g) pque'' ys
+        | otherwise = -1
+      where
+        (xs, ys) = span ((&lt;= fuel) . snd) bas
+        pque' = foldr push pque xs
+</code></pre>
+
+<ul>
+<li>fuelがゴールまで足りていたら補給回数を返す</li>
+<li>そうでなければ通り過ぎたガソリンスタンドを全てキューに追加し、補給できる量が最大のものを取り出す</li>
+<li>取り出せた場合は再帰、取り出せなかったら-1</li>
+</ul>
+
+<pre><code class="language-haskell">-- Fence Repair (POJ 3253)
+q2 :: Int -&gt; [Int] -&gt; Int
+q2 n ls = go 0 (foldr push Empty ls)
+  where
+    go !k s
+        | Just (x1, s1) &lt;- pop s
+        , Just (x2, s2) &lt;- pop s1
+            = let x = x1 + x2 in go (k + x) (push x s2)
+        | otherwise = k
+</code></pre>
+
+<hr />
+
+<h2 id="union-find木">Union-Find木</h2>
+
+<ul>
+<li>経路圧縮のみ</li>
+</ul>
+
+<pre><code class="language-haskell">module UF
+    ( UF (..)
+    , newUF
+    , root
+    , same
+    , unite
+    ) where
+
+import Control.Monad
+import Control.Monad.ST
+import Data.Array.ST
+
+newtype UF s
+    = UF (STUArray s Int Int)
+
+newUF :: (Int, Int) -&gt; ST s (UF s)
+newUF (i, j) = UF &lt;$&gt; (newListArray (i, j) [i .. j])
+
+root :: UF s -&gt; Int -&gt; ST s Int
+root (UF a) i = do
+    p &lt;- readArray a i
+    if p == i
+        then return p
+        else do
+            rp &lt;- root (UF a) p
+            writeArray a i rp
+            return rp
+
+same :: UF s -&gt; Int -&gt; Int -&gt; ST s Bool
+same uf x y = (==) &lt;$&gt; (root uf x) &lt;*&gt; (root uf y)
+
+unite :: UF s -&gt; Int -&gt; Int -&gt; ST s ()
+unite uf@(UF a) i j = do
+    ri &lt;- root uf i
+    rj &lt;- root uf j
+    when (ri /= rj) $ do
+        writeArray a rj ri
+</code></pre>
+
+<hr />
+
+<h2 id="union-find木を用いる問題">Union-Find木を用いる問題</h2>
+
+<pre><code class="language-haskell">-- 食物連鎖 (POJ 1182)
+q3 :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
+q3 n k qs = runST $ do
+    uf &lt;- newUF (1, n * 3)
+    go 0 uf qs
+  where
+    go !f _  [] = return f
+    go !f uf ((1, x, y):rs) = do
+        let p1 = or [x &lt; 1, y &lt; 1, x &gt; n, y &gt; n]
+        p2 &lt;- (||) &lt;$&gt; same uf x (y + n) &lt;*&gt; same uf x (y + n * 2)
+        if p1 || p2
+            then go (f + 1) uf rs
+            else do
+                unite uf x y
+                unite uf (x + n) (y + n)
+                unite uf (x + n * 2) (y + n * 2)
+                go f uf rs
+    go !f uf ((2, x, y):rs) = do
+        let p1 = or [x &lt; 1, y &lt; 1, x &gt; n, y &gt; n]
+        p2 &lt;- (||) &lt;$&gt; same uf x y &lt;*&gt; same uf x (y + n * 2)
+        if p1 || p2
+            then go (f + 1) uf rs
+            else do
+                unite uf x (y + n)
+                unite uf (x + n) (y + n * 2)
+                unite uf (x + n * 2) y
+                go f uf rs
+</code></pre>
+
+<ul>
+<li><p><code>n = 100</code>のときUnion-Findの要素数はその3倍として</p>
+
+<ul>
+<li><code>1: 1が種類A</code>, <code>101: 1が種類B</code>, <code>201: 1が種類C</code></li>
+<li><code>2: 2が種類A</code>, <code>102: 2が種類B</code>, <code>202: 2が種類C</code></li>
+<li><code>...</code></li>
+</ul></li>
+
+<li><p>与えられた情報より、同時に起こるものを同じグループとしていく</p>
+
+<ul>
+<li><code>情報1: 1と2は同じ種類です。</code>
+
+<ul>
+<li><code>unite uf 1 2</code>, <code>unite uf 101 102</code>, <code>unite uf 201 202</code></li>
+</ul></li>
+<li><code>情報2: 1と2を食べます。</code>
+
+<ul>
+<li><code>unite uf 1 102</code>, <code>unite uf 101 202</code>, <code>unite uf 201 2</code></li>
+</ul></li>
+</ul></li>
+</ul>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">19 Nov 2018, 22:09</h1>
                 <section class="post">
                     <header class="post-header">
@@ -795,255 +1117,6 @@ f7 n = (go im n) IMS.! n
 <ul>
 <li>メモ化再帰 (<code>IntMap.Strict</code>)</li>
 <li><code>Lazy</code>はこれより大分遅かったので省略</li>
-</ul>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">10 Nov 2018, 17:10</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/how-to-create-this-blog/" class="post-title">Hugoでこのブログを作った時のメモ</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<p><a href="https://gohugo.io/getting-started/quick-start/">Quick Start | Hugo</a></p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>Windows 7</li>
-<li>Chocolatey v0.10.11</li>
-<li>git 2.19.1</li>
-<li>hugo 0.49</li>
-</ul>
-
-<h2 id="hugoのインストール">Hugoのインストール</h2>
-
-<ol>
-<li><p>Chocolateyをインストール</p></li>
-
-<li><p>Chocolateyでgitをインストール</p>
-
-<ul>
-<li><code>choco install git</code></li>
-</ul></li>
-
-<li><p>ChocolateyでHugoをインストール</p>
-
-<ul>
-<li><code>choco install hugo -confirm</code></li>
-</ul></li>
-
-<li><p>GitHubでリポジトリ作成</p>
-
-<ul>
-<li>Repository name : <code>&lt;username&gt;.github.io</code></li>
-<li>Initialize this repository with a READMEにチェックを入れた</li>
-</ul></li>
-</ol>
-
-<h2 id="hugoで静的サイト生成">Hugoで静的サイト生成</h2>
-
-<ol>
-<li><p>サイト作成</p>
-
-<ul>
-<li><code>hugo new site &lt;フォルダ名&gt;</code></li>
-<li><code>cd &lt;フォルダ名&gt;</code></li>
-<li><code>git init</code></li>
-</ul></li>
-
-<li><p>テーマの追加</p>
-
-<ul>
-<li><code>git add submodule https://github.com/dplesca/purehugo.git themes/purehugo</code></li>
-</ul></li>
-
-<li><p>コンフィグ設定</p>
-
-<ul>
-<li><p><code>config.toml</code>を変更</p>
-
-<pre><code class="language-toml">baseURL = &quot;https://lvs7k.github.io/&quot;
-languageCode = &quot;ja-jp&quot;
-title = &quot;lvs7k's blog&quot;
-theme = &quot;purehugo&quot;
-Paginate = 10
-disqusShortname = &quot;lvs7k&quot;
-publishDir = &quot;docs&quot;
-
-[params]
-    twitterName = &quot;lvs7k&quot;
-    githubName = &quot;lvs7k&quot;
-    description = &quot;Just a Memo&quot;
-    hideShareOptions = true
-</code></pre></li>
-</ul></li>
-
-<li><p>記事の作成</p>
-
-<ul>
-<li><code>hugo new posts/2018/how-to-create-this-blog.md</code></li>
-<li>マークダウンの先頭(<code>front matter</code>と呼ばれている部分)の<code>draft</code>を<code>false</code>に変更
-
-<ul>
-<li>これをしないと生成されたサイトに記事が表示されない</li>
-</ul></li>
-<li>適当になんか書く</li>
-</ul></li>
-
-<li><p>テーマをちょっといじる</p>
-
-<ul>
-<li><code>theme</code>フォルダ内の<code>sidebar.html</code>をトップの<code>layouts</code>フォルダへコピー</li>
-<li><code>theme</code>フォルダの<code>layouts</code>より<code>layouts</code>フォルダのほうが優先されるってこと？</li>
-</ul></li>
-
-<li><p>サーバを立ち上げて確認</p>
-
-<ul>
-<li><code>hugo server</code></li>
-<li>ブラウザで<code>http://localhost:1313/</code>にアクセス</li>
-<li>想定通りテーマや記事が表示されているかどうか確認</li>
-</ul></li>
-
-<li><p>サイト生成</p>
-
-<ul>
-<li><code>hugo</code></li>
-<li>docsフォルダにサイトが生成される</li>
-</ul></li>
-</ol>
-
-<h2 id="githubへデプロイ">GitHubへデプロイ</h2>
-
-<ol>
-<li><p><code>source</code>ブランチを作成</p>
-
-<ul>
-<li><code>git checkout -b source</code></li>
-</ul></li>
-
-<li><p>ここまでの作業分をコミット</p>
-
-<ul>
-<li><code>git add .</code></li>
-<li><code>git commit -m &quot;Initial commit&quot;</code></li>
-</ul></li>
-
-<li><p><code>source</code>ブランチを<code>push</code></p>
-
-<ul>
-<li><code>git push origin source</code></li>
-</ul></li>
-
-<li><p><code>Default branch</code>を<code>source</code>に変更</p>
-
-<ul>
-<li>リポジトリの<code>Settings</code> -&gt; <code>Branches</code> -&gt; <code>Default branch</code>を<code>source</code>に変更</li>
-</ul></li>
-
-<li><p><code>master</code>ブランチをリモートから削除</p>
-
-<ul>
-<li><code>git push -f --delete origin master</code></li>
-</ul></li>
-
-<li><p><code>docs</code>フォルダをsubtreeとして(？)<code>master</code>という名前で<code>push</code></p>
-
-<ul>
-<li><code>git subtree push --prefix docs/ origin master</code></li>
-</ul></li>
-
-<li><p><code>&lt;username&gt;.github.io</code>にアクセスし確認</p></li>
-</ol>
-
-<h2 id="記事を追加するとき">記事を追加するとき</h2>
-
-<ol>
-<li><p>デプロイ用のPowerShellスクリプト作成(<code>deploy.ps1</code>)</p>
-
-<pre><code class="language-powershell">$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
-
-Write-Output &quot;Deploying updates to GitHub...&quot;
-
-# Build the project.
-hugo
-
-# Add changes to git.
-git add .
-
-# Commit changes.
-$msg = &quot;Rebuilding site $(date)&quot;
-
-if ($Args.Count -eq 1) {
-    $msg = $Args[0]
-}
-
-git commit -m &quot;$msg&quot;
-
-# Push source and build repos.
-git push origin source
-git subtree push --prefix docs/ origin master
-</code></pre>
-
-<ul>
-<li>使い方
-
-<ul>
-<li><code>deploy.ps1 [&quot;&lt;commit message&gt;&quot;]</code></li>
-</ul></li>
-</ul></li>
-
-<li><p>記事を書く</p>
-
-<ul>
-<li><code>hugo new posts/2018/kiji-wo-kaku.md</code></li>
-</ul></li>
-
-<li><p>デプロイ</p>
-
-<ul>
-<li><code>deploy.ps1 &quot;initial commit&quot;</code></li>
-</ul></li>
-</ol>
-
-<h3 id="どうしてsourceブランチを作ったりmasterブランチを削除したりしているか">どうしてsourceブランチを作ったりmasterブランチを削除したりしているか</h3>
-
-<ul>
-<li><a href="https://qiita.com/kwappa/items/03ffdeb89039a7249619">GitHub PagesのUser Pagesでドキュメントルートを変更するにはmasterを殺す</a>より</li>
-</ul>
-
-<blockquote>
-<p>GitHub PagesにはUser &amp; Organization PagesとProject Pagesの2種類がある。Project Pagesはgh-pagesというブランチか/docs以下をドキュメントルートにする「Source」という設定ができたのだが、User &amp; Organization Pagesではmasterのルート直下しか選べない。</p>
-
-<p>「Source」が設定できるようになる前はgh-pagesというブランチを用意するしかなかったのだが、これもルート直下がドキュメントルートになってしまう。masterの/docsをsubtreeとしてpushする、というテクニックが以前から使われていたので、それをmasterとして使ってみたというわけ。</p>
-</blockquote>
-
-<h2 id="参考資料">参考資料</h2>
-
-<ul>
-<li><a href="https://myuon.github.io/posts/blog-simplicity/">ブログのテーマ(とGitの管理方法)を変えた</a></li>
-<li><a href="http://kohki.hatenablog.jp/entry/hugo-portfolio">Hugo + GitHub Pagesでポートフォリオを作る</a></li>
-<li><a href="https://qiita.com/kwappa/items/03ffdeb89039a7249619">GitHub PagesのUser Pagesでドキュメントルートを変更するにはmasterを殺す</a></li>
 </ul>
 
                     </div>
