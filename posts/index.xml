@@ -6,18 +6,18 @@
     <description>Recent content in Posts on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Tue, 01 Jan 2019 22:09:19 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 02 Jan 2019 23:05:03 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Haskellのマルチスレッドプログラミングについてメモ</title>
-      <link>https://lvs7k.github.io/posts/2019/what-i-struggled-with-concurrent-haskell/</link>
-      <pubDate>Tue, 01 Jan 2019 22:09:19 +0900</pubDate>
+      <title>Haskellでオンライン対戦じゃんけんゲーム</title>
+      <link>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</link>
+      <pubDate>Wed, 02 Jan 2019 23:05:03 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2019/what-i-struggled-with-concurrent-haskell/</guid>
-      <description> Haskellによる並列・並行プログラミング学習中  随時更新 多分相当レベル低いこと書いてる  サブスレッドで発生した例外はメインスレッドへ伝播しない main :: IO () main = do e &amp;lt;- try $ do forkIO $ throwIO UserInterrupt return () print (e :: Either SomeException ())  *Main&amp;gt; :main &amp;lt;interactive&amp;gt;: user interrupt Right ()  race_ getLine (return ())は入力があるまで終了しない  入力を待たずに終了させるいい方法があったら教えてください  main :: IO () main = do (race_ (putStrLn =&amp;lt;&amp;lt; getLine) (return ())) `finally` (putStrLn &amp;quot;end&amp;quot;)  *Main&amp;gt; :main hello end  </description>
+      <guid>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</guid>
+      <description>マルチスレッドプログラミング難しい  forkFinallyとかwithAsyncとかraceとかconcurrentlyとかどれを使えば良いのか 検索してもちょうどいい教材的なコードが見つからない race_ (putStrLn =&amp;lt;&amp;lt; getLine) (return ())がgetLineの終了を待つのはなぜ？  コード  nc localhost 1234で起動 バグあり  Main.hs: &amp;lt;socket: 444&amp;gt;: commitBuffer: invalid argument (Invalid argument) なにこれ？   {-# OPTIONS_GHC -fno-warn-warnings-deprecations #-} {-# LANGUAGE RecordWildCards #-} module Main where import Control.Exception import Control.Monad import Control.Monad.STM import Control.Concurrent import Control.Concurrent.Async import Control.Concurrent.STM import Data.Unique import Network import System.IO import Text.Printf import qualified Data.Map.Strict as M main :: IO () main = withSocketsDo $ do global &amp;lt;- newGlobal forkIO $ monitorClients global socket &amp;lt;- listenOn (PortNumber 1234) putStrLn &amp;quot;Listening on port 1234 .</description>
     </item>
     
     <item>
