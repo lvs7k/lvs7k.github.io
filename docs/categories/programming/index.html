@@ -84,11 +84,11 @@
             
             <div class="posts">
                 
-                <h1 class="content-subhead">01 Jan 2019, 22:09</h1>
+                <h1 class="content-subhead">02 Jan 2019, 23:05</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2019/what-i-struggled-with-concurrent-haskell/" class="post-title">Haskellのマルチスレッドプログラミングについてメモ</a>
+                        <a href="https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/" class="post-title">Haskellでオンライン対戦じゃんけんゲーム</a>
 
                         <p class="post-meta">
                             
@@ -112,44 +112,211 @@
                     <div class="post-description">
                         
 
-<h2 id="haskellによる並列-並行プログラミング学習中">Haskellによる並列・並行プログラミング学習中</h2>
+<h2 id="マルチスレッドプログラミング難しい">マルチスレッドプログラミング難しい</h2>
 
 <ul>
-<li>随時更新</li>
-<li>多分相当レベル低いこと書いてる</li>
+<li><code>forkFinally</code>とか<code>withAsync</code>とか<code>race</code>とか<code>concurrently</code>とかどれを使えば良いのか</li>
+<li>検索してもちょうどいい教材的なコードが見つからない</li>
+<li><code>race_ (putStrLn =&lt;&lt; getLine) (return ())</code>が<code>getLine</code>の終了を待つのはなぜ？</li>
 </ul>
 
-<h2 id="サブスレッドで発生した例外はメインスレッドへ伝播しない">サブスレッドで発生した例外はメインスレッドへ伝播しない</h2>
-
-<pre><code class="language-haskell">main :: IO ()
-main = do
-  e &lt;- try $ do
-    forkIO $ throwIO UserInterrupt
-    return ()
-  print (e :: Either SomeException ())
-</code></pre>
-
-<pre><code>*Main&gt; :main
-&lt;interactive&gt;: user interrupt
-Right ()
-</code></pre>
-
-<h2 id="race-getline-return-は入力があるまで終了しない"><code>race_ getLine (return ())</code>は入力があるまで終了しない</h2>
+<h2 id="コード">コード</h2>
 
 <ul>
-<li>入力を待たずに終了させるいい方法があったら教えてください</li>
+<li><code>nc localhost 1234</code>で起動</li>
+<li>バグあり
+
+<ul>
+<li><code>Main.hs: &lt;socket: 444&gt;: commitBuffer: invalid argument (Invalid argument)</code></li>
+<li>なにこれ？</li>
+</ul></li>
 </ul>
 
-<pre><code class="language-haskell">main :: IO ()
-main = do
-  (race_ (putStrLn =&lt;&lt; getLine) (return ()))
-  `finally`
-  (putStrLn &quot;end&quot;)
-</code></pre>
+<pre><code class="language-haskell">{-# OPTIONS_GHC -fno-warn-warnings-deprecations #-}
+{-# LANGUAGE RecordWildCards #-}
 
-<pre><code>*Main&gt; :main
-hello
-end
+module Main where
+
+import Control.Exception
+import Control.Monad
+import Control.Monad.STM
+import Control.Concurrent
+import Control.Concurrent.Async
+import Control.Concurrent.STM
+import Data.Unique
+import Network
+import System.IO
+import Text.Printf
+import qualified Data.Map.Strict as M
+
+main :: IO ()
+main = withSocketsDo $ do
+  global &lt;- newGlobal
+  forkIO $ monitorClients global
+
+  socket &lt;- listenOn (PortNumber 1234)
+  putStrLn &quot;Listening on port 1234 ...&quot;
+  let loop = forever $ do
+        (hdl, host, port) &lt;- accept socket
+        printf &quot;Connection %s: %s\n&quot; host (show port)
+        forkFinally
+          (clientMain global hdl)
+          (\_ -&gt; hPutStrLn hdl &quot;disconnected (press enter key)&quot; &gt;&gt; hClose hdl)
+  loop `finally` (sClose socket)
+
+--------------------------------------------------------------------------------
+
+data Global = Global
+  { clients :: TVar (M.Map Unique Client)
+  }
+
+newGlobal :: IO Global
+newGlobal = Global &lt;$&gt; newTVarIO M.empty
+
+addClient :: Global -&gt; Client -&gt; IO ()
+addClient Global{..} client@Client{..} = atomically $ do
+  modifyTVar' clients $ \m -&gt; M.insert clientId client m
+
+removeClient :: Global -&gt; Client -&gt; IO ()
+removeClient Global{..} Client{..} = atomically $ do
+  modifyTVar' clients $ \m -&gt; M.delete clientId m
+
+monitorClients :: Global -&gt; IO ()
+monitorClients Global{..} = do
+  k &lt;- M.size &lt;$&gt; readTVarIO clients
+  loop k
+ where
+  loop k = join . atomically $ do
+    m &lt;- readTVar clients
+    let k' = M.size m
+    case () of
+      _ | k  == k'  -&gt; retry
+        | k' == 2   -&gt; return $ do
+            let (c1:c2:_) = M.elems m
+            matchMaking c1 c2
+            loop k'
+        | otherwise -&gt; return $ do
+            printf &quot;There are %d player in room\n&quot; k'
+            loop k'
+
+matchMaking :: Client -&gt; Client -&gt; IO ()
+matchMaking c1 c2 = do
+  a &lt;- async $ fight c1 c2
+  atomically $ do
+    writeTChan (clientRecvChan c1) (Fight a)
+    writeTChan (clientRecvChan c2) (Fight a)
+
+--------------------------------------------------------------------------------
+
+data Message
+  = ClientInput String
+  | ClientDisconnected
+  | Fight (Async ())
+
+readMessage :: Client -&gt; IO Message
+readMessage Client{..} = do
+  msg &lt;- atomically $ readTChan clientRecvChan
+  case msg of
+    ClientDisconnected -&gt; throwIO (userError &quot;disconnected&quot;)
+    _                  -&gt; return msg
+
+--------------------------------------------------------------------------------
+
+data Client = Client
+  { clientId       :: Unique
+  , clientHandle   :: Handle
+  , clientRecvChan :: TChan Message
+  }
+
+clientMain :: Global -&gt; Handle -&gt; IO ()
+clientMain global hdl = do
+  hSetNewlineMode hdl universalNewlineMode
+  hSetBuffering hdl LineBuffering
+  client &lt;- newClient hdl
+  runClient client `finally` cleanUp client
+ where
+  runClient client = do
+    addClient global client
+    a1 &lt;- async $ clientInputReceiver client
+    a2 &lt;- async $ clientRecvChanHandler client
+    wait a2 `finally` forkIO (cancel a1)
+
+  cleanUp client = do
+    removeClient global client
+
+clientInputReceiver :: Client -&gt; IO ()
+clientInputReceiver Client{..} = flip finally disconnect $ forever $ do
+  line &lt;- hGetLine clientHandle
+  atomically $ writeTChan clientRecvChan (ClientInput line)
+ where
+  disconnect = do
+    atomically $ writeTChan clientRecvChan ClientDisconnected
+
+clientRecvChanHandler :: Client -&gt; IO ()
+clientRecvChanHandler client = loop
+ where
+  loop = do
+    msg &lt;- readMessage client
+    case msg of
+      ClientInput s -&gt; putStrLn s &gt;&gt; loop
+      Fight a       -&gt; wait a
+
+newClient :: Handle -&gt; IO Client
+newClient hdl = do
+  u &lt;- newUnique
+  c &lt;- newTChanIO
+  return Client
+    { clientId       = u
+    , clientHandle   = hdl
+    , clientRecvChan = c
+    }
+
+--------------------------------------------------------------------------------
+
+data Hand
+  = Rock
+  | Paper
+  | Scissors
+  deriving (Eq, Show)
+
+instance Ord Hand where
+  Rock     `compare` Paper    = LT
+  Rock     `compare` Scissors = GT
+  Paper    `compare` Scissors = LT
+  Paper    `compare` Rock     = GT
+  Scissors `compare` Rock     = LT
+  Scissors `compare` Paper    = GT
+  _        `compare` _        = EQ
+
+fight :: Client -&gt; Client -&gt; IO ()
+fight c1 c2 = loop
+ where
+  hdl1 = clientHandle c1
+  hdl2 = clientHandle c2
+  loop = do
+    (h1, h2) &lt;- concurrently (getHand c1) (getHand c2)
+    hPrintf hdl1 &quot;You: %s, Opponent: %s\n&quot; (show h1) (show h2)
+    hPrintf hdl2 &quot;You: %s, Opponent: %s\n&quot; (show h2) (show h1)
+    case h1 `compare` h2 of
+      LT -&gt; do
+        hPutStrLn hdl1 &quot;You lose...&quot;
+        hPutStrLn hdl2 &quot;You win!&quot;
+      GT -&gt; do
+        hPutStrLn hdl1 &quot;You win!&quot;
+        hPutStrLn hdl2 &quot;You lose...&quot;
+      EQ -&gt; loop
+
+getHand :: Client -&gt; IO Hand
+getHand client@Client{..} = loop
+ where
+  loop = do
+    hPutStrLn clientHandle &quot;1=Rock, 2=Paper, 3=Scissors:&quot;
+    (ClientInput k) &lt;- readMessage client
+    case k of
+      '1':_ -&gt; return Rock
+      '2':_ -&gt; return Paper
+      '3':_ -&gt; return Scissors
+      _     -&gt; loop
 </code></pre>
 
                     </div>
