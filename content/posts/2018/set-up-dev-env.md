@@ -1,6 +1,6 @@
 ---
-title: "2018年12月 開発環境構築メモ(Windows7)"
-date: 2018-12-23T12:50:53+09:00
+title: "2019年1月 開発環境構築メモ(Windows7)"
+date: 2019-01-10T22:58:53+09:00
 draft: false
 categories: ["programming"]
 tags: ["haskell", "hugo"]
@@ -9,8 +9,6 @@ tags: ["haskell", "hugo"]
 ## ユーザ環境変数
 
 ```
-PATH = C:\PortableGit\cmd;D:\stack\local\bin;D:\scoop\shims;
-MSYS2_PATH_TYPE = inherit
 SCOOP = D:\scoop
 STACK_ROOT = D:\sr
 ```
@@ -25,25 +23,44 @@ STACK_ROOT = D:\sr
 - [Visual Studio Code](https://code.visualstudio.com/)
 
 
+## MSYS2
+
+- `~/.bash_profile`
+
+```bash
+P1="/c/PortableGit/cmd"
+P2="/d/stack/local/bin"
+P3="/d/scoop/shims"
+PATH="${PATH}:${P1}:${P2}:${P3}"
+
+if [ -f "${HOME}/.bashrc" ] ; then
+  source "${HOME}/.bashrc"
+fi
+```
+
+- `~/.bashrc`
+
+```bash
+source ~/git-completion.bash
+eval "$(stack --bash-completion-script stack)"
+```
+
+- `git`と`stack.exe`でTAB補完が効くようにする
+- `stack.exe`でないと補完が効かない（`stack`ではダメ）
+- [git-completion.bash](https://github.com/git/git/tree/master/contrib/completion)
+
+
 ## Stack
 
 - `$STACK_ROOT/config.yaml`
 
 ```yaml
-# This file contains default non-project-specific settings for 'stack', used
-# in all projects.  For more information about stack's configuration, see
-# http://docs.haskellstack.org/en/stable/yaml_configuration/
-
-# The following parameters are used by "stack new" to automatically fill fields
-# in the cabal config. We recommend uncommenting them and filling them out if
-# you intend to use 'stack new'.
-# See https://docs.haskellstack.org/en/stable/yaml_configuration/#templates
 templates:
   params:
     author-name: lvs7k
     author-email: lvs7k@example.com
     category: Your Projects Category
-    copyright: 'Copyright (c) 2018 lvs7k'
+    copyright: 'Copyright (c) 2019 lvs7k'
     github-username: lvs7k
 
 skip-msys: true
@@ -93,6 +110,8 @@ local-programs-path: D:\stack\
     ],
 
     /* Haskell */
+    "ghcSimple.bareStartupCommands": [],
+    "ghcSimple.workspaceType": "bare-stack",
     "[haskell]": {
         "editor.tabSize": 2,
         "editor.detectIndentation": false
@@ -126,29 +145,18 @@ local-programs-path: D:\stack\
 ```
 
 
-## MSYS2
-
-- `~/.bashrc`
-
-```bash
-source ~/git-completion.bash
-eval "$(stack --bash-completion-script stack)"
-```
-
-- `git`と`stack.exe`でTAB補完が効くようにする
-- `stack.exe`でないと補完が効かない（`stack`ではダメ）
-- [git-completion.bash](https://github.com/git/git/tree/master/contrib/completion)
-
-
 ## その他
 
+- `pacman -Syu`
+- `pacman -S base-devel`
+- `pacman -S mingw-w64-x86_64-toolchain`
 - `stack setup`
 - `scoop install hugo`
 
 
 ## GHCiでctrl-cが動作しない
 
-- `stack exec -- ghcii.sh`は`invalid argument`エラーになってしまうので
+- `stack exec -- ghcii.sh`は`invalid argument`エラーで使えない
 - `pacman -S winpty`
 - `winpty stack ghci`
 
@@ -157,3 +165,11 @@ eval "$(stack --bash-completion-script stack)"
 
 - ファイルパスにスペースが含まれていると動作しないバグあり
 - [Space in file path causes breakage](https://github.com/dramforever/vscode-ghc-simple/issues/14)
+
+
+## 参考リンク
+
+- [FAQ | MinGW](http://www.mingw.org/wiki/FAQ)
+- [Home · msys2/msys2 Wiki](https://github.com/msys2/msys2/wiki)
+    - [About terminals, consoles and shells](https://github.com/msys2/msys2/wiki/Terminals)
+- [pacman - ArchWiki](https://wiki.archlinux.jp/index.php/Pacman)

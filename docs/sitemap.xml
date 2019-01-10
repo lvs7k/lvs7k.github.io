@@ -3,13 +3,18 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</loc>
-    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
+    <loc>https://lvs7k.github.io/posts/2018/set-up-dev-env/</loc>
+    <lastmod>2019-01-10T22:58:53+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://lvs7k.github.io/posts/2018/set-up-dev-env/</loc>
-    <lastmod>2018-12-23T12:50:53+09:00</lastmod>
+    <loc>https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/</loc>
+    <lastmod>2019-01-08T20:24:01+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</loc>
+    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
   </url>
   
   <url>
@@ -63,6 +68,12 @@
   </url>
   
   <url>
+    <loc>https://lvs7k.github.io/tags/c/</loc>
+    <lastmod>2019-01-08T20:24:01+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://lvs7k.github.io/categories/</loc>
     <priority>0</priority>
   </url>
@@ -75,13 +86,13 @@
   
   <url>
     <loc>https://lvs7k.github.io/tags/haskell/</loc>
-    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
+    <lastmod>2019-01-10T22:58:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://lvs7k.github.io/tags/hugo/</loc>
-    <lastmod>2018-12-23T12:50:53+09:00</lastmod>
+    <lastmod>2019-01-10T22:58:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -93,25 +104,25 @@
   
   <url>
     <loc>https://lvs7k.github.io/posts/</loc>
-    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
+    <lastmod>2019-01-10T22:58:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://lvs7k.github.io/categories/programming/</loc>
-    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
+    <lastmod>2019-01-10T22:58:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://lvs7k.github.io/tags/</loc>
-    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
+    <lastmod>2019-01-08T20:24:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://lvs7k.github.io/</loc>
-    <lastmod>2019-01-02T23:05:03+09:00</lastmod>
+    <lastmod>2019-01-10T22:58:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   
