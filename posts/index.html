@@ -84,6 +84,404 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">10 Jan 2019, 22:58</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2019年1月 開発環境構築メモ(Windows7)</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
+                                
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
+
+<pre><code>SCOOP = D:\scoop
+STACK_ROOT = D:\sr
+</code></pre>
+
+<h2 id="インストール">インストール</h2>
+
+<ul>
+<li><a href="https://git-scm.com/download/win">PortableGit</a></li>
+<li><a href="https://www.msys2.org/">MSYS2</a></li>
+<li><a href="https://scoop.sh/">Scoop</a></li>
+<li><a href="https://docs.haskellstack.org/en/stable/README/">The Haskell Tool Stack</a></li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+</ul>
+
+<h2 id="msys2">MSYS2</h2>
+
+<ul>
+<li><code>~/.bash_profile</code></li>
+</ul>
+
+<pre><code class="language-bash">P1=&quot;/c/PortableGit/cmd&quot;
+P2=&quot;/d/stack/local/bin&quot;
+P3=&quot;/d/scoop/shims&quot;
+PATH=&quot;${PATH}:${P1}:${P2}:${P3}&quot;
+
+if [ -f &quot;${HOME}/.bashrc&quot; ] ; then
+  source &quot;${HOME}/.bashrc&quot;
+fi
+</code></pre>
+
+<ul>
+<li><code>~/.bashrc</code></li>
+</ul>
+
+<pre><code class="language-bash">source ~/git-completion.bash
+eval &quot;$(stack --bash-completion-script stack)&quot;
+</code></pre>
+
+<ul>
+<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
+<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
+<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
+</ul>
+
+<h2 id="stack">Stack</h2>
+
+<ul>
+<li><code>$STACK_ROOT/config.yaml</code></li>
+</ul>
+
+<pre><code class="language-yaml">templates:
+  params:
+    author-name: lvs7k
+    author-email: lvs7k@example.com
+    category: Your Projects Category
+    copyright: 'Copyright (c) 2019 lvs7k'
+    github-username: lvs7k
+
+skip-msys: true
+local-bin-path: D:\stack\local\bin
+local-programs-path: D:\stack\
+</code></pre>
+
+<h2 id="visual-studio-code">Visual Studio Code</h2>
+
+<ul>
+<li><code>settings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
+{
+    /* editor */
+    &quot;editor.fontSize&quot;: 20,
+    &quot;editor.rulers&quot;: [80],
+    &quot;editor.wordWrap&quot;: &quot;off&quot;,
+    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
+    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
+    &quot;files.trimTrailingWhitespace&quot;: true,
+    &quot;workbench.editor.enablePreview&quot;: false,
+    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
+    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
+    &quot;extensions.autoUpdate&quot;: false,
+    &quot;zenMode.hideStatusBar&quot;: false,
+
+    /* shell */
+    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
+    &quot;terminal.integrated.shellArgs.windows&quot;: [
+        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
+    ],
+    &quot;terminal.integrated.setLocaleVariables&quot;: true,
+
+    /* vim */
+    &quot;vim.hlsearch&quot;: true,
+    &quot;vim.handleKeys&quot;: {
+        &quot;&lt;C-d&gt;&quot;: false,
+        &quot;&lt;C-k&gt;&quot;: false,
+    },
+    &quot;vim.insertModeKeyBindings&quot;: [
+        {
+            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
+            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
+        }
+    ],
+
+    /* Haskell */
+    &quot;ghcSimple.bareStartupCommands&quot;: [],
+    &quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;,
+    &quot;[haskell]&quot;: {
+        &quot;editor.tabSize&quot;: 2,
+        &quot;editor.detectIndentation&quot;: false
+    },
+}
+</code></pre>
+
+<ul>
+<li><code>keybindings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
+[
+// ctrl+enterで行末へ移動
+{
+  &quot;key&quot;: &quot;ctrl+enter&quot;,
+  &quot;command&quot;: &quot;cursorEnd&quot;,
+  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+},
+// ターミナルの切り替え
+{
+  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
+  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
+  &quot;when&quot;: &quot;terminalFocus&quot;
+},
+{
+  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
+  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
+  &quot;when&quot;: &quot;terminalFocus&quot;
+}
+]
+</code></pre>
+
+<h2 id="その他">その他</h2>
+
+<ul>
+<li><code>pacman -Syu</code></li>
+<li><code>pacman -S base-devel</code></li>
+<li><code>pacman -S mingw-w64-x86_64-toolchain</code></li>
+<li><code>stack setup</code></li>
+<li><code>scoop install hugo</code></li>
+</ul>
+
+<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
+
+<ul>
+<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーで使えない</li>
+<li><code>pacman -S winpty</code></li>
+<li><code>winpty stack ghci</code></li>
+</ul>
+
+<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
+
+<ul>
+<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
+<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
+</ul>
+
+<h2 id="参考リンク">参考リンク</h2>
+
+<ul>
+<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
+<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
+
+<ul>
+<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
+</ul></li>
+<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
+</ul>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">08 Jan 2019, 20:24</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/" class="post-title">GCCとHaskellのFFIについて学習メモ</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                                    <a class="post-category post-category-c" href='https://lvs7k.github.io/tags/c'>c</a>
+                                
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<h2 id="このページより読むべきリンク">このページより読むべきリンク</h2>
+
+<p>上の南洋理工大学のホームページがマジでわかりやすい</p>
+
+<ul>
+<li><a href="http://www.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html">GCC and Make - A Tutorial on how to compile, link and build C/C++ applications</a></li>
+<li><a href="http://www.kotha.net/ghcguide_ja/latest/">栄光のグラスゴーHaskellコンパイルシステム利用の手引き　バージョン7.8.2</a></li>
+</ul>
+
+<h2 id="gccのコンパイルプロセス">GCCのコンパイルプロセス</h2>
+
+<p>参考リンクを読め</p>
+
+<ol>
+<li>Pre-processing
+
+<ul>
+<li>ヘッダのインクルード（<code>#include</code>）とマクロ（<code>#define</code>）の展開（<code>.i, .ii</code>）</li>
+</ul></li>
+<li>Compilation
+
+<ul>
+<li>プリプロセスされたソースからアセンブリを出力（<code>.s</code>）</li>
+</ul></li>
+<li>Assembly
+
+<ul>
+<li>アセンブリからオブジェクトコードを出力（<code>.o</code>）</li>
+</ul></li>
+<li>Linker
+
+<ul>
+<li>オブジェクトコードとライブラリをリンクして実行ファイルを出力（<code>.exe</code>, <code>.a</code>, <code>.dll</code>）</li>
+</ul></li>
+</ol>
+
+<ul>
+<li>GCCはそれぞれのプロセスを行うプログラムを呼び出している
+
+<ul>
+<li><code>cpp</code></li>
+<li><code>cc1</code></li>
+<li><code>as</code></li>
+<li><code>ld</code></li>
+</ul></li>
+</ul>
+
+<h2 id="静的ライブラリと動的ライブラリ">静的ライブラリと動的ライブラリ</h2>
+
+<ul>
+<li>静的ライブラリ
+
+<ul>
+<li>複数のオブジェクトコードを<code>ar</code>というコマンドでまとめたもの</li>
+</ul></li>
+<li>動的ライブラリ
+
+<ul>
+<li>複数のプログラムで共有して使用することができるライブラリ</li>
+</ul></li>
+</ul>
+
+<h2 id="gccで覚えるべきオプション">GCCで覚えるべきオプション</h2>
+
+<ul>
+<li><code>-o</code>
+
+<ul>
+<li>出力ファイル名を指定</li>
+</ul></li>
+<li><code>-v</code>
+
+<ul>
+<li>これつけてコンパイルすると知りたい情報が得られるかも</li>
+</ul></li>
+<li><code>-l</code>
+
+<ul>
+<li>静的ライブラリの<code>lib&lt;ここ&gt;.a</code>を指定</li>
+<li>動的ライブラリの<code>&lt;ここ&gt;.dll</code>を指定</li>
+</ul></li>
+<li><code>-L</code>
+
+<ul>
+<li>ライブラリのあるディレクトリ</li>
+</ul></li>
+<li><code>-I</code>
+
+<ul>
+<li>ヘッダファイルのあるディレクトリ</li>
+</ul></li>
+<li><code>-shared</code>
+
+<ul>
+<li><code>DLL</code>を作成する時に</li>
+</ul></li>
+</ul>
+
+<h2 id="コンパイル済みのファイルを調べるのに使うコマンド">コンパイル済みのファイルを調べるのに使うコマンド</h2>
+
+<ul>
+<li><code>file</code></li>
+<li><code>nm</code></li>
+<li><code>ldd</code></li>
+</ul>
+
+<h2 id="makefileの書き方">Makefileの書き方</h2>
+
+<p>参考リンクを読め</p>
+
+<hr />
+
+<h2 id="haskell-ffi">Haskell FFI</h2>
+
+<h2 id="rwh17章-pcreのコンパイル">RWH17章 PCREのコンパイル</h2>
+
+<ul>
+<li><p><code>pacman -S mingw64/mingw-w64-x86_64-pcre</code></p>
+
+<ul>
+<li><code>msys</code>ではなく<code>mingw64</code>のをインストールする</li>
+</ul></li>
+
+<li><p><code>rwh17.cabal</code></p>
+
+<pre><code class="language-cabal">executable rwh17
+hs-source-dirs:      src
+main-is:             Main.hs
+default-language:    Haskell2010
+build-depends:       base &gt;= 4.7 &amp;&amp; &lt; 5
+include-dirs:        D:\msys64\mingw64\include
+extra-lib-dirs:      D:\msys64\mingw64\lib
+extra-libraries:     pcre
+</code></pre>
+
+<ul>
+<li><code>package.yaml</code>と<code>stack.yaml</code>に設定追加でも同じ</li>
+<li><code>stack build --ghc-options=&quot;-ID:\msys64\mingw64\include -LD:\msys64\mingw64\lib -lpcre&quot;</code>でも同じ</li>
+</ul></li>
+
+<li><p><code>cabal</code>に<code>extra-libraries</code>を設定するとVSCodeのSimple GHCが動作しなくなる</p>
+
+<ul>
+<li><code>&quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;</code>でとりあえず動く</li>
+</ul></li>
+
+<li><p><code>stack exec -- hsc2hs src/Regex.hsc -v -ID:/msys64/mingw64/include</code></p>
+
+<ul>
+<li>指定しないとGHCのincludeしか探しに行かないので自分で追加する必要あり</li>
+</ul></li>
+</ul>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">02 Jan 2019, 23:05</h1>
                 <section class="post">
                     <header class="post-header">
@@ -318,197 +716,6 @@ getHand client@Client{..} = loop
       '3':_ -&gt; return Scissors
       _     -&gt; loop
 </code></pre>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">23 Dec 2018, 12:50</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                
-                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
-                                
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                
-                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                                
-                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
-                                
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
-
-<pre><code>PATH = C:\PortableGit\cmd;D:\stack\local\bin;D:\scoop\shims;
-MSYS2_PATH_TYPE = inherit
-SCOOP = D:\scoop
-STACK_ROOT = D:\sr
-</code></pre>
-
-<h2 id="インストール">インストール</h2>
-
-<ul>
-<li><a href="https://git-scm.com/download/win">PortableGit</a></li>
-<li><a href="https://www.msys2.org/">MSYS2</a></li>
-<li><a href="https://scoop.sh/">Scoop</a></li>
-<li><a href="https://docs.haskellstack.org/en/stable/README/">The Haskell Tool Stack</a></li>
-<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-</ul>
-
-<h2 id="stack">Stack</h2>
-
-<ul>
-<li><code>$STACK_ROOT/config.yaml</code></li>
-</ul>
-
-<pre><code class="language-yaml"># This file contains default non-project-specific settings for 'stack', used
-# in all projects.  For more information about stack's configuration, see
-# http://docs.haskellstack.org/en/stable/yaml_configuration/
-
-# The following parameters are used by &quot;stack new&quot; to automatically fill fields
-# in the cabal config. We recommend uncommenting them and filling them out if
-# you intend to use 'stack new'.
-# See https://docs.haskellstack.org/en/stable/yaml_configuration/#templates
-templates:
-  params:
-    author-name: lvs7k
-    author-email: lvs7k@example.com
-    category: Your Projects Category
-    copyright: 'Copyright (c) 2018 lvs7k'
-    github-username: lvs7k
-
-skip-msys: true
-local-bin-path: D:\stack\local\bin
-local-programs-path: D:\stack\
-</code></pre>
-
-<h2 id="visual-studio-code">Visual Studio Code</h2>
-
-<ul>
-<li><code>settings.json</code></li>
-</ul>
-
-<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
-{
-    /* editor */
-    &quot;editor.fontSize&quot;: 20,
-    &quot;editor.rulers&quot;: [80],
-    &quot;editor.wordWrap&quot;: &quot;off&quot;,
-    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
-    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
-    &quot;files.trimTrailingWhitespace&quot;: true,
-    &quot;workbench.editor.enablePreview&quot;: false,
-    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
-    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
-    &quot;extensions.autoUpdate&quot;: false,
-    &quot;zenMode.hideStatusBar&quot;: false,
-
-    /* shell */
-    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
-    &quot;terminal.integrated.shellArgs.windows&quot;: [
-        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
-    ],
-    &quot;terminal.integrated.setLocaleVariables&quot;: true,
-
-    /* vim */
-    &quot;vim.hlsearch&quot;: true,
-    &quot;vim.handleKeys&quot;: {
-        &quot;&lt;C-d&gt;&quot;: false,
-        &quot;&lt;C-k&gt;&quot;: false,
-    },
-    &quot;vim.insertModeKeyBindings&quot;: [
-        {
-            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
-            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
-        }
-    ],
-
-    /* Haskell */
-    &quot;[haskell]&quot;: {
-        &quot;editor.tabSize&quot;: 2,
-        &quot;editor.detectIndentation&quot;: false
-    },
-}
-</code></pre>
-
-<ul>
-<li><code>keybindings.json</code></li>
-</ul>
-
-<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
-[
-// ctrl+enterで行末へ移動
-{
-  &quot;key&quot;: &quot;ctrl+enter&quot;,
-  &quot;command&quot;: &quot;cursorEnd&quot;,
-  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-},
-// ターミナルの切り替え
-{
-  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-},
-{
-  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-}
-]
-</code></pre>
-
-<h2 id="msys2">MSYS2</h2>
-
-<ul>
-<li><code>~/.bashrc</code></li>
-</ul>
-
-<pre><code class="language-bash">source ~/git-completion.bash
-eval &quot;$(stack --bash-completion-script stack)&quot;
-</code></pre>
-
-<ul>
-<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
-<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
-<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
-</ul>
-
-<h2 id="その他">その他</h2>
-
-<ul>
-<li><code>stack setup</code></li>
-<li><code>scoop install hugo</code></li>
-</ul>
-
-<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
-
-<ul>
-<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーになってしまうので</li>
-<li><code>pacman -S winpty</code></li>
-<li><code>winpty stack ghci</code></li>
-</ul>
-
-<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
-
-<ul>
-<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
-<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
-</ul>
 
                     </div>
                 </section>
@@ -923,528 +1130,6 @@ q6 n
 
 <ul>
 <li><code>modPow</code>のほうが分かりやすくて好き</li>
-</ul>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">23 Nov 2018, 17:19</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-5/" class="post-title">Haskellで蟻本（初級編） - グラフ</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                
-                                    <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
-                                
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                
-                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                                
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<p>※蟻本の入力例でしかテストしていません</p>
-
-<p><em>TODO: コードをもっと綺麗にする</em></p>
-
-<h2 id="入力の形式について">入力の形式について</h2>
-
-<p>標準入力は下記の形式で与えられるものとする。</p>
-
-<ul>
-<li><code>n: 頂点数</code></li>
-<li><code>m: 辺の数</code></li>
-<li><code>c: 重み</code></li>
-</ul>
-
-<pre><code>n m
-f1 t1
-f2 t2
-...
-fn tn
-</code></pre>
-
-<pre><code>n m
-f1 t1 c1
-f2 t2 c2
-...
-fn tn cn
-</code></pre>
-
-<h2 id="グラフの表現">グラフの表現</h2>
-
-<p>隣接行列も隣接リストも<code>accumArray</code>を使えば良い。</p>
-
-<h3 id="隣接行列">隣接行列</h3>
-
-<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
-
-import Control.Monad
-import Control.Monad.ST
-import Data.Array.ST
-import Data.Array
-import Data.STRef
-import Data.List
-
--- 隣接行列
-buildGMatrix :: (Int, Int) -&gt; [(Int, Int)] -&gt; Array (Int, Int) Int
-buildGMatrix (i, j) es = accumArray (flip const) 0 ((i, i), (j, j)) (zip es (repeat 1))
-</code></pre>
-
-<h3 id="隣接リスト">隣接リスト</h3>
-
-<pre><code class="language-haskell">-- 隣接リスト
-buildGList :: (Int, Int) -&gt; [(Int, a)] -&gt; Array Int [a]
-buildGList (i, j) es = accumArray (flip (:)) [] (i, j) es
-</code></pre>
-
-<ul>
-<li><code>containers</code>の<code>Data.Graph.buildG</code>と同じ</li>
-</ul>
-
-<hr />
-
-<h2 id="グラフの探索">グラフの探索</h2>
-
-<pre><code class="language-haskell">-- 二部グラフ判定
-q1 :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Bool
-q1 n m es = runST $ do
-    color &lt;- newArray (0, n - 1) 0 :: ST s (STUArray s Int Int)
-    bs &lt;- forM [0 .. n - 1] $ \i -&gt; do
-        ci &lt;- readArray color i
-        if ci == 0
-            then go color 1 i
-            else return True
-    return (and bs)
-  where
-    g = buildGList (0, n - 1) es
-    go color c i = do
-        ci &lt;- readArray color i
-        if ci == 0
-            then do
-                writeArray color i c
-                and &lt;$&gt; sequence (fmap (go color (-c)) (g ! i))
-            else return (ci == c)
-</code></pre>
-
-<hr />
-
-<h2 id="最短経路問題">最短経路問題</h2>
-
-<h3 id="ベルマンフォード法">ベルマンフォード法</h3>
-
-<pre><code class="language-haskell">-- ベルマン-フォード法
-bellman :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Array Int Int
-bellman n m start es = runSTArray $ do
-    d &lt;- newArray (0, n - 1) maxBound :: ST s (STArray s Int Int)
-    writeArray d start 0
-    go d
-    return d
- where
-    go d = do
-        rupd &lt;- newSTRef False
-        forM_ es $ \(f, t, c) -&gt; do
-            df &lt;- readArray d f
-            dt &lt;- readArray d t
-            when (df /= maxBound &amp;&amp; df + c &lt; dt) $ do
-                writeArray d t (df + c)
-                writeSTRef rupd True
-        readSTRef rupd &gt;&gt;= \upd -&gt; when upd (go d)
-</code></pre>
-
-<ul>
-<li>用意するもの
-
-<ul>
-<li>辺のリスト</li>
-<li>1次元配列
-
-<ul>
-<li>初期化：始点のみ<code>0</code>, 残りは<code>INF</code></li>
-<li><code>maxBound</code>に加算すると負になってしまうので注意</li>
-</ul></li>
-</ul></li>
-<li>ループ
-
-<ul>
-<li>辺のリストに対してループ</li>
-<li>辺の始点と終点の距離を配列から取得し、終点の距離を更新</li>
-<li>1つでも更新できたら再帰呼び出し</li>
-</ul></li>
-</ul>
-
-<h3 id="ダイクストラ法">ダイクストラ法</h3>
-
-<pre><code class="language-haskell">-- ダイクストラ法
-dijkstra :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Array Int Int
-dijkstra n m start es = runSTArray $ do
-    d &lt;- newArray (0, n - 1) maxBound :: ST s (STArray s Int Int)
-    writeArray d start 0
-    go d (push (0, start) Empty :: Skew (Int, Int))
-    return d
-  where
-    g = buildGList (0, n - 1) [(a, (b, c)) | (a, b, c) &lt;- es]
-    go d que
-        | Just ((c, f), q) &lt;- pop que = do
-            rq &lt;- newSTRef q
-            df &lt;- readArray d f
-            when (c &lt;= df) $ do
-                forM_ (g ! f) $ \(t, c) -&gt; do
-                    dt &lt;- readArray d t
-                    when (df + c &lt; dt) $ do
-                        writeArray d t (df + c)
-                        modifySTRef' rq (\q -&gt; push (df + c, t) q)
-            go d =&lt;&lt; readSTRef rq
-        | otherwise = return ()
-</code></pre>
-
-<ul>
-<li>用意するもの
-
-<ul>
-<li>グラフ（隣接リスト）</li>
-<li>優先度付きキュー
-
-<ul>
-<li><code>(コスト, 頂点)</code>の並びでタプルにし、コストの小さい順で取り出せるようにする</li>
-<li>初期化：<code>(0, 始点)</code></li>
-</ul></li>
-<li>1次元配列
-
-<ul>
-<li>初期化：始点のみ<code>0</code>, 残りは<code>INF</code></li>
-</ul></li>
-</ul></li>
-<li>ループ
-
-<ul>
-<li>キューが空になるまでループ</li>
-<li>キューのコストと配列のコストを比較し配列のほうが既に小さいときはスキップ</li>
-<li>グラフより隣接する頂点を取り出し、更新できるときは
-
-<ul>
-<li>配列を更新</li>
-<li>キューにも追加</li>
-</ul></li>
-</ul></li>
-</ul>
-
-<h3 id="ワーシャル-フロイド法">ワーシャル-フロイド法</h3>
-
-<pre><code class="language-haskell">-- ワーシャル-フロイド法
-warshall :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Array (Int, Int) Int
-warshall n m es = runSTArray $ do
-    d &lt;- newArray ((0, 0), (n - 1, n - 1)) inf
-    sequence_ [writeArray d (i, i) 0 | i &lt;- [0 .. n - 1]]
-    sequence_ [writeArray d (f, t) c | (f, t, c) &lt;- es]
-    forM_ [0 .. n - 1] $ \k -&gt; do
-        forM_ [0 .. n - 1] $ \i -&gt; do
-            forM_ [0 .. n - 1] $ \j -&gt; do
-                dij &lt;- readArray d (i, j)
-                dik &lt;- readArray d (i, k)
-                dkj &lt;- readArray d (k, j)
-                writeArray d (i, j) $ min dij (dik + dkj)
-    return d
-  where
-    inf = 10 ^ 9 + 7
-</code></pre>
-
-<ul>
-<li>用意するもの
-
-<ul>
-<li>辺のリスト</li>
-<li>2次元配列
-
-<ul>
-<li>初期化
-
-<ul>
-<li>始点と終点が同じ場合は<code>0</code></li>
-<li>辺が存在する場合はそのコスト</li>
-<li>それ以外は<code>INF</code></li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li>ループ
-
-<ul>
-<li>3重ループ</li>
-<li>1番外側のループがその頂点を経由するかしないか</li>
-<li>2番目と3番目のループが始点と終点</li>
-<li>経由するかしないかで距離が短いほうで更新</li>
-</ul></li>
-</ul>
-
-<h3 id="経路復元-ダイクストラ法">経路復元（ダイクストラ法）</h3>
-
-<pre><code class="language-haskell">-- 経路復元（ダイクストラ法）
-dijkstraPath :: Int -&gt; Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; [Int]
-dijkstraPath n m start end es = runST $ do
-    d &lt;- newArray (0, n - 1) maxBound :: ST s (STArray s Int Int)
-    p &lt;- newArray (0, n - 1) (-1) :: ST s (STArray s Int Int)
-    writeArray d start 0
-    go d p (push (0, start) Empty :: Skew (Int, Int))
-    path [end] p
-  where
-    g = buildGList (0, n - 1) [(a, (b, c)) | (a, b, c) &lt;- es]
-    go d p que
-        | Just ((c, f), q) &lt;- pop que = do
-            rq &lt;- newSTRef q
-            df &lt;- readArray d f
-            when (c &lt;= df) $ do
-                forM_ (g ! f) $ \(t, c) -&gt; do
-                    dt &lt;- readArray d t
-                    when (df + c &lt; dt) $ do
-                        writeArray d t (df + c)
-                        writeArray p t f
-                        modifySTRef' rq (\q -&gt; push (df + c, t) q)
-            go d p =&lt;&lt; readSTRef rq
-        | otherwise = return ()
-    path (x:xs) p
-        | x == start = return (x:xs)
-        | otherwise  = do
-            pt &lt;- readArray p x
-            path (pt:x:xs) p
-</code></pre>
-
-<ul>
-<li>更新時に手前の頂点をメモっておいて最後に復元する</li>
-</ul>
-
-<hr />
-
-<h2 id="最小全域木">最小全域木</h2>
-
-<h3 id="プリム法">プリム法</h3>
-
-<pre><code class="language-haskell">-- プリム法
-prim :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
-prim n m start es = runST $ do
-    used &lt;- newArray (0, n - 1) False :: ST s (STArray s Int Bool)
-    writeArray used start True
-    let ss = fmap (\(t, c) -&gt; (c, t)) (g ! start)
-    go 0 used (foldr push Empty ss)
-  where
-    g = buildGList (0, n - 1) [(a, (b, c)) | (a, b, c) &lt;- es]
-    go !k used que
-        | Just ((c, t), q) &lt;- pop que = do
-            usedt &lt;- readArray used t
-            if usedt
-                then go k used q
-                else do
-                    let ss = fmap (\(t, c) -&gt; (c, t)) (g ! t)
-                    let q' = foldr push q ss
-                    writeArray used t True
-                    go (k + c) used q'
-        | otherwise = return k
-</code></pre>
-
-<ul>
-<li>用意するもの
-
-<ul>
-<li>グラフ（隣接リスト）</li>
-<li>優先度付きキュー
-
-<ul>
-<li>初期化：始点から伸びている辺を<code>(コスト, 頂点)</code>の並びで追加</li>
-</ul></li>
-<li>1次元配列
-
-<ul>
-<li>既にその頂点が最小全域木に含まれているかをメモする配列</li>
-<li>初期化：始点のみ<code>True</code>, 残りは<code>False</code></li>
-</ul></li>
-</ul></li>
-<li>ループ
-
-<ul>
-<li>キューが空になるまでループ</li>
-<li>キューから取り出した辺の終点が既に最小全域木に含まれている場合はスキップ</li>
-<li>そうでなければ採用した辺の終点から伸びている辺を取り出しキューに追加</li>
-<li>採用した辺の終点をメモし、再帰</li>
-</ul></li>
-</ul>
-
-<h3 id="クラスカル法">クラスカル法</h3>
-
-<pre><code class="language-haskell">-- クラスカル法
-kruskal :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
-kruskal n m es = runST $ do
-    uf &lt;- newUF (0, n - 1)
-    rc &lt;- newSTRef 0
-    forM_ es' $ \(f, t, c) -&gt; do
-        isSame &lt;- same uf f t
-        when (not isSame) $ do
-            unite uf f t
-            modifySTRef' rc (+ c)
-    readSTRef rc
-  where
-    es' = sortBy (\(_, _, a) (_, _, b) -&gt; a `compare` b) es
-</code></pre>
-
-<ul>
-<li>用意するもの
-
-<ul>
-<li>辺のリスト
-
-<ul>
-<li>コストの小さい順にソート</li>
-</ul></li>
-<li>Union-Find木</li>
-</ul></li>
-<li>ループ
-
-<ul>
-<li>コストの小さい辺から見ていく</li>
-<li>辺の始点と終点が既に同じグループならスキップ</li>
-<li>そうでなければその辺を採用して始点と終点を同じグループにする</li>
-</ul></li>
-</ul>
-
-<hr />
-
-<h2 id="練習問題">練習問題</h2>
-
-<p>初級とか言ってるけど難しすぎでは…？</p>
-
-<pre><code class="language-haskell">-- Roadblocks (POJ No.3255)
-q2 :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
-q2 n m es = runST $ do
-    d1 &lt;- newListArray (1, 4) (0 : repeat inf) :: ST s (STUArray s Int Int)
-    d2 &lt;- newListArray (1, 4) (0 : repeat inf) :: ST s (STUArray s Int Int)
-    go d1 d2 (push (0, 1) Empty)
-    readArray d2 n
-  where
-    inf = 10 ^ 9 + 7
-    g = buildGList (1, n) [(f, (t, c)) | (f, t, c) &lt;- es]
-    go d1 d2 que
-        | Just ((cost, v), que') &lt;- pop que = do
-            rque &lt;- newSTRef que'
-            d2v &lt;- readArray d2 v
-            when (cost &lt;= d2v) $ do
-                forM_ (g ! v) $ \(t, c) -&gt; do
-                    d1t &lt;- readArray d1 t
-                    d2t &lt;- readArray d2 t
-                    let d2c = cost + c
-                    when (d2c &lt; d1t) $ do
-                        writeArray d1 t d2c
-                        modifySTRef' rque $ \q -&gt; push (d2c, t) q
-                    when (d2c &lt; d2t &amp;&amp; d1t &lt; d2c) $ do
-                        writeArray d2 t d2c
-                        modifySTRef' rque $ \q -&gt; push (d2c, t) q
-            go d1 d2 =&lt;&lt; readSTRef rque
-        | otherwise = return ()
-</code></pre>
-
-<ul>
-<li>ダイクストラ法で最短距離を求めつつ2番目の最短路も求める</li>
-<li>キューから取り出して最短距離は更新できないが2番目の最短路が更新できるなら更新</li>
-</ul>
-
-<pre><code class="language-haskell">-- Conscription (POJ No.3723)
-q3 :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
-q3 n m r es = runST $ do
-    uf &lt;- newUF (0, n + m - 1)
-    k &lt;- kruskal 0 uf es'
-    return $ 10000 * (n + m) + k
-  where
-    es' = sortBy (\(_, _, c1) (_, _, c2) -&gt; c1 `compare` c2)
-        $ concat [[(f, n + t, -c), (n + t, f, -c)] | (f, t, c) &lt;- es]
-    kruskal !k uf []             = return k
-    kruskal !k uf ((f, t, c):rs) = do
-        isSame &lt;- same uf f t
-        if isSame
-            then kruskal k uf rs
-            else do
-                unite uf f t
-                kruskal (k + c) uf rs
-</code></pre>
-
-<ul>
-<li>辺のコストを負にして最小全域木を求める</li>
-<li>なぜこれで答えが求まるのかいまいちわかってない</li>
-</ul>
-
-<pre><code class="language-haskell">-- Layout (POJ No.3169)
-q4 :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; [(Int, Int, Int)] -&gt; Int
-q4 n ml md as bs = runST $ do
-    d &lt;- newListArray (1, n) (0 : repeat maxBound) :: ST s (STUArray s Int Int)
-    forM_ [1 .. n] $ \_ -&gt; do
-        forM_ as  $ \e -&gt; update d e
-        forM_ bs' $ \e -&gt; update d e
-        forM_ cs  $ \e -&gt; update d e
-    d1 &lt;- readArray d 1
-    dn &lt;- readArray d n
-    case () of
-        _ | d1 &lt; 0         -&gt; return (-1)
-          | dn == maxBound -&gt; return (-2)
-          | otherwise      -&gt; return dn
-  where
-    bs' = [(t, f, -c) | (f, t, c) &lt;- bs]
-    cs  = [(i + 1, i, 0) | i &lt;- [1 .. n - 1]]
-    update d (f, t, c) = do
-        df &lt;- readArray d f
-        when (df &lt; maxBound) $ do
-            dt &lt;- readArray d t
-            writeArray d t (min dt (df + c))
-</code></pre>
-
-<ul>
-<li>普通の最短路問題
-
-<ul>
-<li><code>d(v) + w &gt;= d(u)</code>
-
-<ul>
-<li>頂点vから頂点uへコストwの辺が存在</li>
-</ul></li>
-</ul></li>
-<li>この問題
-
-<ul>
-<li><code>d[i+1] + 0     &gt;= d[i]</code>
-
-<ul>
-<li>頂点i+1から頂点iへコスト0の辺が存在</li>
-</ul></li>
-<li><code>d[AL]  + DL    &gt;= d[BL]</code>
-
-<ul>
-<li>頂点ALから頂点BLへコストDLの辺が存在</li>
-</ul></li>
-<li><code>d[BD]  + (-DD) &gt;= d[AD]</code>
-
-<ul>
-<li>頂点BDから頂点ADへコスト-DDの辺が存在</li>
-</ul></li>
-</ul></li>
-<li>負の辺が含まれるためベルマン-フォード法で最短経路を求める</li>
-<li>負の閉路が存在する場合
-
-<ul>
-<li>例）1と3は仲良しで距離10以内、2と3は仲悪くて距離11以上離す</li>
-</ul></li>
-<li>いくらでも離れることが可能な場合
-
-<ul>
-<li>例）Nは誰とも仲良くない</li>
-</ul></li>
 </ul>
 
                     </div>

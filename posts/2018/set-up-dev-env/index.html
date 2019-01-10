@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2018年12月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog</title>
+    <title>2019年1月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog</title>
 
     <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.52" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="2018年12月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
+    <meta name="twitter:title" content="2019年1月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
     <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="2018年12月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
+    <meta property="og:title" content="2019年1月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
     <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -83,11 +83,11 @@
         <div>
             
             <div class="posts">
-                <h1 class="content-subhead">23 Dec 2018, 12:50</h1>
+                <h1 class="content-subhead">10 Jan 2019, 22:58</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
+                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2019年1月 開発環境構築メモ(Windows7)</a>
 
                         <p class="post-meta">
                             
@@ -115,9 +115,7 @@
 
 <h2 id="ユーザ環境変数">ユーザ環境変数</h2>
 
-<pre><code>PATH = C:\PortableGit\cmd;D:\stack\local\bin;D:\scoop\shims;
-MSYS2_PATH_TYPE = inherit
-SCOOP = D:\scoop
+<pre><code>SCOOP = D:\scoop
 STACK_ROOT = D:\sr
 </code></pre>
 
@@ -131,26 +129,48 @@ STACK_ROOT = D:\sr
 <li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
 </ul>
 
+<h2 id="msys2">MSYS2</h2>
+
+<ul>
+<li><code>~/.bash_profile</code></li>
+</ul>
+
+<pre><code class="language-bash">P1=&quot;/c/PortableGit/cmd&quot;
+P2=&quot;/d/stack/local/bin&quot;
+P3=&quot;/d/scoop/shims&quot;
+PATH=&quot;${PATH}:${P1}:${P2}:${P3}&quot;
+
+if [ -f &quot;${HOME}/.bashrc&quot; ] ; then
+  source &quot;${HOME}/.bashrc&quot;
+fi
+</code></pre>
+
+<ul>
+<li><code>~/.bashrc</code></li>
+</ul>
+
+<pre><code class="language-bash">source ~/git-completion.bash
+eval &quot;$(stack --bash-completion-script stack)&quot;
+</code></pre>
+
+<ul>
+<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
+<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
+<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
+</ul>
+
 <h2 id="stack">Stack</h2>
 
 <ul>
 <li><code>$STACK_ROOT/config.yaml</code></li>
 </ul>
 
-<pre><code class="language-yaml"># This file contains default non-project-specific settings for 'stack', used
-# in all projects.  For more information about stack's configuration, see
-# http://docs.haskellstack.org/en/stable/yaml_configuration/
-
-# The following parameters are used by &quot;stack new&quot; to automatically fill fields
-# in the cabal config. We recommend uncommenting them and filling them out if
-# you intend to use 'stack new'.
-# See https://docs.haskellstack.org/en/stable/yaml_configuration/#templates
-templates:
+<pre><code class="language-yaml">templates:
   params:
     author-name: lvs7k
     author-email: lvs7k@example.com
     category: Your Projects Category
-    copyright: 'Copyright (c) 2018 lvs7k'
+    copyright: 'Copyright (c) 2019 lvs7k'
     github-username: lvs7k
 
 skip-msys: true
@@ -200,6 +220,8 @@ local-programs-path: D:\stack\
     ],
 
     /* Haskell */
+    &quot;ghcSimple.bareStartupCommands&quot;: [],
+    &quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;,
     &quot;[haskell]&quot;: {
         &quot;editor.tabSize&quot;: 2,
         &quot;editor.detectIndentation&quot;: false
@@ -233,25 +255,12 @@ local-programs-path: D:\stack\
 ]
 </code></pre>
 
-<h2 id="msys2">MSYS2</h2>
-
-<ul>
-<li><code>~/.bashrc</code></li>
-</ul>
-
-<pre><code class="language-bash">source ~/git-completion.bash
-eval &quot;$(stack --bash-completion-script stack)&quot;
-</code></pre>
-
-<ul>
-<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
-<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
-<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
-</ul>
-
 <h2 id="その他">その他</h2>
 
 <ul>
+<li><code>pacman -Syu</code></li>
+<li><code>pacman -S base-devel</code></li>
+<li><code>pacman -S mingw-w64-x86_64-toolchain</code></li>
 <li><code>stack setup</code></li>
 <li><code>scoop install hugo</code></li>
 </ul>
@@ -259,7 +268,7 @@ eval &quot;$(stack --bash-completion-script stack)&quot;
 <h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
 
 <ul>
-<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーになってしまうので</li>
+<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーで使えない</li>
 <li><code>pacman -S winpty</code></li>
 <li><code>winpty stack ghci</code></li>
 </ul>
@@ -269,6 +278,18 @@ eval &quot;$(stack --bash-completion-script stack)&quot;
 <ul>
 <li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
 <li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
+</ul>
+
+<h2 id="参考リンク">参考リンク</h2>
+
+<ul>
+<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
+<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
+
+<ul>
+<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
+</ul></li>
+<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
 </ul>
 
                     </div>

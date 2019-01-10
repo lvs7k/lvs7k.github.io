@@ -84,6 +84,524 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">23 Nov 2018, 17:19</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-5/" class="post-title">Haskellで蟻本（初級編） - グラフ</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>※蟻本の入力例でしかテストしていません</p>
+
+<p><em>TODO: コードをもっと綺麗にする</em></p>
+
+<h2 id="入力の形式について">入力の形式について</h2>
+
+<p>標準入力は下記の形式で与えられるものとする。</p>
+
+<ul>
+<li><code>n: 頂点数</code></li>
+<li><code>m: 辺の数</code></li>
+<li><code>c: 重み</code></li>
+</ul>
+
+<pre><code>n m
+f1 t1
+f2 t2
+...
+fn tn
+</code></pre>
+
+<pre><code>n m
+f1 t1 c1
+f2 t2 c2
+...
+fn tn cn
+</code></pre>
+
+<h2 id="グラフの表現">グラフの表現</h2>
+
+<p>隣接行列も隣接リストも<code>accumArray</code>を使えば良い。</p>
+
+<h3 id="隣接行列">隣接行列</h3>
+
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
+
+import Control.Monad
+import Control.Monad.ST
+import Data.Array.ST
+import Data.Array
+import Data.STRef
+import Data.List
+
+-- 隣接行列
+buildGMatrix :: (Int, Int) -&gt; [(Int, Int)] -&gt; Array (Int, Int) Int
+buildGMatrix (i, j) es = accumArray (flip const) 0 ((i, i), (j, j)) (zip es (repeat 1))
+</code></pre>
+
+<h3 id="隣接リスト">隣接リスト</h3>
+
+<pre><code class="language-haskell">-- 隣接リスト
+buildGList :: (Int, Int) -&gt; [(Int, a)] -&gt; Array Int [a]
+buildGList (i, j) es = accumArray (flip (:)) [] (i, j) es
+</code></pre>
+
+<ul>
+<li><code>containers</code>の<code>Data.Graph.buildG</code>と同じ</li>
+</ul>
+
+<hr />
+
+<h2 id="グラフの探索">グラフの探索</h2>
+
+<pre><code class="language-haskell">-- 二部グラフ判定
+q1 :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Bool
+q1 n m es = runST $ do
+    color &lt;- newArray (0, n - 1) 0 :: ST s (STUArray s Int Int)
+    bs &lt;- forM [0 .. n - 1] $ \i -&gt; do
+        ci &lt;- readArray color i
+        if ci == 0
+            then go color 1 i
+            else return True
+    return (and bs)
+  where
+    g = buildGList (0, n - 1) es
+    go color c i = do
+        ci &lt;- readArray color i
+        if ci == 0
+            then do
+                writeArray color i c
+                and &lt;$&gt; sequence (fmap (go color (-c)) (g ! i))
+            else return (ci == c)
+</code></pre>
+
+<hr />
+
+<h2 id="最短経路問題">最短経路問題</h2>
+
+<h3 id="ベルマンフォード法">ベルマンフォード法</h3>
+
+<pre><code class="language-haskell">-- ベルマン-フォード法
+bellman :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Array Int Int
+bellman n m start es = runSTArray $ do
+    d &lt;- newArray (0, n - 1) maxBound :: ST s (STArray s Int Int)
+    writeArray d start 0
+    go d
+    return d
+ where
+    go d = do
+        rupd &lt;- newSTRef False
+        forM_ es $ \(f, t, c) -&gt; do
+            df &lt;- readArray d f
+            dt &lt;- readArray d t
+            when (df /= maxBound &amp;&amp; df + c &lt; dt) $ do
+                writeArray d t (df + c)
+                writeSTRef rupd True
+        readSTRef rupd &gt;&gt;= \upd -&gt; when upd (go d)
+</code></pre>
+
+<ul>
+<li>用意するもの
+
+<ul>
+<li>辺のリスト</li>
+<li>1次元配列
+
+<ul>
+<li>初期化：始点のみ<code>0</code>, 残りは<code>INF</code></li>
+<li><code>maxBound</code>に加算すると負になってしまうので注意</li>
+</ul></li>
+</ul></li>
+<li>ループ
+
+<ul>
+<li>辺のリストに対してループ</li>
+<li>辺の始点と終点の距離を配列から取得し、終点の距離を更新</li>
+<li>1つでも更新できたら再帰呼び出し</li>
+</ul></li>
+</ul>
+
+<h3 id="ダイクストラ法">ダイクストラ法</h3>
+
+<pre><code class="language-haskell">-- ダイクストラ法
+dijkstra :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Array Int Int
+dijkstra n m start es = runSTArray $ do
+    d &lt;- newArray (0, n - 1) maxBound :: ST s (STArray s Int Int)
+    writeArray d start 0
+    go d (push (0, start) Empty :: Skew (Int, Int))
+    return d
+  where
+    g = buildGList (0, n - 1) [(a, (b, c)) | (a, b, c) &lt;- es]
+    go d que
+        | Just ((c, f), q) &lt;- pop que = do
+            rq &lt;- newSTRef q
+            df &lt;- readArray d f
+            when (c &lt;= df) $ do
+                forM_ (g ! f) $ \(t, c) -&gt; do
+                    dt &lt;- readArray d t
+                    when (df + c &lt; dt) $ do
+                        writeArray d t (df + c)
+                        modifySTRef' rq (\q -&gt; push (df + c, t) q)
+            go d =&lt;&lt; readSTRef rq
+        | otherwise = return ()
+</code></pre>
+
+<ul>
+<li>用意するもの
+
+<ul>
+<li>グラフ（隣接リスト）</li>
+<li>優先度付きキュー
+
+<ul>
+<li><code>(コスト, 頂点)</code>の並びでタプルにし、コストの小さい順で取り出せるようにする</li>
+<li>初期化：<code>(0, 始点)</code></li>
+</ul></li>
+<li>1次元配列
+
+<ul>
+<li>初期化：始点のみ<code>0</code>, 残りは<code>INF</code></li>
+</ul></li>
+</ul></li>
+<li>ループ
+
+<ul>
+<li>キューが空になるまでループ</li>
+<li>キューのコストと配列のコストを比較し配列のほうが既に小さいときはスキップ</li>
+<li>グラフより隣接する頂点を取り出し、更新できるときは
+
+<ul>
+<li>配列を更新</li>
+<li>キューにも追加</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h3 id="ワーシャル-フロイド法">ワーシャル-フロイド法</h3>
+
+<pre><code class="language-haskell">-- ワーシャル-フロイド法
+warshall :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Array (Int, Int) Int
+warshall n m es = runSTArray $ do
+    d &lt;- newArray ((0, 0), (n - 1, n - 1)) inf
+    sequence_ [writeArray d (i, i) 0 | i &lt;- [0 .. n - 1]]
+    sequence_ [writeArray d (f, t) c | (f, t, c) &lt;- es]
+    forM_ [0 .. n - 1] $ \k -&gt; do
+        forM_ [0 .. n - 1] $ \i -&gt; do
+            forM_ [0 .. n - 1] $ \j -&gt; do
+                dij &lt;- readArray d (i, j)
+                dik &lt;- readArray d (i, k)
+                dkj &lt;- readArray d (k, j)
+                writeArray d (i, j) $ min dij (dik + dkj)
+    return d
+  where
+    inf = 10 ^ 9 + 7
+</code></pre>
+
+<ul>
+<li>用意するもの
+
+<ul>
+<li>辺のリスト</li>
+<li>2次元配列
+
+<ul>
+<li>初期化
+
+<ul>
+<li>始点と終点が同じ場合は<code>0</code></li>
+<li>辺が存在する場合はそのコスト</li>
+<li>それ以外は<code>INF</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>ループ
+
+<ul>
+<li>3重ループ</li>
+<li>1番外側のループがその頂点を経由するかしないか</li>
+<li>2番目と3番目のループが始点と終点</li>
+<li>経由するかしないかで距離が短いほうで更新</li>
+</ul></li>
+</ul>
+
+<h3 id="経路復元-ダイクストラ法">経路復元（ダイクストラ法）</h3>
+
+<pre><code class="language-haskell">-- 経路復元（ダイクストラ法）
+dijkstraPath :: Int -&gt; Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; [Int]
+dijkstraPath n m start end es = runST $ do
+    d &lt;- newArray (0, n - 1) maxBound :: ST s (STArray s Int Int)
+    p &lt;- newArray (0, n - 1) (-1) :: ST s (STArray s Int Int)
+    writeArray d start 0
+    go d p (push (0, start) Empty :: Skew (Int, Int))
+    path [end] p
+  where
+    g = buildGList (0, n - 1) [(a, (b, c)) | (a, b, c) &lt;- es]
+    go d p que
+        | Just ((c, f), q) &lt;- pop que = do
+            rq &lt;- newSTRef q
+            df &lt;- readArray d f
+            when (c &lt;= df) $ do
+                forM_ (g ! f) $ \(t, c) -&gt; do
+                    dt &lt;- readArray d t
+                    when (df + c &lt; dt) $ do
+                        writeArray d t (df + c)
+                        writeArray p t f
+                        modifySTRef' rq (\q -&gt; push (df + c, t) q)
+            go d p =&lt;&lt; readSTRef rq
+        | otherwise = return ()
+    path (x:xs) p
+        | x == start = return (x:xs)
+        | otherwise  = do
+            pt &lt;- readArray p x
+            path (pt:x:xs) p
+</code></pre>
+
+<ul>
+<li>更新時に手前の頂点をメモっておいて最後に復元する</li>
+</ul>
+
+<hr />
+
+<h2 id="最小全域木">最小全域木</h2>
+
+<h3 id="プリム法">プリム法</h3>
+
+<pre><code class="language-haskell">-- プリム法
+prim :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
+prim n m start es = runST $ do
+    used &lt;- newArray (0, n - 1) False :: ST s (STArray s Int Bool)
+    writeArray used start True
+    let ss = fmap (\(t, c) -&gt; (c, t)) (g ! start)
+    go 0 used (foldr push Empty ss)
+  where
+    g = buildGList (0, n - 1) [(a, (b, c)) | (a, b, c) &lt;- es]
+    go !k used que
+        | Just ((c, t), q) &lt;- pop que = do
+            usedt &lt;- readArray used t
+            if usedt
+                then go k used q
+                else do
+                    let ss = fmap (\(t, c) -&gt; (c, t)) (g ! t)
+                    let q' = foldr push q ss
+                    writeArray used t True
+                    go (k + c) used q'
+        | otherwise = return k
+</code></pre>
+
+<ul>
+<li>用意するもの
+
+<ul>
+<li>グラフ（隣接リスト）</li>
+<li>優先度付きキュー
+
+<ul>
+<li>初期化：始点から伸びている辺を<code>(コスト, 頂点)</code>の並びで追加</li>
+</ul></li>
+<li>1次元配列
+
+<ul>
+<li>既にその頂点が最小全域木に含まれているかをメモする配列</li>
+<li>初期化：始点のみ<code>True</code>, 残りは<code>False</code></li>
+</ul></li>
+</ul></li>
+<li>ループ
+
+<ul>
+<li>キューが空になるまでループ</li>
+<li>キューから取り出した辺の終点が既に最小全域木に含まれている場合はスキップ</li>
+<li>そうでなければ採用した辺の終点から伸びている辺を取り出しキューに追加</li>
+<li>採用した辺の終点をメモし、再帰</li>
+</ul></li>
+</ul>
+
+<h3 id="クラスカル法">クラスカル法</h3>
+
+<pre><code class="language-haskell">-- クラスカル法
+kruskal :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
+kruskal n m es = runST $ do
+    uf &lt;- newUF (0, n - 1)
+    rc &lt;- newSTRef 0
+    forM_ es' $ \(f, t, c) -&gt; do
+        isSame &lt;- same uf f t
+        when (not isSame) $ do
+            unite uf f t
+            modifySTRef' rc (+ c)
+    readSTRef rc
+  where
+    es' = sortBy (\(_, _, a) (_, _, b) -&gt; a `compare` b) es
+</code></pre>
+
+<ul>
+<li>用意するもの
+
+<ul>
+<li>辺のリスト
+
+<ul>
+<li>コストの小さい順にソート</li>
+</ul></li>
+<li>Union-Find木</li>
+</ul></li>
+<li>ループ
+
+<ul>
+<li>コストの小さい辺から見ていく</li>
+<li>辺の始点と終点が既に同じグループならスキップ</li>
+<li>そうでなければその辺を採用して始点と終点を同じグループにする</li>
+</ul></li>
+</ul>
+
+<hr />
+
+<h2 id="練習問題">練習問題</h2>
+
+<p>初級とか言ってるけど難しすぎでは…？</p>
+
+<pre><code class="language-haskell">-- Roadblocks (POJ No.3255)
+q2 :: Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
+q2 n m es = runST $ do
+    d1 &lt;- newListArray (1, 4) (0 : repeat inf) :: ST s (STUArray s Int Int)
+    d2 &lt;- newListArray (1, 4) (0 : repeat inf) :: ST s (STUArray s Int Int)
+    go d1 d2 (push (0, 1) Empty)
+    readArray d2 n
+  where
+    inf = 10 ^ 9 + 7
+    g = buildGList (1, n) [(f, (t, c)) | (f, t, c) &lt;- es]
+    go d1 d2 que
+        | Just ((cost, v), que') &lt;- pop que = do
+            rque &lt;- newSTRef que'
+            d2v &lt;- readArray d2 v
+            when (cost &lt;= d2v) $ do
+                forM_ (g ! v) $ \(t, c) -&gt; do
+                    d1t &lt;- readArray d1 t
+                    d2t &lt;- readArray d2 t
+                    let d2c = cost + c
+                    when (d2c &lt; d1t) $ do
+                        writeArray d1 t d2c
+                        modifySTRef' rque $ \q -&gt; push (d2c, t) q
+                    when (d2c &lt; d2t &amp;&amp; d1t &lt; d2c) $ do
+                        writeArray d2 t d2c
+                        modifySTRef' rque $ \q -&gt; push (d2c, t) q
+            go d1 d2 =&lt;&lt; readSTRef rque
+        | otherwise = return ()
+</code></pre>
+
+<ul>
+<li>ダイクストラ法で最短距離を求めつつ2番目の最短路も求める</li>
+<li>キューから取り出して最短距離は更新できないが2番目の最短路が更新できるなら更新</li>
+</ul>
+
+<pre><code class="language-haskell">-- Conscription (POJ No.3723)
+q3 :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; Int
+q3 n m r es = runST $ do
+    uf &lt;- newUF (0, n + m - 1)
+    k &lt;- kruskal 0 uf es'
+    return $ 10000 * (n + m) + k
+  where
+    es' = sortBy (\(_, _, c1) (_, _, c2) -&gt; c1 `compare` c2)
+        $ concat [[(f, n + t, -c), (n + t, f, -c)] | (f, t, c) &lt;- es]
+    kruskal !k uf []             = return k
+    kruskal !k uf ((f, t, c):rs) = do
+        isSame &lt;- same uf f t
+        if isSame
+            then kruskal k uf rs
+            else do
+                unite uf f t
+                kruskal (k + c) uf rs
+</code></pre>
+
+<ul>
+<li>辺のコストを負にして最小全域木を求める</li>
+<li>なぜこれで答えが求まるのかいまいちわかってない</li>
+</ul>
+
+<pre><code class="language-haskell">-- Layout (POJ No.3169)
+q4 :: Int -&gt; Int -&gt; Int -&gt; [(Int, Int, Int)] -&gt; [(Int, Int, Int)] -&gt; Int
+q4 n ml md as bs = runST $ do
+    d &lt;- newListArray (1, n) (0 : repeat maxBound) :: ST s (STUArray s Int Int)
+    forM_ [1 .. n] $ \_ -&gt; do
+        forM_ as  $ \e -&gt; update d e
+        forM_ bs' $ \e -&gt; update d e
+        forM_ cs  $ \e -&gt; update d e
+    d1 &lt;- readArray d 1
+    dn &lt;- readArray d n
+    case () of
+        _ | d1 &lt; 0         -&gt; return (-1)
+          | dn == maxBound -&gt; return (-2)
+          | otherwise      -&gt; return dn
+  where
+    bs' = [(t, f, -c) | (f, t, c) &lt;- bs]
+    cs  = [(i + 1, i, 0) | i &lt;- [1 .. n - 1]]
+    update d (f, t, c) = do
+        df &lt;- readArray d f
+        when (df &lt; maxBound) $ do
+            dt &lt;- readArray d t
+            writeArray d t (min dt (df + c))
+</code></pre>
+
+<ul>
+<li>普通の最短路問題
+
+<ul>
+<li><code>d(v) + w &gt;= d(u)</code>
+
+<ul>
+<li>頂点vから頂点uへコストwの辺が存在</li>
+</ul></li>
+</ul></li>
+<li>この問題
+
+<ul>
+<li><code>d[i+1] + 0     &gt;= d[i]</code>
+
+<ul>
+<li>頂点i+1から頂点iへコスト0の辺が存在</li>
+</ul></li>
+<li><code>d[AL]  + DL    &gt;= d[BL]</code>
+
+<ul>
+<li>頂点ALから頂点BLへコストDLの辺が存在</li>
+</ul></li>
+<li><code>d[BD]  + (-DD) &gt;= d[AD]</code>
+
+<ul>
+<li>頂点BDから頂点ADへコスト-DDの辺が存在</li>
+</ul></li>
+</ul></li>
+<li>負の辺が含まれるためベルマン-フォード法で最短経路を求める</li>
+<li>負の閉路が存在する場合
+
+<ul>
+<li>例）1と3は仲良しで距離10以内、2と3は仲悪くて距離11以上離す</li>
+</ul></li>
+<li>いくらでも離れることが可能な場合
+
+<ul>
+<li>例）Nは誰とも仲良くない</li>
+</ul></li>
+</ul>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">20 Nov 2018, 21:01</h1>
                 <section class="post">
                     <header class="post-header">
@@ -909,214 +1427,6 @@ q3 n m xss = fst . head $ dropWhile ((/= goal) . snd) queue
 <li>左側から取り出して右側に追加する</li>
 <li>左側から取り出す時に空だったら右側を<code>reverse</code>して左側にセットする</li>
 </ul></li>
-</ul>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">12 Nov 2018, 21:47</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/" class="post-title">Haskellで動的計画法（準備編）</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<h2 id="知りたいこと">知りたいこと</h2>
-
-<ul>
-<li>Haskellで動的計画法を書く時にどういう書き方をすればいいのか</li>
-</ul>
-
-<h2 id="試してみたこと">試してみたこと</h2>
-
-<ul>
-<li><code>f(n) = f(n - 1) + 1</code></li>
-<li>初項1、公差1の等差数列の和を<code>n = 10 ^ 6</code>と<code>n = 10 ^ 7</code>で計算</li>
-<li>PowerShellの<code>Measure-Command</code>で時間を計測</li>
-<li>時間計測時に<code>stack run</code>や<code>stack exec</code>を使うと200ms~400ms余計に時間がかかった</li>
-</ul>
-
-<h2 id="結論">結論</h2>
-
-<ul>
-<li><code>f1</code>でTLEにならないなら<code>f1</code></li>
-<li>ボトムアップに配列埋める場合は<code>f2</code></li>
-<li><code>f1</code>では間に合わないがメモ化再帰したい場合は<code>f3</code></li>
-<li>間違ったこと言ってたらごめんなさい</li>
-</ul>
-
-<pre><code class="language-haskell">{-# LANGUAGE BangPatterns #-}
-
-import Control.Monad
-import Control.Monad.ST
-import Data.List
-import Data.Array
-import Data.Array.ST
-import qualified Data.IntMap.Strict as IMS
-import Control.Monad.Trans.Class
-import Control.Monad.Trans.Cont
-
--- f(n) = f(n - 1) + 1
--- stack build
--- Measure-Command { ./stack-work/~.exe | Out-Default } | Select-Object TotalMilliseconds
-
--- n = 10 ^ 6 :  477 ms
--- n = 10 ^ 7 : 4308 ms
-f1 :: Int -&gt; Int
-f1 n = go n
-  where
-    memo = listArray (1, n) (fmap go [1 .. n])
-    go 1 = 1
-    go k = memo ! (k - 1) + 1
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>Array</code>)</li>
-<li>これ以下の速度のものは使う必要がない</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  14 ms
--- n = 10 ^ 7 :  97 ms
-f2 :: Int -&gt; Int
-f2 n = runST $ do
-    a &lt;- newArray (1, n) 1 :: ST s (STUArray s Int Int)
-    forM_ [2 .. n] $ \i -&gt; do
-        b &lt;- readArray a (i - 1)
-        writeArray a i (b + 1)
-    readArray a n
-</code></pre>
-
-<ul>
-<li>動的計画法 (<code>UArray</code>)</li>
-<li>最速</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  159 ms
--- n = 10 ^ 7 : 1850 ms
-f3 :: Int -&gt; Int
-f3 n = runST $ do
-    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
-    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
-    writeArray m 1 True
-    go a m n
-  where
-    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
-    go a m i = do
-        evaluated &lt;- readArray m i
-        if evaluated
-            then readArray a i
-            else do
-                b &lt;- go a m (i - 1)
-                writeArray a i (b + 1)
-                writeArray m i True
-                return (b + 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>UArray</code>)</li>
-<li>関数呼び出しのオーバーヘッドなのか大分遅くなる</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  192 ms
--- n = 10 ^ 7 : 1654 ms
-f4 :: Int -&gt; Int
-f4 n = runST $ do
-    a &lt;- newArray (1, n) 1     :: ST s (STUArray s Int Int)
-    m &lt;- newArray (1, n) False :: ST s (STUArray s Int Bool)
-    writeArray m 1 True
-    go a m n
-  where
-    go :: STUArray s Int Int -&gt; STUArray s Int Bool -&gt; Int -&gt; ST s Int
-    go a m i = evalContT . callCC $ \cc -&gt; do
-        evaluated &lt;- lift $ readArray m i
-        when evaluated $ do
-            b &lt;- lift $ readArray a i
-            cc b
-        c &lt;- lift $ go a m (i - 1)
-        lift $ writeArray a i (c + 1)
-        lift $ writeArray m i True
-        return (c + 1)
-</code></pre>
-
-<ul>
-<li>速さとは関係ないがインデントが深くなるのが嫌なら<code>Cont</code>モナドを使う</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  404 ms
--- n = 10 ^ 7 : 4369 ms
-f5 :: Int -&gt; Int
-f5 n = runST $ do
-    a &lt;- newArray (1, n) Nothing :: ST s (STArray s Int (Maybe Int))
-    writeArray a 1 (Just 1)
-    go a n
-    Just i &lt;- readArray a n
-    return i
-  where
-    go :: STArray s Int (Maybe Int) -&gt; Int -&gt; ST s Int
-    go a i = do
-        mi &lt;- readArray a i
-        case mi of
-            Just b  -&gt; return b
-            Nothing -&gt; do
-                c &lt;- go a (i - 1)
-                writeArray a i (Just (c + 1))
-                return (c + 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>Array</code>)</li>
-<li>計算済みかどうかを<code>Array</code>に<code>Maybe Int</code>を入れて判断した場合</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  459 ms
--- n = 10 ^ 7 : 3615 ms
-f6 :: Int -&gt; Int
-f6 n = (foldl' f im [2 .. n]) IMS.! n
-  where
-    im = IMS.singleton 1 1 :: IMS.IntMap Int
-    f m i = let b = m IMS.! (i - 1)
-            in IMS.insert i (b + 1) m
-</code></pre>
-
-<ul>
-<li>動的計画法 (<code>IntMap.Strict</code>)</li>
-<li><code>Lazy</code>はこれより大分遅かったので省略</li>
-</ul>
-
-<pre><code class="language-haskell">-- n = 10 ^ 6 :  516 ms
--- n = 10 ^ 7 : 4380 ms
-f7 :: Int -&gt; Int
-f7 n = (go im n) IMS.! n
-  where
-    im = IMS.singleton 1 1 :: IMS.IntMap Int
-    go !m i
-        | Just _ &lt;- IMS.lookup i m = m
-        | otherwise                = IMS.insert i (b + 1) m'
-      where
-        m' = go m (i - 1)
-        b  = m' IMS.! (i - 1)
-</code></pre>
-
-<ul>
-<li>メモ化再帰 (<code>IntMap.Strict</code>)</li>
-<li><code>Lazy</code>はこれより大分遅かったので省略</li>
 </ul>
 
                     </div>
