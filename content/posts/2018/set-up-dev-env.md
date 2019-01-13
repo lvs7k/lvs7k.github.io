@@ -1,6 +1,6 @@
 ---
-title: "2019年1月 開発環境構築メモ(Windows7)"
-date: 2019-01-10T22:58:53+09:00
+title: "2018年12月 開発環境構築メモ(Windows7)"
+date: 2018-12-31T22:58:53+09:00
 draft: false
 categories: ["programming"]
 tags: ["haskell", "hugo"]

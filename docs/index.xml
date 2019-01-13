@@ -6,29 +6,22 @@
     <description>Recent content on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Thu, 10 Jan 2019 22:58:53 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 13 Jan 2019 15:19:35 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>2019年1月 開発環境構築メモ(Windows7)</title>
-      <link>https://lvs7k.github.io/posts/2018/set-up-dev-env/</link>
-      <pubDate>Thu, 10 Jan 2019 22:58:53 +0900</pubDate>
+      <title>HaskellでFFIを書く準備</title>
+      <link>https://lvs7k.github.io/posts/2019/haskell-ffi-practice/</link>
+      <pubDate>Sun, 13 Jan 2019 15:19:35 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/set-up-dev-env/</guid>
-      <description>ユーザ環境変数 SCOOP = D:\scoop STACK_ROOT = D:\sr  インストール  PortableGit MSYS2 Scoop The Haskell Tool Stack Visual Studio Code  MSYS2  ~/.bash_profile  P1=&amp;quot;/c/PortableGit/cmd&amp;quot; P2=&amp;quot;/d/stack/local/bin&amp;quot; P3=&amp;quot;/d/scoop/shims&amp;quot; PATH=&amp;quot;${PATH}:${P1}:${P2}:${P3}&amp;quot; if [ -f &amp;quot;${HOME}/.bashrc&amp;quot; ] ; then source &amp;quot;${HOME}/.bashrc&amp;quot; fi   ~/.bashrc  source ~/git-completion.bash eval &amp;quot;$(stack --bash-completion-script stack)&amp;quot;   gitとstack.exeでTAB補完が効くようにする stack.exeでないと補完が効かない（stackではダメ） git-completion.bash  Stack  $STACK_ROOT/config.yaml  templates: params: author-name: lvs7k author-email: lvs7k@example.com category: Your Projects Category copyright: &#39;Copyright (c) 2019 lvs7k&#39; github-username: lvs7k skip-msys: true local-bin-path: D:\stack\local\bin local-programs-path: D:\stack\  Visual Studio Code  settings.</description>
-    </item>
-    
-    <item>
-      <title>GCCとHaskellのFFIについて学習メモ</title>
-      <link>https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/</link>
-      <pubDate>Tue, 08 Jan 2019 20:24:01 +0900</pubDate>
-      
-      <guid>https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/</guid>
-      <description>このページより読むべきリンク 上の南洋理工大学のホームページがマジでわかりやすい
- GCC and Make - A Tutorial on how to compile, link and build C/C++ applications 栄光のグラスゴーHaskellコンパイルシステム利用の手引き　バージョン7.8.2  GCCのコンパイルプロセス 参考リンクを読め
- Pre-processing  ヘッダのインクルード（#include）とマクロ（#define）の展開（.i, .ii）  Compilation  プリプロセスされたソースからアセンブリを出力（.s）  Assembly  アセンブリからオブジェクトコードを出力（.o）  Linker  オブジェクトコードとライブラリをリンクして実行ファイルを出力（.exe, .a, .dll）    GCCはそれぞれのプロセスを行うプログラムを呼び出している  cpp cc1 as ld   静的ライブラリと動的ライブラリ  静的ライブラリ  複数のオブジェクトコードをarというコマンドでまとめたもの  動的ライブラリ  複数のプログラムで共有して使用することができるライブラリ   GCCで覚えるべきオプション  -o  出力ファイル名を指定  -v  これつけてコンパイルすると知りたい情報が得られるかも  -l  静的ライブラリのlib&amp;lt;ここ&amp;gt;.</description>
+      <guid>https://lvs7k.github.io/posts/2019/haskell-ffi-practice/</guid>
+      <description>以下の2つのパターンについてFFIをやってみた。
+ ライブラリで自作のCの関数を使う 外部のライブラリに対するバインディングを書く  1. ライブラリで自作のCの関数を使う GitHubに上げました
+ フォルダ構成  app - Main.hs cbits - person.c include - person.h src - Person.hsc   package.yaml  extra-source-files: - README.md - ChangeLog.md - include/** - cbits/** library: source-dirs: src include-dirs: - include c-sources: - cbits/*.c build-tools: - hsc2hs:hsc2hs  これだけでstack buildしてstack runできる。
+2. 外部のライブラリに対するバインディングを書く 例えばRWH17章のようにPCREのバインディングを書くなら
+ 準備  pacman -S mingw64/mingw-w64-x86_64-pcre   フォルダ構成  app - Main.hs include - pcre.</description>
     </item>
     
     <item>
@@ -38,6 +31,15 @@
       
       <guid>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</guid>
       <description>マルチスレッドプログラミング難しい  forkFinallyとかwithAsyncとかraceとかconcurrentlyとかどれを使えば良いのか 検索してもちょうどいい教材的なコードが見つからない race_ (putStrLn =&amp;lt;&amp;lt; getLine) (return ())がgetLineの終了を待つのはなぜ？  コード  nc localhost 1234で起動 バグあり  Main.hs: &amp;lt;socket: 444&amp;gt;: commitBuffer: invalid argument (Invalid argument) なにこれ？   {-# OPTIONS_GHC -fno-warn-warnings-deprecations #-} {-# LANGUAGE RecordWildCards #-} module Main where import Control.Exception import Control.Monad import Control.Monad.STM import Control.Concurrent import Control.Concurrent.Async import Control.Concurrent.STM import Data.Unique import Network import System.IO import Text.Printf import qualified Data.Map.Strict as M main :: IO () main = withSocketsDo $ do global &amp;lt;- newGlobal forkIO $ monitorClients global socket &amp;lt;- listenOn (PortNumber 1234) putStrLn &amp;quot;Listening on port 1234 .</description>
+    </item>
+    
+    <item>
+      <title>2018年12月 開発環境構築メモ(Windows7)</title>
+      <link>https://lvs7k.github.io/posts/2018/set-up-dev-env/</link>
+      <pubDate>Mon, 31 Dec 2018 22:58:53 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2018/set-up-dev-env/</guid>
+      <description>ユーザ環境変数 SCOOP = D:\scoop STACK_ROOT = D:\sr  インストール  PortableGit MSYS2 Scoop The Haskell Tool Stack Visual Studio Code  MSYS2  ~/.bash_profile  P1=&amp;quot;/c/PortableGit/cmd&amp;quot; P2=&amp;quot;/d/stack/local/bin&amp;quot; P3=&amp;quot;/d/scoop/shims&amp;quot; PATH=&amp;quot;${PATH}:${P1}:${P2}:${P3}&amp;quot; if [ -f &amp;quot;${HOME}/.bashrc&amp;quot; ] ; then source &amp;quot;${HOME}/.bashrc&amp;quot; fi   ~/.bashrc  source ~/git-completion.bash eval &amp;quot;$(stack --bash-completion-script stack)&amp;quot;   gitとstack.exeでTAB補完が効くようにする stack.exeでないと補完が効かない（stackではダメ） git-completion.bash  Stack  $STACK_ROOT/config.yaml  templates: params: author-name: lvs7k author-email: lvs7k@example.com category: Your Projects Category copyright: &#39;Copyright (c) 2019 lvs7k&#39; github-username: lvs7k skip-msys: true local-bin-path: D:\stack\local\bin local-programs-path: D:\stack\  Visual Studio Code  settings.</description>
     </item>
     
     <item>
