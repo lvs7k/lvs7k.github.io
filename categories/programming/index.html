@@ -84,11 +84,11 @@
             
             <div class="posts">
                 
-                <h1 class="content-subhead">10 Jan 2019, 22:58</h1>
+                <h1 class="content-subhead">13 Jan 2019, 15:19</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2019年1月 開発環境構築メモ(Windows7)</a>
+                        <a href="https://lvs7k.github.io/posts/2019/haskell-ffi-practice/" class="post-title">HaskellでFFIを書く準備</a>
 
                         <p class="post-meta">
                             
@@ -105,8 +105,6 @@
                                 
                                     <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
                                 
-                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
-                                
                             
                         </p>
                     </header>
@@ -114,368 +112,120 @@
                     <div class="post-description">
                         
 
-<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
-
-<pre><code>SCOOP = D:\scoop
-STACK_ROOT = D:\sr
-</code></pre>
-
-<h2 id="インストール">インストール</h2>
-
-<ul>
-<li><a href="https://git-scm.com/download/win">PortableGit</a></li>
-<li><a href="https://www.msys2.org/">MSYS2</a></li>
-<li><a href="https://scoop.sh/">Scoop</a></li>
-<li><a href="https://docs.haskellstack.org/en/stable/README/">The Haskell Tool Stack</a></li>
-<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-</ul>
-
-<h2 id="msys2">MSYS2</h2>
-
-<ul>
-<li><code>~/.bash_profile</code></li>
-</ul>
-
-<pre><code class="language-bash">P1=&quot;/c/PortableGit/cmd&quot;
-P2=&quot;/d/stack/local/bin&quot;
-P3=&quot;/d/scoop/shims&quot;
-PATH=&quot;${PATH}:${P1}:${P2}:${P3}&quot;
-
-if [ -f &quot;${HOME}/.bashrc&quot; ] ; then
-  source &quot;${HOME}/.bashrc&quot;
-fi
-</code></pre>
-
-<ul>
-<li><code>~/.bashrc</code></li>
-</ul>
-
-<pre><code class="language-bash">source ~/git-completion.bash
-eval &quot;$(stack --bash-completion-script stack)&quot;
-</code></pre>
-
-<ul>
-<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
-<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
-<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
-</ul>
-
-<h2 id="stack">Stack</h2>
-
-<ul>
-<li><code>$STACK_ROOT/config.yaml</code></li>
-</ul>
-
-<pre><code class="language-yaml">templates:
-  params:
-    author-name: lvs7k
-    author-email: lvs7k@example.com
-    category: Your Projects Category
-    copyright: 'Copyright (c) 2019 lvs7k'
-    github-username: lvs7k
-
-skip-msys: true
-local-bin-path: D:\stack\local\bin
-local-programs-path: D:\stack\
-</code></pre>
-
-<h2 id="visual-studio-code">Visual Studio Code</h2>
-
-<ul>
-<li><code>settings.json</code></li>
-</ul>
-
-<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
-{
-    /* editor */
-    &quot;editor.fontSize&quot;: 20,
-    &quot;editor.rulers&quot;: [80],
-    &quot;editor.wordWrap&quot;: &quot;off&quot;,
-    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
-    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
-    &quot;files.trimTrailingWhitespace&quot;: true,
-    &quot;workbench.editor.enablePreview&quot;: false,
-    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
-    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
-    &quot;extensions.autoUpdate&quot;: false,
-    &quot;zenMode.hideStatusBar&quot;: false,
-
-    /* shell */
-    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
-    &quot;terminal.integrated.shellArgs.windows&quot;: [
-        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
-    ],
-    &quot;terminal.integrated.setLocaleVariables&quot;: true,
-
-    /* vim */
-    &quot;vim.hlsearch&quot;: true,
-    &quot;vim.handleKeys&quot;: {
-        &quot;&lt;C-d&gt;&quot;: false,
-        &quot;&lt;C-k&gt;&quot;: false,
-    },
-    &quot;vim.insertModeKeyBindings&quot;: [
-        {
-            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
-            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
-        }
-    ],
-
-    /* Haskell */
-    &quot;ghcSimple.bareStartupCommands&quot;: [],
-    &quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;,
-    &quot;[haskell]&quot;: {
-        &quot;editor.tabSize&quot;: 2,
-        &quot;editor.detectIndentation&quot;: false
-    },
-}
-</code></pre>
-
-<ul>
-<li><code>keybindings.json</code></li>
-</ul>
-
-<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
-[
-// ctrl+enterで行末へ移動
-{
-  &quot;key&quot;: &quot;ctrl+enter&quot;,
-  &quot;command&quot;: &quot;cursorEnd&quot;,
-  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-},
-// ターミナルの切り替え
-{
-  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-},
-{
-  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-}
-]
-</code></pre>
-
-<h2 id="その他">その他</h2>
-
-<ul>
-<li><code>pacman -Syu</code></li>
-<li><code>pacman -S base-devel</code></li>
-<li><code>pacman -S mingw-w64-x86_64-toolchain</code></li>
-<li><code>stack setup</code></li>
-<li><code>scoop install hugo</code></li>
-</ul>
-
-<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
-
-<ul>
-<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーで使えない</li>
-<li><code>pacman -S winpty</code></li>
-<li><code>winpty stack ghci</code></li>
-</ul>
-
-<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
-
-<ul>
-<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
-<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
-</ul>
-
-<h2 id="参考リンク">参考リンク</h2>
-
-<ul>
-<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
-<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
-
-<ul>
-<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
-</ul></li>
-<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
-</ul>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">08 Jan 2019, 20:24</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/" class="post-title">GCCとHaskellのFFIについて学習メモ</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                
-                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
-                                
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                
-                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                                
-                                    <a class="post-category post-category-c" href='https://lvs7k.github.io/tags/c'>c</a>
-                                
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<h2 id="このページより読むべきリンク">このページより読むべきリンク</h2>
-
-<p>上の南洋理工大学のホームページがマジでわかりやすい</p>
-
-<ul>
-<li><a href="http://www.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html">GCC and Make - A Tutorial on how to compile, link and build C/C++ applications</a></li>
-<li><a href="http://www.kotha.net/ghcguide_ja/latest/">栄光のグラスゴーHaskellコンパイルシステム利用の手引き　バージョン7.8.2</a></li>
-</ul>
-
-<h2 id="gccのコンパイルプロセス">GCCのコンパイルプロセス</h2>
-
-<p>参考リンクを読め</p>
+<p>以下の2つのパターンについてFFIをやってみた。</p>
 
 <ol>
-<li>Pre-processing
-
-<ul>
-<li>ヘッダのインクルード（<code>#include</code>）とマクロ（<code>#define</code>）の展開（<code>.i, .ii</code>）</li>
-</ul></li>
-<li>Compilation
-
-<ul>
-<li>プリプロセスされたソースからアセンブリを出力（<code>.s</code>）</li>
-</ul></li>
-<li>Assembly
-
-<ul>
-<li>アセンブリからオブジェクトコードを出力（<code>.o</code>）</li>
-</ul></li>
-<li>Linker
-
-<ul>
-<li>オブジェクトコードとライブラリをリンクして実行ファイルを出力（<code>.exe</code>, <code>.a</code>, <code>.dll</code>）</li>
-</ul></li>
+<li>ライブラリで自作のCの関数を使う</li>
+<li>外部のライブラリに対するバインディングを書く</li>
 </ol>
 
-<ul>
-<li>GCCはそれぞれのプロセスを行うプログラムを呼び出している
+<h2 id="1-ライブラリで自作のcの関数を使う">1. ライブラリで自作のCの関数を使う</h2>
+
+<p><a href="https://github.com/lvs7k/haskell-ffi-example">GitHubに上げました</a></p>
 
 <ul>
-<li><code>cpp</code></li>
-<li><code>cc1</code></li>
-<li><code>as</code></li>
-<li><code>ld</code></li>
-</ul></li>
+<li>フォルダ構成</li>
 </ul>
 
-<h2 id="静的ライブラリと動的ライブラリ">静的ライブラリと動的ライブラリ</h2>
-
-<ul>
-<li>静的ライブラリ
-
-<ul>
-<li>複数のオブジェクトコードを<code>ar</code>というコマンドでまとめたもの</li>
-</ul></li>
-<li>動的ライブラリ
-
-<ul>
-<li>複数のプログラムで共有して使用することができるライブラリ</li>
-</ul></li>
-</ul>
-
-<h2 id="gccで覚えるべきオプション">GCCで覚えるべきオプション</h2>
-
-<ul>
-<li><code>-o</code>
-
-<ul>
-<li>出力ファイル名を指定</li>
-</ul></li>
-<li><code>-v</code>
-
-<ul>
-<li>これつけてコンパイルすると知りたい情報が得られるかも</li>
-</ul></li>
-<li><code>-l</code>
-
-<ul>
-<li>静的ライブラリの<code>lib&lt;ここ&gt;.a</code>を指定</li>
-<li>動的ライブラリの<code>&lt;ここ&gt;.dll</code>を指定</li>
-</ul></li>
-<li><code>-L</code>
-
-<ul>
-<li>ライブラリのあるディレクトリ</li>
-</ul></li>
-<li><code>-I</code>
-
-<ul>
-<li>ヘッダファイルのあるディレクトリ</li>
-</ul></li>
-<li><code>-shared</code>
-
-<ul>
-<li><code>DLL</code>を作成する時に</li>
-</ul></li>
-</ul>
-
-<h2 id="コンパイル済みのファイルを調べるのに使うコマンド">コンパイル済みのファイルを調べるのに使うコマンド</h2>
-
-<ul>
-<li><code>file</code></li>
-<li><code>nm</code></li>
-<li><code>ldd</code></li>
-</ul>
-
-<h2 id="makefileの書き方">Makefileの書き方</h2>
-
-<p>参考リンクを読め</p>
-
-<hr />
-
-<h2 id="haskell-ffi">Haskell FFI</h2>
-
-<h2 id="rwh17章-pcreのコンパイル">RWH17章 PCREのコンパイル</h2>
-
-<ul>
-<li><p><code>pacman -S mingw64/mingw-w64-x86_64-pcre</code></p>
-
-<ul>
-<li><code>msys</code>ではなく<code>mingw64</code>のをインストールする</li>
-</ul></li>
-
-<li><p><code>rwh17.cabal</code></p>
-
-<pre><code class="language-cabal">executable rwh17
-hs-source-dirs:      src
-main-is:             Main.hs
-default-language:    Haskell2010
-build-depends:       base &gt;= 4.7 &amp;&amp; &lt; 5
-include-dirs:        D:\msys64\mingw64\include
-extra-lib-dirs:      D:\msys64\mingw64\lib
-extra-libraries:     pcre
+<pre><code>app
+  - Main.hs
+cbits
+  - person.c
+include
+  - person.h
+src
+  - Person.hsc
 </code></pre>
 
 <ul>
-<li><code>package.yaml</code>と<code>stack.yaml</code>に設定追加でも同じ</li>
-<li><code>stack build --ghc-options=&quot;-ID:\msys64\mingw64\include -LD:\msys64\mingw64\lib -lpcre&quot;</code>でも同じ</li>
-</ul></li>
+<li><code>package.yaml</code></li>
+</ul>
 
-<li><p><code>cabal</code>に<code>extra-libraries</code>を設定するとVSCodeのSimple GHCが動作しなくなる</p>
+<pre><code class="language-yaml">extra-source-files:
+- README.md
+- ChangeLog.md
+- include/**
+- cbits/**
+
+library:
+  source-dirs: src
+  include-dirs:
+  - include
+  c-sources:
+  - cbits/*.c
+  build-tools:
+  - hsc2hs:hsc2hs
+</code></pre>
+
+<p>これだけで<code>stack build</code>して<code>stack run</code>できる。</p>
+
+<h2 id="2-外部のライブラリに対するバインディングを書く">2. 外部のライブラリに対するバインディングを書く</h2>
+
+<p>例えばRWH17章のように<code>PCRE</code>のバインディングを書くなら</p>
+
+<ul>
+<li>準備</li>
+</ul>
+
+<pre><code>pacman -S mingw64/mingw-w64-x86_64-pcre
+</code></pre>
+
+<ul>
+<li>フォルダ構成</li>
+</ul>
+
+<pre><code>app
+  - Main.hs
+include
+  - pcre.h    -- mingw64/includeからコピー
+src
+  - Pcre.hsc
+</code></pre>
+
+<ul>
+<li><code>package.yaml</code></li>
+</ul>
+
+<pre><code class="language-yaml">extra-source-files:
+- README.md
+- ChangeLog.md
+- include/**
+
+library:
+  source-dirs: src
+  extra-libraries:
+  - pcre
+  include-dirs:
+  - include
+  build-tools:
+  - hsc2hs:hsc2hs
+</code></pre>
+
+<ul>
+<li><code>stack.yaml</code></li>
+</ul>
+
+<pre><code class="language-yaml"># Extra directories used by stack for building
+extra-include-dirs:
+- D:\msys64\mingw64\include
+extra-lib-dirs:
+- D:\msys64\mingw64\lib
+</code></pre>
+
+<h2 id="メモ">メモ</h2>
+
+<ul>
+<li><p><code>extra-libraries</code>を設定するとVSCodeのSimple GHCが動作しなくなる</p>
 
 <ul>
 <li><code>&quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;</code>でとりあえず動く</li>
 </ul></li>
 
-<li><p><code>stack exec -- hsc2hs src/Regex.hsc -v -ID:/msys64/mingw64/include</code></p>
+<li><p><code>hsc2hs</code>を使って手動で変換したいとき</p>
 
 <ul>
-<li>指定しないとGHCのincludeしか探しに行かないので自分で追加する必要あり</li>
+<li><code>stack exec -- hsc2hs src/Pcre.hsc -I./include</code></li>
+<li><code>-I</code>で指定しないとGHCのincludeしか探しに行かない</li>
 </ul></li>
 </ul>
 
@@ -716,6 +466,218 @@ getHand client@Client{..} = loop
       '3':_ -&gt; return Scissors
       _     -&gt; loop
 </code></pre>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">31 Dec 2018, 22:58</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
+                                
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
+
+<pre><code>SCOOP = D:\scoop
+STACK_ROOT = D:\sr
+</code></pre>
+
+<h2 id="インストール">インストール</h2>
+
+<ul>
+<li><a href="https://git-scm.com/download/win">PortableGit</a></li>
+<li><a href="https://www.msys2.org/">MSYS2</a></li>
+<li><a href="https://scoop.sh/">Scoop</a></li>
+<li><a href="https://docs.haskellstack.org/en/stable/README/">The Haskell Tool Stack</a></li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+</ul>
+
+<h2 id="msys2">MSYS2</h2>
+
+<ul>
+<li><code>~/.bash_profile</code></li>
+</ul>
+
+<pre><code class="language-bash">P1=&quot;/c/PortableGit/cmd&quot;
+P2=&quot;/d/stack/local/bin&quot;
+P3=&quot;/d/scoop/shims&quot;
+PATH=&quot;${PATH}:${P1}:${P2}:${P3}&quot;
+
+if [ -f &quot;${HOME}/.bashrc&quot; ] ; then
+  source &quot;${HOME}/.bashrc&quot;
+fi
+</code></pre>
+
+<ul>
+<li><code>~/.bashrc</code></li>
+</ul>
+
+<pre><code class="language-bash">source ~/git-completion.bash
+eval &quot;$(stack --bash-completion-script stack)&quot;
+</code></pre>
+
+<ul>
+<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
+<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
+<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
+</ul>
+
+<h2 id="stack">Stack</h2>
+
+<ul>
+<li><code>$STACK_ROOT/config.yaml</code></li>
+</ul>
+
+<pre><code class="language-yaml">templates:
+  params:
+    author-name: lvs7k
+    author-email: lvs7k@example.com
+    category: Your Projects Category
+    copyright: 'Copyright (c) 2019 lvs7k'
+    github-username: lvs7k
+
+skip-msys: true
+local-bin-path: D:\stack\local\bin
+local-programs-path: D:\stack\
+</code></pre>
+
+<h2 id="visual-studio-code">Visual Studio Code</h2>
+
+<ul>
+<li><code>settings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
+{
+    /* editor */
+    &quot;editor.fontSize&quot;: 20,
+    &quot;editor.rulers&quot;: [80],
+    &quot;editor.wordWrap&quot;: &quot;off&quot;,
+    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
+    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
+    &quot;files.trimTrailingWhitespace&quot;: true,
+    &quot;workbench.editor.enablePreview&quot;: false,
+    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
+    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
+    &quot;extensions.autoUpdate&quot;: false,
+    &quot;zenMode.hideStatusBar&quot;: false,
+
+    /* shell */
+    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
+    &quot;terminal.integrated.shellArgs.windows&quot;: [
+        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
+    ],
+    &quot;terminal.integrated.setLocaleVariables&quot;: true,
+
+    /* vim */
+    &quot;vim.hlsearch&quot;: true,
+    &quot;vim.handleKeys&quot;: {
+        &quot;&lt;C-d&gt;&quot;: false,
+        &quot;&lt;C-k&gt;&quot;: false,
+    },
+    &quot;vim.insertModeKeyBindings&quot;: [
+        {
+            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
+            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
+        }
+    ],
+
+    /* Haskell */
+    &quot;ghcSimple.bareStartupCommands&quot;: [],
+    &quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;,
+    &quot;[haskell]&quot;: {
+        &quot;editor.tabSize&quot;: 2,
+        &quot;editor.detectIndentation&quot;: false
+    },
+}
+</code></pre>
+
+<ul>
+<li><code>keybindings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
+[
+// ctrl+enterで行末へ移動
+{
+  &quot;key&quot;: &quot;ctrl+enter&quot;,
+  &quot;command&quot;: &quot;cursorEnd&quot;,
+  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+},
+// ターミナルの切り替え
+{
+  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
+  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
+  &quot;when&quot;: &quot;terminalFocus&quot;
+},
+{
+  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
+  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
+  &quot;when&quot;: &quot;terminalFocus&quot;
+}
+]
+</code></pre>
+
+<h2 id="その他">その他</h2>
+
+<ul>
+<li><code>pacman -Syu</code></li>
+<li><code>pacman -S base-devel</code></li>
+<li><code>pacman -S mingw-w64-x86_64-toolchain</code></li>
+<li><code>stack setup</code></li>
+<li><code>scoop install hugo</code></li>
+</ul>
+
+<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
+
+<ul>
+<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーで使えない</li>
+<li><code>pacman -S winpty</code></li>
+<li><code>winpty stack ghci</code></li>
+</ul>
+
+<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
+
+<ul>
+<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
+<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
+</ul>
+
+<h2 id="参考リンク">参考リンク</h2>
+
+<ul>
+<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
+<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
+
+<ul>
+<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
+</ul></li>
+<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
+</ul>
 
                     </div>
                 </section>
