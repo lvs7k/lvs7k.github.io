@@ -18,7 +18,7 @@
       
       <guid>https://lvs7k.github.io/posts/2019/01/what-i-wish-i-knew-about-cmake/</guid>
       <description>初めてCMake使ったからメモ
-Hello, world!  フォルダ構成  include - hello.h src - hello.c CMakeLists.txt   hello.h  void hello();   hello.c  #include &amp;lt;stdio.h&amp;gt; #include &amp;quot;hello.h&amp;quot; int main() { hello(); return 0; } void hello() { printf(&amp;quot;Hello, world!\n&amp;quot;); }   CMakeLists.txt  cmake_minimum_required(VERSION 2.8) project (hello_project) include_directories(${CMAKE_SOURCE_DIR}/include) add_executable(hello src/hello.c)  ビルド mkdir build cd build cmake .. -G &amp;quot;MSYS Makefiles&amp;quot; make VERBOSE=1 ./hello.exe  Hello, world!  ライブラリのリンク TODO: 具体例を書く</description>
+参考リンク  cmake-commands(7) CMakeを使ってみた How To Find Libraries SIGIL - CMakeLists.txt kigster/cmake-project-template  Hello, world!  フォルダ構成  hello.h hello.c CMakeLists.txt   CMakeLists.txt  cmake_minimum_required(VERSION 3.0) project (hello) include_directories(${PROJECT_SOURCE_DIR}) add_executable(${PROJECT_NAME} hello.c)  ビルド mkdir build cd build cmake .. -G &amp;quot;MSYS Makefiles&amp;quot; make VERBOSE=1 ./hello.exe  Hello, world!  ライブラリのリンク  CMake付属のモジュールが存在する場合  cmake --help-module-listでモジュール一覧を表示 find_package(OpenGL REQUIRED)のように使う  存在しない場合  find_library (&amp;lt;VAR&amp;gt; NAMES name1 [name2 ...] PATH [path1 path2 .</description>
     </item>
     
   </channel>

@@ -8,49 +8,32 @@ tags: ["c"]
 
 初めてCMake使ったからメモ
 
+## 参考リンク
+
+- [cmake-commands(7)](https://cmake.org/cmake/help/git-master/manual/cmake-commands.7.html)
+- [CMakeを使ってみた](https://www.wagavulin.jp/entry/2011/11/27/222636)
+- [How To Find Libraries](https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries)
+- [SIGIL - CMakeLists.txt](https://gitlab.com/geoff-nagy/sigil/blob/master/CMakeLists.txt)
+- [kigster/cmake-project-template](https://github.com/kigster/cmake-project-template)
+
+
 ## Hello, world!
 
 - フォルダ構成
 
 ```
-include
-  - hello.h
-src
-  - hello.c
+hello.h
+hello.c
 CMakeLists.txt
-```
-
-- `hello.h`
-
-```c
-void hello();
-```
-
-- `hello.c`
-
-```c
-#include <stdio.h>
-#include "hello.h"
-
-int main()
-{
-    hello();
-    return 0;
-}
-
-void hello()
-{
-    printf("Hello, world!\n");
-}
 ```
 
 - `CMakeLists.txt`
 
 ```
-cmake_minimum_required(VERSION 2.8)
-project (hello_project)
-include_directories(${CMAKE_SOURCE_DIR}/include)
-add_executable(hello src/hello.c)
+cmake_minimum_required(VERSION 3.0)
+project (hello)
+include_directories(${PROJECT_SOURCE_DIR})
+add_executable(${PROJECT_NAME} hello.c)
 ```
 
 
@@ -71,15 +54,16 @@ Hello, world!
 
 ## ライブラリのリンク
 
-*TODO: 具体例を書く*
+- CMake付属のモジュールが存在する場合
+    - `cmake --help-module-list`でモジュール一覧を表示
+    - `find_package(OpenGL REQUIRED)`のように使う
+- 存在しない場合
+    - `find_library (<VAR> NAMES name1 [name2 ...] PATH [path1 path2 ...])`
+    - 詳しくは[How To Find Libraries](https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries)
 
-- `cmake --help-module-list | grep ^Find`で出てくるライブラリ
-    - `find_package`を使う
-- それ以外
-    - 正しくは`.cmake`ファイルを作成して行う（参考リンク参照）
-    - 簡単なものなら`find_library`を使う
 
+----
 
-## 参考
+## もう少し複雑な例
 
-- [How To Find Libraries · Wiki · CMake / Community · GitLab](https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries)
+[GitHubに上げました](https://github.com/lvs7k/cmake-template)

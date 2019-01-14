@@ -114,53 +114,35 @@
 
 <p>初めてCMake使ったからメモ</p>
 
+<h2 id="参考リンク">参考リンク</h2>
+
+<ul>
+<li><a href="https://cmake.org/cmake/help/git-master/manual/cmake-commands.7.html">cmake-commands(7)</a></li>
+<li><a href="https://www.wagavulin.jp/entry/2011/11/27/222636">CMakeを使ってみた</a></li>
+<li><a href="https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries">How To Find Libraries</a></li>
+<li><a href="https://gitlab.com/geoff-nagy/sigil/blob/master/CMakeLists.txt">SIGIL - CMakeLists.txt</a></li>
+<li><a href="https://github.com/kigster/cmake-project-template">kigster/cmake-project-template</a></li>
+</ul>
+
 <h2 id="hello-world">Hello, world!</h2>
 
 <ul>
 <li>フォルダ構成</li>
 </ul>
 
-<pre><code>include
-  - hello.h
-src
-  - hello.c
+<pre><code>hello.h
+hello.c
 CMakeLists.txt
-</code></pre>
-
-<ul>
-<li><code>hello.h</code></li>
-</ul>
-
-<pre><code class="language-c">void hello();
-</code></pre>
-
-<ul>
-<li><code>hello.c</code></li>
-</ul>
-
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &quot;hello.h&quot;
-
-int main()
-{
-    hello();
-    return 0;
-}
-
-void hello()
-{
-    printf(&quot;Hello, world!\n&quot;);
-}
 </code></pre>
 
 <ul>
 <li><code>CMakeLists.txt</code></li>
 </ul>
 
-<pre><code>cmake_minimum_required(VERSION 2.8)
-project (hello_project)
-include_directories(${CMAKE_SOURCE_DIR}/include)
-add_executable(hello src/hello.c)
+<pre><code>cmake_minimum_required(VERSION 3.0)
+project (hello)
+include_directories(${PROJECT_SOURCE_DIR})
+add_executable(${PROJECT_NAME} hello.c)
 </code></pre>
 
 <h2 id="ビルド">ビルド</h2>
@@ -177,27 +159,26 @@ make VERBOSE=1
 
 <h2 id="ライブラリのリンク">ライブラリのリンク</h2>
 
-<p><em>TODO: 具体例を書く</em></p>
+<ul>
+<li>CMake付属のモジュールが存在する場合
 
 <ul>
-<li><code>cmake --help-module-list | grep ^Find</code>で出てくるライブラリ
-
-<ul>
-<li><code>find_package</code>を使う</li>
+<li><code>cmake --help-module-list</code>でモジュール一覧を表示</li>
+<li><code>find_package(OpenGL REQUIRED)</code>のように使う</li>
 </ul></li>
-<li>それ以外
+<li>存在しない場合
 
 <ul>
-<li>正しくは<code>.cmake</code>ファイルを作成して行う（参考リンク参照）</li>
-<li>簡単なものなら<code>find_library</code>を使う</li>
+<li><code>find_library (&lt;VAR&gt; NAMES name1 [name2 ...] PATH [path1 path2 ...])</code></li>
+<li>詳しくは<a href="https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries">How To Find Libraries</a></li>
 </ul></li>
 </ul>
 
-<h2 id="参考">参考</h2>
+<hr />
 
-<ul>
-<li><a href="https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries">How To Find Libraries · Wiki · CMake / Community · GitLab</a></li>
-</ul>
+<h2 id="もう少し複雑な例">もう少し複雑な例</h2>
+
+<p><a href="https://github.com/lvs7k/cmake-template">GitHubに上げました</a></p>
 
                     </div>
                 </section>
