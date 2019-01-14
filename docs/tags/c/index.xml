@@ -6,20 +6,19 @@
     <description>Recent content in C on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Tue, 08 Jan 2019 20:24:01 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jan 2019 11:30:24 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/tags/c/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>GCCとHaskellのFFIについて学習メモ</title>
-      <link>https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/</link>
-      <pubDate>Tue, 08 Jan 2019 20:24:01 +0900</pubDate>
+      <title>初めてのCMake</title>
+      <link>https://lvs7k.github.io/posts/2019/01/what-i-wish-i-knew-about-cmake/</link>
+      <pubDate>Mon, 14 Jan 2019 11:30:24 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2019/binding-gcc-and-ghc/</guid>
-      <description>このページより読むべきリンク 上の南洋理工大学のホームページがマジでわかりやすい
- GCC and Make - A Tutorial on how to compile, link and build C/C++ applications 栄光のグラスゴーHaskellコンパイルシステム利用の手引き　バージョン7.8.2  GCCのコンパイルプロセス 参考リンクを読め
- Pre-processing  ヘッダのインクルード（#include）とマクロ（#define）の展開（.i, .ii）  Compilation  プリプロセスされたソースからアセンブリを出力（.s）  Assembly  アセンブリからオブジェクトコードを出力（.o）  Linker  オブジェクトコードとライブラリをリンクして実行ファイルを出力（.exe, .a, .dll）    GCCはそれぞれのプロセスを行うプログラムを呼び出している  cpp cc1 as ld   静的ライブラリと動的ライブラリ  静的ライブラリ  複数のオブジェクトコードをarというコマンドでまとめたもの  動的ライブラリ  複数のプログラムで共有して使用することができるライブラリ   GCCで覚えるべきオプション  -o  出力ファイル名を指定  -v  これつけてコンパイルすると知りたい情報が得られるかも  -l  静的ライブラリのlib&amp;lt;ここ&amp;gt;.</description>
+      <guid>https://lvs7k.github.io/posts/2019/01/what-i-wish-i-knew-about-cmake/</guid>
+      <description>初めてCMake使ったからメモ
+Hello, world!  フォルダ構成  include - hello.h src - hello.c CMakeLists.txt   hello.h  void hello();   hello.c  #include &amp;lt;stdio.h&amp;gt; #include &amp;quot;hello.h&amp;quot; int main() { hello(); return 0; } void hello() { printf(&amp;quot;Hello, world!\n&amp;quot;); }   CMakeLists.txt  cmake_minimum_required(VERSION 2.8) project (hello_project) include_directories(${CMAKE_SOURCE_DIR}/include) add_executable(hello src/hello.c)  ビルド mkdir build cd build cmake .. -G &amp;quot;MSYS Makefiles&amp;quot; make VERBOSE=1 ./hello.exe  Hello, world!  ライブラリのリンク TODO: 具体例を書く</description>
     </item>
     
   </channel>

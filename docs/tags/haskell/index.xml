@@ -13,10 +13,10 @@
     
     <item>
       <title>HaskellでFFIを書く準備</title>
-      <link>https://lvs7k.github.io/posts/2019/haskell-ffi-practice/</link>
+      <link>https://lvs7k.github.io/posts/2019/01/haskell-ffi-practice/</link>
       <pubDate>Sun, 13 Jan 2019 15:19:35 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2019/haskell-ffi-practice/</guid>
+      <guid>https://lvs7k.github.io/posts/2019/01/haskell-ffi-practice/</guid>
       <description>以下の2つのパターンについてFFIをやってみた。
  ライブラリで自作のCの関数を使う 外部のライブラリに対するバインディングを書く  1. ライブラリで自作のCの関数を使う GitHubに上げました
  フォルダ構成  app - Main.hs cbits - person.c include - person.h src - Person.hsc   package.yaml  extra-source-files: - README.md - ChangeLog.md - include/** - cbits/** library: source-dirs: src include-dirs: - include c-sources: - cbits/*.c build-tools: - hsc2hs:hsc2hs  これだけでstack buildしてstack runできる。
@@ -26,28 +26,28 @@
     
     <item>
       <title>Haskellでオンライン対戦じゃんけんゲーム</title>
-      <link>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</link>
+      <link>https://lvs7k.github.io/posts/2019/01/online-rock-paper-scissors/</link>
       <pubDate>Wed, 02 Jan 2019 23:05:03 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/</guid>
+      <guid>https://lvs7k.github.io/posts/2019/01/online-rock-paper-scissors/</guid>
       <description>マルチスレッドプログラミング難しい  forkFinallyとかwithAsyncとかraceとかconcurrentlyとかどれを使えば良いのか 検索してもちょうどいい教材的なコードが見つからない race_ (putStrLn =&amp;lt;&amp;lt; getLine) (return ())がgetLineの終了を待つのはなぜ？  コード  nc localhost 1234で起動 バグあり  Main.hs: &amp;lt;socket: 444&amp;gt;: commitBuffer: invalid argument (Invalid argument) なにこれ？   {-# OPTIONS_GHC -fno-warn-warnings-deprecations #-} {-# LANGUAGE RecordWildCards #-} module Main where import Control.Exception import Control.Monad import Control.Monad.STM import Control.Concurrent import Control.Concurrent.Async import Control.Concurrent.STM import Data.Unique import Network import System.IO import Text.Printf import qualified Data.Map.Strict as M main :: IO () main = withSocketsDo $ do global &amp;lt;- newGlobal forkIO $ monitorClients global socket &amp;lt;- listenOn (PortNumber 1234) putStrLn &amp;quot;Listening on port 1234 .</description>
     </item>
     
     <item>
       <title>2018年12月 開発環境構築メモ(Windows7)</title>
-      <link>https://lvs7k.github.io/posts/2018/set-up-dev-env/</link>
+      <link>https://lvs7k.github.io/posts/2018/12/set-up-dev-env/</link>
       <pubDate>Mon, 31 Dec 2018 22:58:53 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/set-up-dev-env/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/12/set-up-dev-env/</guid>
       <description>ユーザ環境変数 SCOOP = D:\scoop STACK_ROOT = D:\sr  インストール  PortableGit MSYS2 Scoop The Haskell Tool Stack Visual Studio Code  MSYS2  ~/.bash_profile  P1=&amp;quot;/c/PortableGit/cmd&amp;quot; P2=&amp;quot;/d/stack/local/bin&amp;quot; P3=&amp;quot;/d/scoop/shims&amp;quot; PATH=&amp;quot;${PATH}:${P1}:${P2}:${P3}&amp;quot; if [ -f &amp;quot;${HOME}/.bashrc&amp;quot; ] ; then source &amp;quot;${HOME}/.bashrc&amp;quot; fi   ~/.bashrc  source ~/git-completion.bash eval &amp;quot;$(stack --bash-completion-script stack)&amp;quot;   gitとstack.exeでTAB補完が効くようにする stack.exeでないと補完が効かない（stackではダメ） git-completion.bash  Stack  $STACK_ROOT/config.yaml  templates: params: author-name: lvs7k author-email: lvs7k@example.com category: Your Projects Category copyright: &#39;Copyright (c) 2019 lvs7k&#39; github-username: lvs7k skip-msys: true local-bin-path: D:\stack\local\bin local-programs-path: D:\stack\  Visual Studio Code  settings.</description>
     </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - GCJの問題に挑戦してみよう（１）</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-7/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-7/</link>
       <pubDate>Thu, 29 Nov 2018 22:06:10 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-7/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-7/</guid>
       <description>※蟻本の入力例でしかテストしていません
 下2つはコンテストで出たとして解けなそう…。
 Minimum Scalar Product {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Control.Monad.ST import Data.Array import Data.Array.ST import Data.STRef import Data.List -- Minimum Scalar Product (2008 Round1A A) q1 :: Int -&amp;gt; [Int] -&amp;gt; [Int] -&amp;gt; Int q1 n xs ys = sum $ zipWith (*) xs&#39; ys&#39; where xs&#39; = sort xs ys&#39; = sortBy (flip compare) ys   蟻本の解説参照  Crazy Rows -- Crazy Rows (2009 Round2 A) q2 :: Int -&amp;gt; [String] -&amp;gt; Int q2 n xss = runST $ do a &amp;lt;- newListArray (1, n) (fmap last1 xss) :: ST s (STUArray s Int Int) ans &amp;lt;- newSTRef 0 forM_ [1 .</description>
@@ -55,20 +55,20 @@ Minimum Scalar Product {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Co
     
     <item>
       <title>Haskellで蟻本（初級編） - 数学的な問題を解くコツ</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-6/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-6/</link>
       <pubDate>Tue, 27 Nov 2018 22:42:23 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-6/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-6/</guid>
       <description>参考資料  大学数学へのかけ橋！『高校数学＋α ：基礎と論理の物語』  文系社会人が高校数学やり直すために何冊か本買ったけどこれが一番好き PDFが無料でダウンロードできます   ※蟻本の入力例でしかテストしていません
 ユークリッド互除法 {-# LANGUAGE BangPatterns #-} import qualified Data.IntMap.Strict as IM -- ユークリッド互除法 gcd&#39; :: Int -&amp;gt; Int -&amp;gt; Int gcd&#39; x y = go x y where go a 0 = a go a b = go b (a `mod` b) -- 線分上の格子点の個数 q1 :: (Int, Int) -&amp;gt; (Int, Int) -&amp;gt; Int q1 (x1, y1) (x2, y2) = gcd&#39; (abs $ x1 - x2) (abs $ y1 - y2) - 1   参考資料の「1.</description>
     </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - グラフ</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-5/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-5/</link>
       <pubDate>Fri, 23 Nov 2018 17:19:12 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-5/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-5/</guid>
       <description>※蟻本の入力例でしかテストしていません
 TODO: コードをもっと綺麗にする
 入力の形式について 標準入力は下記の形式で与えられるものとする。
@@ -78,10 +78,10 @@ TODO: コードをもっと綺麗にする
     
     <item>
       <title>Haskellで蟻本（初級編） - データ構造</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-4/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-4/</link>
       <pubDate>Tue, 20 Nov 2018 21:01:17 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-4/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-4/</guid>
       <description>※蟻本の入力例でしかテストしていません
 優先度付きキュー  多くのプログラミング言語では効率的に実装されたプライオリティキューが標準で含まれています。
  と書かれているが、Haskellには標準で含まれていない。
@@ -92,40 +92,40 @@ Leftist Heap module Heap ( Heap (..) , meld , push , pop ) where import Control.
     
     <item>
       <title>Haskellで蟻本（初級編） - 動的計画法</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-3/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-3/</link>
       <pubDate>Mon, 19 Nov 2018 22:09:54 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-3/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-3/</guid>
       <description>※蟻本の入力例でしかテストしていません
 {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Data.List import qualified Data.ByteString.Char8 as B import Control.Monad.ST import Data.Array.ST import Data.Array import qualified Data.Map.Strict as M -- 01 ナップサック問題 q1 :: Int -&amp;gt; Int -&amp;gt; [(Int, Int)] -&amp;gt; Int q1 n m wvs = go n m where wva = listArray (1, n) wvs memo = listArray ((0, 0), (n, m)) [go i j | i &amp;lt;- [0 .. n], j &amp;lt;- [0 .</description>
     </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - 貪欲法</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-2/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-2/</link>
       <pubDate>Sun, 18 Nov 2018 12:39:46 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-2/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-2/</guid>
       <description>※蟻本の入力例でしかテストしていません
 {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Data.List import Control.Monad.ST import Data.Array.ST import Data.STRef import Data.Array (Array) import Data.Array.Unboxed (UArray) import Data.Array.IArray import qualified Data.Set as S -- 硬貨の問題 q1 :: Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int q1 n c1 c5 c10 c50 c100 c500 = go 0 n cs where cs = zip [500, 100, 50, 10, 5, 1] [c500, c100, c50, c10, c5, c1] go !</description>
     </item>
     
     <item>
       <title>Haskellで蟻本（初級編） - 全探索</title>
-      <link>https://lvs7k.github.io/posts/2018/pccb-easy-1/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/pccb-easy-1/</link>
       <pubDate>Sat, 17 Nov 2018 20:40:14 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/pccb-easy-1/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/pccb-easy-1/</guid>
       <description>※蟻本の入力例でしかテストしていません
 {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Control.Monad.ST import Data.Array.ST import Data.Array.Unboxed (UArray) import Data.Array.IArray import Data.STRef import qualified Data.Set as S -- 部分和問題 q1 :: Int -&amp;gt; Int -&amp;gt; [Int] -&amp;gt; Bool q1 n k as = go 0 as where go !i [] | i == k = True | otherwise = False go !i (b:bs) = go (i + b) bs || go i bs q1&#39; :: Int -&amp;gt; Int -&amp;gt; [Int] -&amp;gt; Bool q1&#39; n k as = go k as where go !</description>
     </item>
     
     <item>
       <title>Haskellで動的計画法（準備編）</title>
-      <link>https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/dynamic-programming-in-haskell/</link>
       <pubDate>Mon, 12 Nov 2018 21:47:14 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/dynamic-programming-in-haskell/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/dynamic-programming-in-haskell/</guid>
       <description>知りたいこと  Haskellで動的計画法を書く時にどういう書き方をすればいいのか  試してみたこと  f(n) = f(n - 1) + 1 初項1、公差1の等差数列の和をn = 10 ^ 6とn = 10 ^ 7で計算 PowerShellのMeasure-Commandで時間を計測 時間計測時にstack runやstack execを使うと200ms~400ms余計に時間がかかった  結論  f1でTLEにならないならf1 ボトムアップに配列埋める場合はf2 f1では間に合わないがメモ化再帰したい場合はf3 間違ったこと言ってたらごめんなさい  {-# LANGUAGE BangPatterns #-} import Control.Monad import Control.Monad.ST import Data.List import Data.Array import Data.Array.ST import qualified Data.IntMap.Strict as IMS import Control.Monad.Trans.Class import Control.Monad.Trans.Cont -- f(n) = f(n - 1) + 1 -- stack build -- Measure-Command { .</description>
     </item>
     

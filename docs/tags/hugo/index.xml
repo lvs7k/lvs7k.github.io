@@ -13,19 +13,19 @@
     
     <item>
       <title>2018年12月 開発環境構築メモ(Windows7)</title>
-      <link>https://lvs7k.github.io/posts/2018/set-up-dev-env/</link>
+      <link>https://lvs7k.github.io/posts/2018/12/set-up-dev-env/</link>
       <pubDate>Mon, 31 Dec 2018 22:58:53 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/set-up-dev-env/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/12/set-up-dev-env/</guid>
       <description>ユーザ環境変数 SCOOP = D:\scoop STACK_ROOT = D:\sr  インストール  PortableGit MSYS2 Scoop The Haskell Tool Stack Visual Studio Code  MSYS2  ~/.bash_profile  P1=&amp;quot;/c/PortableGit/cmd&amp;quot; P2=&amp;quot;/d/stack/local/bin&amp;quot; P3=&amp;quot;/d/scoop/shims&amp;quot; PATH=&amp;quot;${PATH}:${P1}:${P2}:${P3}&amp;quot; if [ -f &amp;quot;${HOME}/.bashrc&amp;quot; ] ; then source &amp;quot;${HOME}/.bashrc&amp;quot; fi   ~/.bashrc  source ~/git-completion.bash eval &amp;quot;$(stack --bash-completion-script stack)&amp;quot;   gitとstack.exeでTAB補完が効くようにする stack.exeでないと補完が効かない（stackではダメ） git-completion.bash  Stack  $STACK_ROOT/config.yaml  templates: params: author-name: lvs7k author-email: lvs7k@example.com category: Your Projects Category copyright: &#39;Copyright (c) 2019 lvs7k&#39; github-username: lvs7k skip-msys: true local-bin-path: D:\stack\local\bin local-programs-path: D:\stack\  Visual Studio Code  settings.</description>
     </item>
     
     <item>
       <title>Hugoでこのブログを作った時のメモ</title>
-      <link>https://lvs7k.github.io/posts/2018/how-to-create-this-blog/</link>
+      <link>https://lvs7k.github.io/posts/2018/11/how-to-create-this-blog/</link>
       <pubDate>Sat, 10 Nov 2018 17:10:21 +0900</pubDate>
       
-      <guid>https://lvs7k.github.io/posts/2018/how-to-create-this-blog/</guid>
+      <guid>https://lvs7k.github.io/posts/2018/11/how-to-create-this-blog/</guid>
       <description>Quick Start | Hugo
 環境  Windows 7 Chocolatey v0.10.11 git 2.19.1 hugo 0.49  Hugoのインストール  Chocolateyをインストール
  Chocolateyでgitをインストール

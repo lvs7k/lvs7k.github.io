@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hugo &middot; lvs7k&#39;s blog</title>
+    <title>Hugoでこのブログを作った時のメモ &middot; lvs7k&#39;s blog</title>
 
-    <meta name="description" content="Just a Memo">
+    <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.52" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Hugo &middot; lvs7k&#39;s blog">
-    <meta name="twitter:description" content="Just a Memo">
+    <meta name="twitter:title" content="Hugoでこのブログを作った時のメモ &middot; lvs7k&#39;s blog">
+    <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Hugo &middot; lvs7k&#39;s blog">
-    <meta property="og:description" content="Just a Memo">
+    <meta property="og:title" content="Hugoでこのブログを作った時のメモ &middot; lvs7k&#39;s blog">
+    <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
@@ -83,219 +83,6 @@
         <div>
             
             <div class="posts">
-                
-                <h1 class="content-subhead">31 Dec 2018, 22:58</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/12/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                
-                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
-                                
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                
-                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                                
-                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
-                                
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
-
-<pre><code>SCOOP = D:\scoop
-STACK_ROOT = D:\sr
-</code></pre>
-
-<h2 id="インストール">インストール</h2>
-
-<ul>
-<li><a href="https://git-scm.com/download/win">PortableGit</a></li>
-<li><a href="https://www.msys2.org/">MSYS2</a></li>
-<li><a href="https://scoop.sh/">Scoop</a></li>
-<li><a href="https://docs.haskellstack.org/en/stable/README/">The Haskell Tool Stack</a></li>
-<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-</ul>
-
-<h2 id="msys2">MSYS2</h2>
-
-<ul>
-<li><code>~/.bash_profile</code></li>
-</ul>
-
-<pre><code class="language-bash">P1=&quot;/c/PortableGit/cmd&quot;
-P2=&quot;/d/stack/local/bin&quot;
-P3=&quot;/d/scoop/shims&quot;
-PATH=&quot;${PATH}:${P1}:${P2}:${P3}&quot;
-
-if [ -f &quot;${HOME}/.bashrc&quot; ] ; then
-  source &quot;${HOME}/.bashrc&quot;
-fi
-</code></pre>
-
-<ul>
-<li><code>~/.bashrc</code></li>
-</ul>
-
-<pre><code class="language-bash">source ~/git-completion.bash
-eval &quot;$(stack --bash-completion-script stack)&quot;
-</code></pre>
-
-<ul>
-<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
-<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
-<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
-</ul>
-
-<h2 id="stack">Stack</h2>
-
-<ul>
-<li><code>$STACK_ROOT/config.yaml</code></li>
-</ul>
-
-<pre><code class="language-yaml">templates:
-  params:
-    author-name: lvs7k
-    author-email: lvs7k@example.com
-    category: Your Projects Category
-    copyright: 'Copyright (c) 2019 lvs7k'
-    github-username: lvs7k
-
-skip-msys: true
-local-bin-path: D:\stack\local\bin
-local-programs-path: D:\stack\
-</code></pre>
-
-<h2 id="visual-studio-code">Visual Studio Code</h2>
-
-<ul>
-<li><code>settings.json</code></li>
-</ul>
-
-<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
-{
-    /* editor */
-    &quot;editor.fontSize&quot;: 20,
-    &quot;editor.rulers&quot;: [80],
-    &quot;editor.wordWrap&quot;: &quot;off&quot;,
-    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
-    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
-    &quot;files.trimTrailingWhitespace&quot;: true,
-    &quot;workbench.editor.enablePreview&quot;: false,
-    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
-    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
-    &quot;extensions.autoUpdate&quot;: false,
-    &quot;zenMode.hideStatusBar&quot;: false,
-
-    /* shell */
-    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
-    &quot;terminal.integrated.shellArgs.windows&quot;: [
-        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
-    ],
-    &quot;terminal.integrated.setLocaleVariables&quot;: true,
-
-    /* vim */
-    &quot;vim.hlsearch&quot;: true,
-    &quot;vim.handleKeys&quot;: {
-        &quot;&lt;C-d&gt;&quot;: false,
-        &quot;&lt;C-k&gt;&quot;: false,
-    },
-    &quot;vim.insertModeKeyBindings&quot;: [
-        {
-            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
-            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
-        }
-    ],
-
-    /* Haskell */
-    &quot;ghcSimple.bareStartupCommands&quot;: [],
-    &quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;,
-    &quot;[haskell]&quot;: {
-        &quot;editor.tabSize&quot;: 2,
-        &quot;editor.detectIndentation&quot;: false
-    },
-}
-</code></pre>
-
-<ul>
-<li><code>keybindings.json</code></li>
-</ul>
-
-<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
-[
-// ctrl+enterで行末へ移動
-{
-  &quot;key&quot;: &quot;ctrl+enter&quot;,
-  &quot;command&quot;: &quot;cursorEnd&quot;,
-  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-},
-// ターミナルの切り替え
-{
-  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-},
-{
-  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-}
-]
-</code></pre>
-
-<h2 id="その他">その他</h2>
-
-<ul>
-<li><code>pacman -Syu</code></li>
-<li><code>pacman -S base-devel</code></li>
-<li><code>pacman -S mingw-w64-x86_64-toolchain</code></li>
-<li><code>stack setup</code></li>
-<li><code>scoop install hugo</code></li>
-</ul>
-
-<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
-
-<ul>
-<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーで使えない</li>
-<li><code>pacman -S winpty</code></li>
-<li><code>winpty stack ghci</code></li>
-</ul>
-
-<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
-
-<ul>
-<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
-<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
-</ul>
-
-<h2 id="参考リンク">参考リンク</h2>
-
-<ul>
-<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
-<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
-
-<ul>
-<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
-</ul></li>
-<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
-</ul>
-
-                    </div>
-                </section>
-                
                 <h1 class="content-subhead">10 Nov 2018, 17:10</h1>
                 <section class="post">
                     <header class="post-header">
@@ -320,7 +107,7 @@ local-programs-path: D:\stack\
                             
                         </p>
                     </header>
-
+                    
                     <div class="post-description">
                         
 
@@ -547,11 +334,28 @@ git subtree push --prefix docs/ origin master
 </ul>
 
                     </div>
+                    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "lvs7k" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                 </section>
-                
             </div>
-            
-
             <div class="footer">
     <div class="pure-menu pure-menu-horizontal pure-menu-open">
         <ul>
@@ -564,6 +368,7 @@ git subtree push --prefix docs/ origin master
         </div>
     </div>
 </div>
+
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
