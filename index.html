@@ -84,11 +84,125 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">14 Jan 2019, 11:30</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2019/01/what-i-wish-i-knew-about-cmake/" class="post-title">初めてのCMake</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                <a class="post-category post-category-c" href='https://lvs7k.github.io/tags/c'>c</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>初めてCMake使ったからメモ</p>
+
+<h2 id="hello-world">Hello, world!</h2>
+
+<ul>
+<li>フォルダ構成</li>
+</ul>
+
+<pre><code>include
+  - hello.h
+src
+  - hello.c
+CMakeLists.txt
+</code></pre>
+
+<ul>
+<li><code>hello.h</code></li>
+</ul>
+
+<pre><code class="language-c">void hello();
+</code></pre>
+
+<ul>
+<li><code>hello.c</code></li>
+</ul>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;hello.h&quot;
+
+int main()
+{
+    hello();
+    return 0;
+}
+
+void hello()
+{
+    printf(&quot;Hello, world!\n&quot;);
+}
+</code></pre>
+
+<ul>
+<li><code>CMakeLists.txt</code></li>
+</ul>
+
+<pre><code>cmake_minimum_required(VERSION 2.8)
+project (hello_project)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+add_executable(hello src/hello.c)
+</code></pre>
+
+<h2 id="ビルド">ビルド</h2>
+
+<pre><code>mkdir build
+cd build
+cmake .. -G &quot;MSYS Makefiles&quot;
+make VERBOSE=1
+./hello.exe
+</code></pre>
+
+<pre><code>Hello, world!
+</code></pre>
+
+<h2 id="ライブラリのリンク">ライブラリのリンク</h2>
+
+<p><em>TODO: 具体例を書く</em></p>
+
+<ul>
+<li><code>cmake --help-module-list | grep ^Find</code>で出てくるライブラリ
+
+<ul>
+<li><code>find_package</code>を使う</li>
+</ul></li>
+<li>それ以外
+
+<ul>
+<li>正しくは<code>.cmake</code>ファイルを作成して行う（参考リンク参照）</li>
+<li>簡単なものなら<code>find_library</code>を使う</li>
+</ul></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries">How To Find Libraries · Wiki · CMake / Community · GitLab</a></li>
+</ul>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">13 Jan 2019, 15:19</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2019/haskell-ffi-practice/" class="post-title">HaskellでFFIを書く準備</a>
+                        <a href="https://lvs7k.github.io/posts/2019/01/haskell-ffi-practice/" class="post-title">HaskellでFFIを書く準備</a>
 
                         <p class="post-meta">
                             
@@ -232,7 +346,7 @@ extra-lib-dirs:
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2019/online-rock-paper-scissors/" class="post-title">Haskellでオンライン対戦じゃんけんゲーム</a>
+                        <a href="https://lvs7k.github.io/posts/2019/01/online-rock-paper-scissors/" class="post-title">Haskellでオンライン対戦じゃんけんゲーム</a>
 
                         <p class="post-meta">
                             
@@ -466,7 +580,7 @@ getHand client@Client{..} = loop
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
+                        <a href="https://lvs7k.github.io/posts/2018/12/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
 
                         <p class="post-meta">
                             
@@ -672,7 +786,7 @@ local-programs-path: D:\stack\
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-7/" class="post-title">Haskellで蟻本（初級編） - GCJの問題に挑戦してみよう（１）</a>
+                        <a href="https://lvs7k.github.io/posts/2018/11/pccb-easy-7/" class="post-title">Haskellで蟻本（初級編） - GCJの問題に挑戦してみよう（１）</a>
 
                         <p class="post-meta">
                             
@@ -858,218 +972,6 @@ dp[2] | 0.00 | 0.25 | 0.50 | 0.75 | 1.00 |
 <li>蟻本の<code>int i = (ll)X * n / 1000000;</code>の部分で最初の所持金がどのグループか判別している</li>
 <li><code>500,000 / (1,000,000 / 2^2) == 500,000 * 2^2 / 1,000,000 == 2</code></li>
 </ul></li>
-</ul>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">27 Nov 2018, 22:42</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/pccb-easy-6/" class="post-title">Haskellで蟻本（初級編） - 数学的な問題を解くコツ</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<h2 id="参考資料">参考資料</h2>
-
-<ul>
-<li><a href="http://tad311.xsrv.jp/hsmath/">大学数学へのかけ橋！『高校数学＋α ：基礎と論理の物語』</a>
-
-<ul>
-<li>文系社会人が高校数学やり直すために何冊か本買ったけどこれが一番好き</li>
-<li>PDFが無料でダウンロードできます</li>
-</ul></li>
-</ul>
-
-<hr />
-
-<p>※蟻本の入力例でしかテストしていません</p>
-
-<h2 id="ユークリッド互除法">ユークリッド互除法</h2>
-
-<pre><code class="language-haskell">{-# LANGUAGE BangPatterns #-}
-
-import qualified Data.IntMap.Strict as IM
-
--- ユークリッド互除法
-gcd' :: Int -&gt; Int -&gt; Int
-gcd' x y = go x y
-  where
-    go a 0 = a
-    go a b = go b (a `mod` b)
-
--- 線分上の格子点の個数
-q1 :: (Int, Int) -&gt; (Int, Int) -&gt; Int
-q1 (x1, y1) (x2, y2) = gcd' (abs $ x1 - x2) (abs $ y1 - y2) - 1
-</code></pre>
-
-<ul>
-<li>参考資料の「1.10.2.1 ユークリッドの互除法」を読む</li>
-<li>証明も理解する</li>
-</ul>
-
-<h3 id="拡張ユークリッド互除法">拡張ユークリッド互除法</h3>
-
-<pre><code class="language-haskell">-- 拡張ユークリッド互除法
-extgcd :: Int -&gt; Int -&gt; (Int, Int)
-extgcd x y = go x y
-  where
-    go a 0 = (1, 0)
-    go a b = (t, s - q * t)
-      where
-        (q, r) = a `divMod` b
-        (s, t) = extgcd b r
-
--- 双六
-q2 :: Int -&gt; Int -&gt; Maybe (Int, Int, Int, Int)
-q2 a b
-    | gcd' a b == 1 = case () of
-        _ | x &lt; 0, y &lt; 0 -&gt; Just (0, 0, abs x, abs y)
-          | x &lt; 0        -&gt; Just (0, y, abs x, 0)
-          | y &lt; 0        -&gt; Just (x, 0, 0, abs y)
-          | otherwise    -&gt; Just (x, y, 0, 0)
-    | otherwise     = Nothing
-  where
-    (x, y) = extgcd a b
-</code></pre>
-
-<ul>
-<li><p>拡張ユークリッド互除法で何ができるの？</p>
-
-<ul>
-<li><code>ax + by = gcd(a, b)</code>の整数解、<code>(x, y)</code>を求めることができる</li>
-</ul></li>
-
-<li><p>上記のプログラムが理解できないんだけど？（蟻本の解説本が欲しいんだけど？）</p>
-
-<pre><code>参考資料の「1.10.3 整数論の基本定理」を読む
-整数a，b が互いに素のとき ax + by = 1 は整数解をもつ
-整数a，b が互いに素のとき ax + by = c は整数解をもつ
-整数a, b が互いに素でなくても c が gcd(a, b) で割り切れるなら ax + by = c は整数解をもつ
-ということはax + by = gcd(a, b) は整数解をもつ
-a を b で割って a = bq + r として上に式に代入すると
-b(qx + y) + rx = gcd(a, b)
-s = qx + y, x = t とおいて bs + rt = gcd(s, t) = gcd(a, b)
-(b, r) は (a, b) よりも小さいため再帰的に解くことができる
-(s, t) がわかっているなら上の式で元の解(x, y) がわかる
-停止条件は r == 0 のとき bs + 0t = gcd(b, 0) の解(s, t) = (1, 0)
-</code></pre></li>
-</ul>
-
-<hr />
-
-<h2 id="素数に関する基本的なアルゴリズム">素数に関する基本的なアルゴリズム</h2>
-
-<pre><code class="language-haskell">-- 素数判定
-isPrime :: Int -&gt; Bool
-isPrime n = all ((/= 0) . (n `mod`)) $ takeWhile ((&lt;= n) . (^ 2)) (primes n)
-
--- n以下の素数
-primes :: Int -&gt; [Int]
-primes n = 2 : 3 : filter isPrime xs
-  where
-    xs = takeWhile (&lt;= n) [6 * i + j | i &lt;- [1 ..], j &lt;- [-1, 1]]
-
--- 約数の列挙
-divisor :: Int -&gt; [Int]
-divisor n = foldr f [] $ takeWhile ((&lt;= n) . (^ 2)) [1 .. n]
-  where
-    f x ds
-        | r == 0, q /= x = x : q : ds
-        | r == 0         = x : ds
-        | otherwise      = ds
-      where
-        (q, r) = n `divMod` x
-
--- 素因数分解
-primeFactor :: Int -&gt; IM.IntMap Int
-primeFactor n = go IM.empty n $ takeWhile ((&lt;= n) . (^ 2)) (primes n)
-  where
-    go im 1  _  = im
-    go im !k [] = IM.insertWith (+) k 1 im
-    go im !k (p:ps)
-        | r == 0    = go (IM.insertWith (+) p 1 im) q (p:ps)
-        | otherwise = go im k ps
-      where
-        (q, r) = k `divMod` p
-</code></pre>
-
-<h3 id="エラトステネスの篩">エラトステネスの篩</h3>
-
-<pre><code class="language-haskell">-- エラトステネスの篩
-sieve :: Int -&gt; [Int]
-sieve n = takeWhile (&lt;= n) (sieve' [2 ..])
-  where
-    sieve' (x:xs) = x : sieve' (filter ((/= 0) . (`mod` x)) xs)
-
--- 区間内の素数の個数
-q5 :: Int -&gt; Int -&gt; Int
-q5 a b = go [a .. b - 1] (takeWhile ((&lt; b) . (^ 2)) [2 ..])
-  where
-    go !ps []     = length ps
-    go !ps (x:xs) = go (f ps) (f xs)
-      where
-        f as = filter ((/= 0) . (`mod` x)) as
-</code></pre>
-
-<ul>
-<li>Haskellっぽくてかっこいいけど遅い、多分TLE</li>
-</ul>
-
-<hr />
-
-<h2 id="べき乗を高速に計算する">べき乗を高速に計算する</h2>
-
-<pre><code class="language-haskell">-- べき乗を高速に計算する
-modPow' :: Int -&gt; Int -&gt; Int -&gt; Int
-modPow' x n m = go 1 x n
-  where
-    go !k !_ 0 = k
-    go !k !p q
-        | r == 1    = go (k * p `mod` m) (p ^ 2 `mod` m) q'
-        | otherwise = go k               (p ^ 2 `mod` m) q'
-      where
-        (q', r) = q `divMod` 2
-
-modPow :: Int -&gt; Int -&gt; Int -&gt; Int
-modPow x n m = go n
-  where
-    go 0 = 1
-    go k
-        | odd k     = (t * x) `mod` m
-        | otherwise = t
-      where
-        s = go (k `div` 2)
-        t = (s * s) `mod` m
-
--- Carmichael Numbers (UVa No.10006)
-q6 :: Int -&gt; Bool
-q6 n
-    | isPrime n = False
-    | otherwise = all f [2 .. n - 1]
-  where
-    f x = modPow x n n == x `mod` n
-</code></pre>
-
-<ul>
-<li><code>modPow</code>のほうが分かりやすくて好き</li>
 </ul>
 
                     </div>

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haskellで蟻本（初級編） - 動的計画法 &middot; lvs7k&#39;s blog</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.52" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Haskellで蟻本（初級編） - 動的計画法 &middot; lvs7k&#39;s blog">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Haskellで蟻本（初級編） - 動的計画法 &middot; lvs7k&#39;s blog">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+
+    <link rel="stylesheet" href='https://lvs7k.github.io/css/all.min.css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="lvs7k&#39;s blog" href='https://lvs7k.github.io/index.xml' />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://lvs7k.github.io/">lvs7k&#39;s blog</a></h1>
+            <h2 class="brand-tagline"> Just a Memo </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/lvs7k">
+                        <i class="fa fa-twitter"></i> Twitter
+                    </a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/lvs7k">
+                        <i class="fa fa-github-alt"></i> Github
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/index.xml'>
+                        <i class="fa fa-rss"></i> rss
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/menu/about'>
+                        <i class="fa fa-user"></i> about
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/categories'>
+                        <i class="fa fa-folder"></i> categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href='https://lvs7k.github.io/tags'>
+                        <i class="fa fa-tag"></i> tags
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">19 Nov 2018, 22:09</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/11/pccb-easy-3/" class="post-title">Haskellで蟻本（初級編） - 動的計画法</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-description">
+                        <p>※蟻本の入力例でしかテストしていません</p>
+
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
+
+import Control.Monad
+import Data.List
+import qualified Data.ByteString.Char8 as B
+
+import Control.Monad.ST
+import Data.Array.ST
+import Data.Array
+import qualified Data.Map.Strict as M
+
+-- 01 ナップサック問題
+q1 :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Int
+q1 n m wvs = go n m
+  where
+    wva = listArray (1, n) wvs
+    memo = listArray ((0, 0), (n, m)) [go i j | i &lt;- [0 .. n], j &lt;- [0 .. m]]
+    go 0 _ = 0
+    go i j
+        | j &lt; w     = x1
+        | otherwise = max x1 x2
+      where
+        (w, v) = wva ! i
+        x1 = memo ! (i - 1, j)
+        x2 = memo ! (i - 1, j - w) + v
+
+q1' :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Int
+q1' n m wvs = runST $ do
+    dp &lt;- newArray ((0, 0), (n, m)) 0 :: ST s (STUArray s (Int, Int) Int)
+    forM_ [1 .. n] $ \i -&gt; do
+        let (w, v) = wva ! i
+        forM_ [0 .. m] $ \j -&gt; do
+            x1 &lt;- readArray dp (i - 1, j)
+            if j &lt; w
+                then writeArray dp (i, j) x1
+                else do
+                    x2 &lt;- readArray dp (i - 1, j - w)
+                    writeArray dp (i, j) (max x1 (x2 + v))
+    readArray dp (n, m)
+  where
+    wva = listArray (1, n) wvs
+
+q1'' :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Int
+q1'' n m wvs = runST $ do
+    dp   &lt;- newArray ((0, 0), (n, m)) 0     :: ST s (STUArray s (Int, Int) Int)
+    memo &lt;- newArray ((0, 0), (n, m)) False :: ST s (STUArray s (Int, Int) Bool)
+    sequence_ [writeArray memo (0, i) True | i &lt;- [0 .. m]]
+    go dp memo (n, m)
+  where
+    wva = listArray (1, n) wvs
+    go dp memo (i, j) = do
+        exists &lt;- readArray memo (i, j)
+        when (not exists) $ do
+            let (w, v) = wva ! i
+            x1 &lt;- go dp memo (i - 1, j)
+            if j &lt; w
+                then do
+                    writeArray dp (i, j) x1
+                else do
+                    x2 &lt;- go dp memo (i - 1, j - w)
+                    writeArray dp (i, j) (max x1 (x2 + v))
+            writeArray memo (i, j) True
+        readArray dp (i, j)
+</code></pre>
+
+<ul>
+<li>メモ化再帰　これでAC取りたい</li>
+<li>動的計画法　圧倒的速さ</li>
+<li>メモ化再帰　上のでTLEになるがメモ化再帰したいとき？</li>
+</ul>
+
+<pre><code class="language-haskell">-- 最長共通部分列問題
+q2 :: Int -&gt; Int -&gt; B.ByteString -&gt; B.ByteString -&gt; Int
+q2 n m ss ts = go (n, m)
+  where
+    memo = listArray ((0, 0), (n, m)) [go (i, j) | i &lt;- [0 .. n], j &lt;- [0 .. m]]
+    go (0, _) = 0
+    go (_, 0) = 0
+    go (i, j)
+        | si == tj  = maximum [x1, x2, x3]
+        | otherwise = max x1 x2
+      where
+        si = ss `B.index` (i - 1)
+        tj = ts `B.index` (j - 1)
+        x1 = memo ! (i - 1, j)
+        x2 = memo ! (i, j - 1)
+        x3 = memo ! (i - 1, j - 1) + 1
+</code></pre>
+
+<ul>
+<li><code>ByteString</code>の<code>index</code>は<code>O(1)</code></li>
+<li><code>where</code>句に細かく名前つけてあげると読みやすくなる気がする</li>
+</ul>
+
+<pre><code class="language-haskell">-- 個数制限なしナップサック問題
+q3 :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Int
+q3 n m wvs = go (n, m)
+  where
+    wva  = listArray (1, n) wvs
+    memo = listArray ((0, 0), (n, m)) [go (i, j) | i &lt;- [0 .. n], j &lt;- [0 .. m]]
+    go (0, _) = 0
+    go (i, j)
+        | j &lt; w     = x1
+        | otherwise = max x1 x2
+      where
+        (w, v) = wva ! i
+        x1 = memo ! (i - 1, j)
+        x2 = memo ! (i, j - w) + v
+</code></pre>
+
+<ul>
+<li>このように計算量を減らすのだって書いてあるけど思いつけるようになるのだろうか</li>
+</ul>
+
+<pre><code class="language-haskell">-- 01 ナップサック問題 その2
+q4 :: Int -&gt; Int -&gt; [(Int, Int)] -&gt; Int
+q4 n m wvs = maximum $ do
+    v &lt;- [0 .. vmax]
+    let w = memo ! (n, v)
+    guard (w &lt;= m)
+    return v
+  where
+    inf = 10 ^ 10
+    vmax = sum $ fmap snd wvs
+    wva = listArray (1, n) wvs
+    memo = listArray ((0, 0), (n, vmax)) [go (i, j) | i &lt;- [0 .. n], j &lt;- [0 .. vmax]]
+    go (0, 0) = 0
+    go (0, _) = inf
+    go (i, j)
+        | j &lt; v     = x1
+        | otherwise = min x1 x2
+      where
+        (w, v) = wva ! i
+        x1 = go (i - 1, j)
+        x2 = go (i - 1, j - v) + w
+</code></pre>
+
+<pre><code class="language-haskell">-- 個数制限つき部分和問題
+q5 :: Int -&gt; Int -&gt; [Int] -&gt; [Int] -&gt; Bool
+q5 n k as ms
+    | go (n, k) &lt; 0 = False
+    | otherwise     = True
+  where
+    aa = listArray (1, n) as
+    ma = listArray (1, n) ms
+    memo = listArray ((0, 0), (n, k)) [go (i, j) | i &lt;- [0 .. n], j &lt;- [0 .. k]]
+    go (0, 0) = 0
+    go (0, _) = -1
+    go (i, j)
+        | x1 &gt;= 0          = m
+        | j &lt; a || x2 &lt;= 0 = -1
+        | otherwise        = x2 - 1
+      where
+        a = aa ! i
+        m = ma ! i
+        x1 = memo ! (i - 1, j)
+        x2 = memo ! (i, j - a)
+</code></pre>
+
+<pre><code class="language-haskell">-- 最長増加部分列問題
+q6 :: Int -&gt; [Int] -&gt; Int
+q6 n as = go n
+  where
+    aa = listArray (1, n) as
+    memo = listArray (1, n) [go i | i &lt;- [1 .. n]]
+    go 1 = 1
+    go i = maximum . (1:) $ do
+        j &lt;- [1 .. i - 1]
+        let (ai, aj) = (aa ! i, aa ! j)
+        guard (aj &lt; ai)
+        return $ (memo ! j) + 1
+
+q6' :: Int -&gt; [Int] -&gt; Int
+q6' n as = maximum $ foldl' f M.empty as
+  where
+    f m a
+        | Just (k, v) &lt;- M.lookupGE a m = M.insert a v $ M.delete k m
+        | otherwise                     = M.insert a (M.size m + 1) m
+</code></pre>
+
+<ul>
+<li><code>IntMap</code>と異なり<code>Map</code>の<code>size</code>は<code>O(1)</code></li>
+<li>蟻本の「DPテーブルの変化」の図と同じように<code>Map</code>が更新されていく</li>
+</ul>
+
+<pre><code class="language-haskell">-- 分割数
+q7 :: Int -&gt; Int -&gt; Int -&gt; Int
+q7 n m d = go (m, n)
+  where
+    memo = listArray ((0, 0), (m, n)) [go (i, j) | i &lt;- [0 .. m], j &lt;- [0 .. n]]
+    go (0, 0) = 1
+    go (0, _) = 0
+    go (i, j)
+        | j &lt; i     = x1
+        | otherwise = (x1 + x2) `mod` d
+      where
+        x1 = memo ! (i - 1, j)
+        x2 = memo ! (i, j - 1)
+</code></pre>
+
+<pre><code>漸化式がよく理解できなかったのでメモ
+
+dp[3][4] = 4 (4の3分割の総数)
+
+  (4, 0, 0)
+  (3, 1, 0) -- dp[2][4]と同じ
+  (2, 2, 0)
+
+  (2, 1, 1) -- 4の3分割 (全て1以上) == (4 - 3)の3分割 (全て0以上)
+</code></pre>
+
+<pre><code class="language-haskell">-- 重複組合せ
+q8 :: Int -&gt; Int -&gt; Int -&gt; [Int] -&gt; Int
+q8 n m d as = go (n, m)
+  where
+    aa = listArray (1, n) as
+    memo = listArray ((0, 0), (n, m)) [go (i, j) | i &lt;- [0 .. n], j &lt;- [0 .. m]]
+    go (0, 0) = 1
+    go (0, _) = 0
+    go (i, j)
+        | j - 1 &lt; 0      = x1
+        | j - 1 - ai &lt; 0 = (x1 + x2) `mod` d
+        | otherwise      = (x1 + x2 - x3) `mod` d
+      where
+        ai = aa ! i
+        x1 = memo ! (i - 1, j)
+        x2 = memo ! (i, j - 1)
+        x3 = memo ! (i - 1, j - 1 - ai)
+</code></pre>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/phyllo_algo/20140831/1409502655">重複組み合わせ - れどこだ目指すよ！　(；`・ω・）</a>
+
+<ul>
+<li>上の図と下の図の矢印が繋がっている□を見比べる</li>
+<li><code>X = C + B</code>だと<code>A</code>が余計に足されているので引いてあげる</li>
+</ul></li>
+</ul>
+
+                    </div>
+                    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "lvs7k" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src='https://lvs7k.github.io/js/all.min.js'></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-129286122-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

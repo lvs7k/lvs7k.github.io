@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tags &middot; lvs7k&#39;s blog</title>
+    <title>初めてのCMake &middot; lvs7k&#39;s blog</title>
 
-    <meta name="description" content="Just a Memo">
+    <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.52" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Tags &middot; lvs7k&#39;s blog">
-    <meta name="twitter:description" content="Just a Memo">
+    <meta name="twitter:title" content="初めてのCMake &middot; lvs7k&#39;s blog">
+    <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Tags &middot; lvs7k&#39;s blog">
-    <meta property="og:description" content="Just a Memo">
+    <meta property="og:title" content="初めてのCMake &middot; lvs7k&#39;s blog">
+    <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
@@ -83,70 +83,144 @@
         <div>
             
             <div class="posts">
-                
                 <h1 class="content-subhead">14 Jan 2019, 11:30</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/tags/c/" class="post-title">C</a>
+                        <a href="https://lvs7k.github.io/posts/2019/01/what-i-wish-i-knew-about-cmake/" class="post-title">初めてのCMake</a>
 
                         <p class="post-meta">
                             
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                                
                             
                         </p>
                         <p class="post-meta">
                             
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">13 Jan 2019, 15:19</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/tags/haskell/" class="post-title">Haskell</a>
-
-                        <p class="post-meta">
-                            
-                            
-                        </p>
-                        <p class="post-meta">
+                                tags
+                                
+                                    <a class="post-category post-category-c" href='https://lvs7k.github.io/tags/c'>c</a>
+                                
                             
                         </p>
                     </header>
-
+                    
                     <div class="post-description">
                         
+
+<p>初めてCMake使ったからメモ</p>
+
+<h2 id="hello-world">Hello, world!</h2>
+
+<ul>
+<li>フォルダ構成</li>
+</ul>
+
+<pre><code>include
+  - hello.h
+src
+  - hello.c
+CMakeLists.txt
+</code></pre>
+
+<ul>
+<li><code>hello.h</code></li>
+</ul>
+
+<pre><code class="language-c">void hello();
+</code></pre>
+
+<ul>
+<li><code>hello.c</code></li>
+</ul>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;hello.h&quot;
+
+int main()
+{
+    hello();
+    return 0;
+}
+
+void hello()
+{
+    printf(&quot;Hello, world!\n&quot;);
+}
+</code></pre>
+
+<ul>
+<li><code>CMakeLists.txt</code></li>
+</ul>
+
+<pre><code>cmake_minimum_required(VERSION 2.8)
+project (hello_project)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+add_executable(hello src/hello.c)
+</code></pre>
+
+<h2 id="ビルド">ビルド</h2>
+
+<pre><code>mkdir build
+cd build
+cmake .. -G &quot;MSYS Makefiles&quot;
+make VERBOSE=1
+./hello.exe
+</code></pre>
+
+<pre><code>Hello, world!
+</code></pre>
+
+<h2 id="ライブラリのリンク">ライブラリのリンク</h2>
+
+<p><em>TODO: 具体例を書く</em></p>
+
+<ul>
+<li><code>cmake --help-module-list | grep ^Find</code>で出てくるライブラリ
+
+<ul>
+<li><code>find_package</code>を使う</li>
+</ul></li>
+<li>それ以外
+
+<ul>
+<li>正しくは<code>.cmake</code>ファイルを作成して行う（参考リンク参照）</li>
+<li>簡単なものなら<code>find_library</code>を使う</li>
+</ul></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/How-To-Find-Libraries">How To Find Libraries · Wiki · CMake / Community · GitLab</a></li>
+</ul>
+
                     </div>
+                    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "lvs7k" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                 </section>
-                
-                <h1 class="content-subhead">31 Dec 2018, 22:58</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/tags/hugo/" class="post-title">Hugo</a>
-
-                        <p class="post-meta">
-                            
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-                    </div>
-                </section>
-                
             </div>
-            
-
             <div class="footer">
     <div class="pure-menu pure-menu-horizontal pure-menu-open">
         <ul>
@@ -159,6 +233,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
