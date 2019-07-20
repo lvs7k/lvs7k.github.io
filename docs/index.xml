@@ -6,10 +6,21 @@
     <description>Recent content on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Mon, 14 Jan 2019 11:30:24 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jul 2019 18:53:00 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019年7月 開発環境構築メモ(Windows7)</title>
+      <link>https://lvs7k.github.io/posts/2019/07/set-up-dev-env/</link>
+      <pubDate>Sat, 20 Jul 2019 18:53:00 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2019/07/set-up-dev-env/</guid>
+      <description>しばらくプログラミングをしていなかったので環境を見直してみる。どうせ大してやらないので最小限やることだけ書く。
+ユーザ環境変数 SCOOP = D:\scoop MSYS2_PATH_TYPE = inherit  インストール  Scoop MSYS2 Visual Studio Code  MSYS2とVisual Studio CodeもScoopでインストールしても良いかもしれない。
+インストール後に  scoop install git scoop install haskell scoop install hugo  Visual Studio Code  settings.json  // 既定の設定を上書きするには、このファイル内に設定を挿入します { /* editor */ &amp;quot;editor.fontSize&amp;quot;: 20, &amp;quot;editor.rulers&amp;quot;: [80], &amp;quot;editor.wordWrap&amp;quot;: &amp;quot;off&amp;quot;, &amp;quot;editor.multiCursorModifier&amp;quot;: &amp;quot;ctrlCmd&amp;quot;, &amp;quot;editor.acceptSuggestionOnEnter&amp;quot;: &amp;quot;off&amp;quot;, &amp;quot;files.trimTrailingWhitespace&amp;quot;: true, &amp;quot;workbench.editor.enablePreview&amp;quot;: false, &amp;quot;workbench.startupEditor&amp;quot;: &amp;quot;none&amp;quot;, &amp;quot;workbench.colorTheme&amp;quot;: &amp;quot;Abyss&amp;quot;, &amp;quot;extensions.autoUpdate&amp;quot;: false, &amp;quot;zenMode.hideStatusBar&amp;quot;: false, /* shell */ &amp;quot;terminal.</description>
+    </item>
     
     <item>
       <title>初めてのCMake</title>
@@ -18,7 +29,9 @@
       
       <guid>https://lvs7k.github.io/posts/2019/01/what-i-wish-i-knew-about-cmake/</guid>
       <description>初めてCMake使ったからメモ
-参考リンク  cmake-commands(7) CMakeを使ってみた How To Find Libraries SIGIL - CMakeLists.txt kigster/cmake-project-template  Hello, world!  フォルダ構成  hello.h hello.c CMakeLists.txt   CMakeLists.txt  cmake_minimum_required(VERSION 3.0) project (hello) include_directories(${PROJECT_SOURCE_DIR}) add_executable(${PROJECT_NAME} hello.c)  ビルド mkdir build cd build cmake .. -G &amp;quot;MSYS Makefiles&amp;quot; make VERBOSE=1 ./hello.exe  Hello, world!  ライブラリのリンク  CMake付属のモジュールが存在する場合  cmake --help-module-listでモジュール一覧を表示 find_package(OpenGL REQUIRED)のように使う  存在しない場合  find_library (&amp;lt;VAR&amp;gt; NAMES name1 [name2 ...] PATH [path1 path2 .</description>
+これより読むべき公式より分かりやすいチュートリアル  CMake Tutorial – Onur Dündar – Medium  参考リンク  cmake-commands(7) CMakeを使ってみた How To Find Libraries SIGIL - CMakeLists.txt kigster/cmake-project-template  Hello, world!  フォルダ構成
+hello.h hello.c CMakeLists.txt  CMakeLists.txt
+cmake_minimum_required(VERSION 3.0) project (hello) include_directories(${PROJECT_SOURCE_DIR}) add_executable(${PROJECT_NAME} hello.c)   ビルド mkdir build cd build cmake .. -G &amp;quot;MSYS Makefiles&amp;quot; make VERBOSE=1 ./hello.exe  Hello, world!  ライブラリのリンク  CMake付属のモジュールが存在する場合  cmake --help-module-listでモジュール一覧を表示 find_package(OpenGL REQUIRED)のように使う  存在しない場合  find_library (&amp;lt;VAR&amp;gt; NAMES name1 [name2 .</description>
     </item>
     
     <item>
@@ -29,9 +42,13 @@
       <guid>https://lvs7k.github.io/posts/2019/01/haskell-ffi-practice/</guid>
       <description>以下の2つのパターンについてFFIをやってみた。
  ライブラリで自作のCの関数を使う 外部のライブラリに対するバインディングを書く  1. ライブラリで自作のCの関数を使う GitHubに上げました
- フォルダ構成  app - Main.hs cbits - person.c include - person.h src - Person.hsc   package.yaml  extra-source-files: - README.md - ChangeLog.md - include/** - cbits/** library: source-dirs: src include-dirs: - include c-sources: - cbits/*.c build-tools: - hsc2hs:hsc2hs  これだけでstack buildしてstack runできる。
+ フォルダ構成
+app - Main.hs cbits - person.c include - person.h src - Person.hsc  package.yaml
+  extra-source-files: - README.md - ChangeLog.md - include/** - cbits/** library: source-dirs: src include-dirs: - include c-sources: - cbits/*.c build-tools: - hsc2hs:hsc2hs  これだけでstack buildしてstack runできる。
 2. 外部のライブラリに対するバインディングを書く 例えばRWH17章のようにPCREのバインディングを書くなら
- 準備  pacman -S mingw64/mingw-w64-x86_64-pcre   フォルダ構成  app - Main.hs include - pcre.</description>
+ 準備
+pacman -S mingw64/mingw-w64-x86_64-pcre  フォルダ構成
+app - Main.hs include - pcre.h -- mingw64/includeからコピー src - Pcre.</description>
     </item>
     
     <item>
@@ -82,7 +99,8 @@ Minimum Scalar Product {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Co
       <description>※蟻本の入力例でしかテストしていません
 TODO: コードをもっと綺麗にする
 入力の形式について 標準入力は下記の形式で与えられるものとする。
- n: 頂点数 m: 辺の数 c: 重み  n m f1 t1 f2 t2 ... fn tn  n m f1 t1 c1 f2 t2 c2 ... fn tn cn  グラフの表現 隣接行列も隣接リストもaccumArrayを使えば良い。
+ n: 頂点数 m: 辺の数 c: 重み
+n m f1 t1 f2 t2 ... fn tn  n m f1 t1 c1 f2 t2 c2 ... fn tn cn   グラフの表現 隣接行列も隣接リストもaccumArrayを使えば良い。
 隣接行列 {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Control.Monad.ST import Data.Array.ST import Data.Array import Data.STRef import Data.List -- 隣接行列 buildGMatrix :: (Int, Int) -&amp;gt; [(Int, Int)] -&amp;gt; Array (Int, Int) Int buildGMatrix (i, j) es = accumArray (flip const) 0 ((i, i), (j, j)) (zip es (repeat 1))  隣接リスト -- 隣接リスト buildGList :: (Int, Int) -&amp;gt; [(Int, a)] -&amp;gt; Array Int [a] buildGList (i, j) es = accumArray (flip (:)) [] (i, j) es   containersのData.</description>
     </item>
     

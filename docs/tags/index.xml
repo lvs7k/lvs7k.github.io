@@ -6,35 +6,35 @@
     <description>Recent content in Tags on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Mon, 14 Jan 2019 11:30:24 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jul 2019 18:53:00 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>C</title>
-      <link>https://lvs7k.github.io/tags/c/</link>
-      <pubDate>Mon, 14 Jan 2019 11:30:24 +0900</pubDate>
-      
-      <guid>https://lvs7k.github.io/tags/c/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Haskell</title>
+      <title>haskell</title>
       <link>https://lvs7k.github.io/tags/haskell/</link>
-      <pubDate>Sun, 13 Jan 2019 15:19:35 +0900</pubDate>
+      <pubDate>Sat, 20 Jul 2019 18:53:00 +0900</pubDate>
       
       <guid>https://lvs7k.github.io/tags/haskell/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Hugo</title>
+      <title>hugo</title>
       <link>https://lvs7k.github.io/tags/hugo/</link>
-      <pubDate>Mon, 31 Dec 2018 22:58:53 +0900</pubDate>
+      <pubDate>Sat, 20 Jul 2019 18:53:00 +0900</pubDate>
       
       <guid>https://lvs7k.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c</title>
+      <link>https://lvs7k.github.io/tags/c/</link>
+      <pubDate>Mon, 14 Jan 2019 11:30:24 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/tags/c/</guid>
       <description></description>
     </item>
     

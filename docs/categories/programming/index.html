@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programming &middot; lvs7k&#39;s blog</title>
+    <title>programming &middot; lvs7k&#39;s blog</title>
 
     <meta name="description" content="Just a Memo">
 
-    <meta name="generator" content="Hugo 0.52" />
+    <meta name="generator" content="Hugo 0.55.6" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Programming &middot; lvs7k&#39;s blog">
+    <meta name="twitter:title" content="programming &middot; lvs7k&#39;s blog">
     <meta name="twitter:description" content="Just a Memo">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Programming &middot; lvs7k&#39;s blog">
+    <meta property="og:title" content="programming &middot; lvs7k&#39;s blog">
     <meta property="og:description" content="Just a Memo">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -84,6 +84,135 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">20 Jul 2019, 18:53</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2019/07/set-up-dev-env/" class="post-title">2019年7月 開発環境構築メモ(Windows7)</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
+                                
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>しばらくプログラミングをしていなかったので環境を見直してみる。どうせ大してやらないので最小限やることだけ書く。</p>
+
+<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
+
+<pre><code>SCOOP = D:\scoop
+MSYS2_PATH_TYPE = inherit
+</code></pre>
+
+<h2 id="インストール">インストール</h2>
+
+<ul>
+<li><a href="https://scoop.sh/">Scoop</a></li>
+<li><a href="https://www.msys2.org/">MSYS2</a></li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+</ul>
+
+<p>MSYS2とVisual Studio CodeもScoopでインストールしても良いかもしれない。</p>
+
+<h2 id="インストール後に">インストール後に</h2>
+
+<ul>
+<li><code>scoop install git</code></li>
+<li><code>scoop install haskell</code></li>
+<li><code>scoop install hugo</code></li>
+</ul>
+
+<h2 id="visual-studio-code">Visual Studio Code</h2>
+
+<ul>
+<li><code>settings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
+{
+    /* editor */
+    &quot;editor.fontSize&quot;: 20,
+    &quot;editor.rulers&quot;: [80],
+    &quot;editor.wordWrap&quot;: &quot;off&quot;,
+    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
+    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
+    &quot;files.trimTrailingWhitespace&quot;: true,
+    &quot;workbench.editor.enablePreview&quot;: false,
+    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
+    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
+    &quot;extensions.autoUpdate&quot;: false,
+    &quot;zenMode.hideStatusBar&quot;: false,
+
+    /* shell */
+    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
+    &quot;terminal.integrated.shellArgs.windows&quot;: [
+        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
+    ],
+    &quot;terminal.integrated.setLocaleVariables&quot;: true,
+
+    /* vim */
+    &quot;vim.hlsearch&quot;: true,
+    &quot;vim.handleKeys&quot;: {
+        &quot;&lt;C-d&gt;&quot;: false,
+        &quot;&lt;C-k&gt;&quot;: false,
+    },
+    &quot;vim.insertModeKeyBindings&quot;: [
+        {
+            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
+            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
+        }
+    ],
+}
+</code></pre>
+
+<ul>
+<li><code>keybindings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
+[
+// ctrl+enterで行末へ移動
+{
+  &quot;key&quot;: &quot;ctrl+enter&quot;,
+  &quot;command&quot;: &quot;cursorEnd&quot;,
+  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+},
+]
+</code></pre>
+
+<h2 id="参考リンク">参考リンク</h2>
+
+<ul>
+<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
+<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
+
+<ul>
+<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
+</ul></li>
+<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
+</ul>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">14 Jan 2019, 11:30</h1>
                 <section class="post">
                     <header class="post-header">
@@ -114,6 +243,12 @@
 
 <p>初めてCMake使ったからメモ</p>
 
+<h2 id="これより読むべき公式より分かりやすいチュートリアル">これより読むべき公式より分かりやすいチュートリアル</h2>
+
+<ul>
+<li><a href="https://medium.com/@onur.dundar1/cmake-tutorial-585dd180109b">CMake Tutorial – Onur Dündar – Medium</a></li>
+</ul>
+
 <h2 id="参考リンク">参考リンク</h2>
 
 <ul>
@@ -127,23 +262,21 @@
 <h2 id="hello-world">Hello, world!</h2>
 
 <ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>hello.h
 hello.c
 CMakeLists.txt
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li><code>CMakeLists.txt</code></li>
-</ul>
+<li><p><code>CMakeLists.txt</code></p>
 
 <pre><code>cmake_minimum_required(VERSION 3.0)
 project (hello)
 include_directories(${PROJECT_SOURCE_DIR})
 add_executable(${PROJECT_NAME} hello.c)
-</code></pre>
+</code></pre></li>
+</ul>
 
 <h2 id="ビルド">ビルド</h2>
 
@@ -178,7 +311,24 @@ make VERBOSE=1
 
 <h2 id="もう少し複雑な例">もう少し複雑な例</h2>
 
-<p><a href="https://github.com/lvs7k/cmake-template">GitHubに上げました</a></p>
+<p>Haskell stackのnew-templateっぽいのを作ってみた</p>
+
+<p><a href="https://github.com/lvs7k/cmake-template-c">My C project template</a></p>
+
+<h2 id="libfoo-dll-aって何">libfoo.dll.aって何？</h2>
+
+<ul>
+<li>よくわからんが参考になりそうなStackOverflowの回答を見つけた</li>
+<li><a href="https://stackoverflow.com/questions/17601949/building-a-shared-library-using-gcc-on-linux-and-mingw-on-windows">Building a shared library using gcc on Linux and MinGW on Windows - Stack Overflow</a></li>
+</ul>
+
+<blockquote>
+<p>On Windows, you need to create an import library for the DLL. An import library looks like a static library, in that it defines all of the needed symbols, but it doesn&rsquo;t have the actual function implementations, it just has stubs. The import library will resolve the &ldquo;undefined reference&rdquo; errors while avoiding static linking.</p>
+
+<p>To create an import library with MinGW, follow the instructions here. The key is that when building the DLL, you must pass the option -Wl,&ndash;out-implib,libexample_dll.a to the linker to generate the import library libexample_dll.a.</p>
+
+<p>Then, when you compile your main executable, you use the -lexample_dll option (along with -L.) to link against the import library.</p>
+</blockquote>
 
                     </div>
                 </section>
@@ -223,21 +373,19 @@ make VERBOSE=1
 <p><a href="https://github.com/lvs7k/haskell-ffi-example">GitHubに上げました</a></p>
 
 <ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>app
-  - Main.hs
+- Main.hs
 cbits
-  - person.c
+- person.c
 include
-  - person.h
+- person.h
 src
-  - Person.hsc
-</code></pre>
+- Person.hsc
+</code></pre></li>
 
-<ul>
-<li><code>package.yaml</code></li>
+<li><p><code>package.yaml</code></p></li>
 </ul>
 
 <pre><code class="language-yaml">extra-source-files:
@@ -263,26 +411,22 @@ library:
 <p>例えばRWH17章のように<code>PCRE</code>のバインディングを書くなら</p>
 
 <ul>
-<li>準備</li>
-</ul>
+<li><p>準備</p>
 
 <pre><code>pacman -S mingw64/mingw-w64-x86_64-pcre
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>app
-  - Main.hs
+- Main.hs
 include
-  - pcre.h    -- mingw64/includeからコピー
+- pcre.h    -- mingw64/includeからコピー
 src
-  - Pcre.hsc
-</code></pre>
+- Pcre.hsc
+</code></pre></li>
 
-<ul>
-<li><code>package.yaml</code></li>
+<li><p><code>package.yaml</code></p></li>
 </ul>
 
 <pre><code class="language-yaml">extra-source-files:
@@ -781,261 +925,20 @@ local-programs-path: D:\stack\
                     </div>
                 </section>
                 
-                <h1 class="content-subhead">10 Nov 2018, 17:10</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/11/how-to-create-this-blog/" class="post-title">Hugoでこのブログを作った時のメモ</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                
-                                    <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
-                                
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                
-                                    <a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
-                                
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<p><a href="https://gohugo.io/getting-started/quick-start/">Quick Start | Hugo</a></p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>Windows 7</li>
-<li>Chocolatey v0.10.11</li>
-<li>git 2.19.1</li>
-<li>hugo 0.49</li>
-</ul>
-
-<h2 id="hugoのインストール">Hugoのインストール</h2>
-
-<ol>
-<li><p>Chocolateyをインストール</p></li>
-
-<li><p>Chocolateyでgitをインストール</p>
-
-<ul>
-<li><code>choco install git</code></li>
-</ul></li>
-
-<li><p>ChocolateyでHugoをインストール</p>
-
-<ul>
-<li><code>choco install hugo -confirm</code></li>
-</ul></li>
-
-<li><p>GitHubでリポジトリ作成</p>
-
-<ul>
-<li>Repository name : <code>&lt;username&gt;.github.io</code></li>
-<li>Initialize this repository with a READMEにチェックを入れた</li>
-</ul></li>
-</ol>
-
-<h2 id="hugoで静的サイト生成">Hugoで静的サイト生成</h2>
-
-<ol>
-<li><p>サイト作成</p>
-
-<ul>
-<li><code>hugo new site &lt;フォルダ名&gt;</code></li>
-<li><code>cd &lt;フォルダ名&gt;</code></li>
-<li><code>git init</code></li>
-</ul></li>
-
-<li><p>テーマの追加</p>
-
-<ul>
-<li><code>git add submodule https://github.com/dplesca/purehugo.git themes/purehugo</code></li>
-</ul></li>
-
-<li><p>コンフィグ設定</p>
-
-<ul>
-<li><p><code>config.toml</code>を変更</p>
-
-<pre><code class="language-toml">baseURL = &quot;https://lvs7k.github.io/&quot;
-languageCode = &quot;ja-jp&quot;
-title = &quot;lvs7k's blog&quot;
-theme = &quot;purehugo&quot;
-Paginate = 10
-disqusShortname = &quot;lvs7k&quot;
-publishDir = &quot;docs&quot;
-
-[params]
-    twitterName = &quot;lvs7k&quot;
-    githubName = &quot;lvs7k&quot;
-    description = &quot;Just a Memo&quot;
-    hideShareOptions = true
-</code></pre></li>
-</ul></li>
-
-<li><p>記事の作成</p>
-
-<ul>
-<li><code>hugo new posts/2018/how-to-create-this-blog.md</code></li>
-<li>マークダウンの先頭(<code>front matter</code>と呼ばれている部分)の<code>draft</code>を<code>false</code>に変更
-
-<ul>
-<li>これをしないと生成されたサイトに記事が表示されない</li>
-</ul></li>
-<li>適当になんか書く</li>
-</ul></li>
-
-<li><p>テーマをちょっといじる</p>
-
-<ul>
-<li><code>theme</code>フォルダ内の<code>sidebar.html</code>をトップの<code>layouts</code>フォルダへコピー</li>
-<li><code>theme</code>フォルダの<code>layouts</code>より<code>layouts</code>フォルダのほうが優先されるってこと？</li>
-</ul></li>
-
-<li><p>サーバを立ち上げて確認</p>
-
-<ul>
-<li><code>hugo server</code></li>
-<li>ブラウザで<code>http://localhost:1313/</code>にアクセス</li>
-<li>想定通りテーマや記事が表示されているかどうか確認</li>
-</ul></li>
-
-<li><p>サイト生成</p>
-
-<ul>
-<li><code>hugo</code></li>
-<li>docsフォルダにサイトが生成される</li>
-</ul></li>
-</ol>
-
-<h2 id="githubへデプロイ">GitHubへデプロイ</h2>
-
-<ol>
-<li><p><code>source</code>ブランチを作成</p>
-
-<ul>
-<li><code>git checkout -b source</code></li>
-</ul></li>
-
-<li><p>ここまでの作業分をコミット</p>
-
-<ul>
-<li><code>git add .</code></li>
-<li><code>git commit -m &quot;Initial commit&quot;</code></li>
-</ul></li>
-
-<li><p><code>source</code>ブランチを<code>push</code></p>
-
-<ul>
-<li><code>git push origin source</code></li>
-</ul></li>
-
-<li><p><code>Default branch</code>を<code>source</code>に変更</p>
-
-<ul>
-<li>リポジトリの<code>Settings</code> -&gt; <code>Branches</code> -&gt; <code>Default branch</code>を<code>source</code>に変更</li>
-</ul></li>
-
-<li><p><code>master</code>ブランチをリモートから削除</p>
-
-<ul>
-<li><code>git push -f --delete origin master</code></li>
-</ul></li>
-
-<li><p><code>docs</code>フォルダをsubtreeとして(？)<code>master</code>という名前で<code>push</code></p>
-
-<ul>
-<li><code>git subtree push --prefix docs/ origin master</code></li>
-</ul></li>
-
-<li><p><code>&lt;username&gt;.github.io</code>にアクセスし確認</p></li>
-</ol>
-
-<h2 id="記事を追加するとき">記事を追加するとき</h2>
-
-<ol>
-<li><p>デプロイ用のPowerShellスクリプト作成(<code>deploy.ps1</code>)</p>
-
-<pre><code class="language-powershell">$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
-
-Write-Output &quot;Deploying updates to GitHub...&quot;
-
-# Build the project.
-hugo
-
-# Add changes to git.
-git add .
-
-# Commit changes.
-$msg = &quot;Rebuilding site $(date)&quot;
-
-if ($Args.Count -eq 1) {
-    $msg = $Args[0]
-}
-
-git commit -m &quot;$msg&quot;
-
-# Push source and build repos.
-git push origin source
-git subtree push --prefix docs/ origin master
-</code></pre>
-
-<ul>
-<li>使い方
-
-<ul>
-<li><code>deploy.ps1 [&quot;&lt;commit message&gt;&quot;]</code></li>
-</ul></li>
-</ul></li>
-
-<li><p>記事を書く</p>
-
-<ul>
-<li><code>hugo new posts/2018/kiji-wo-kaku.md</code></li>
-</ul></li>
-
-<li><p>デプロイ</p>
-
-<ul>
-<li><code>deploy.ps1 &quot;initial commit&quot;</code></li>
-</ul></li>
-</ol>
-
-<h3 id="どうしてsourceブランチを作ったりmasterブランチを削除したりしているか">どうしてsourceブランチを作ったりmasterブランチを削除したりしているか</h3>
-
-<ul>
-<li><a href="https://qiita.com/kwappa/items/03ffdeb89039a7249619">GitHub PagesのUser Pagesでドキュメントルートを変更するにはmasterを殺す</a>より</li>
-</ul>
-
-<blockquote>
-<p>GitHub PagesにはUser &amp; Organization PagesとProject Pagesの2種類がある。Project Pagesはgh-pagesというブランチか/docs以下をドキュメントルートにする「Source」という設定ができたのだが、User &amp; Organization Pagesではmasterのルート直下しか選べない。</p>
-
-<p>「Source」が設定できるようになる前はgh-pagesというブランチを用意するしかなかったのだが、これもルート直下がドキュメントルートになってしまう。masterの/docsをsubtreeとしてpushする、というテクニックが以前から使われていたので、それをmasterとして使ってみたというわけ。</p>
-</blockquote>
-
-<h2 id="参考資料">参考資料</h2>
-
-<ul>
-<li><a href="https://myuon.github.io/posts/blog-simplicity/">ブログのテーマ(とGitの管理方法)を変えた</a></li>
-<li><a href="http://kohki.hatenablog.jp/entry/hugo-portfolio">Hugo + GitHub Pagesでポートフォリオを作る</a></li>
-<li><a href="https://qiita.com/kwappa/items/03ffdeb89039a7249619">GitHub PagesのUser Pagesでドキュメントルートを変更するにはmasterを殺す</a></li>
-</ul>
-
-                    </div>
-                </section>
-                
             </div>
             
+<div class="pagination">
+  <nav role="pagination" class="post-list-pagination">
+      
+    <span class="post-list-pagination-item post-list-pagination-item-current">Page 1 of 2</span>
+    
+      <a href="/categories/programming/page/2/" class="post-list-pagination-item pure-button post-list-pagination-item-next">
+        Older&nbsp;<i class="fa fa-angle-double-right"></i>
+      </a>
+    
+  </nav>
+</div>
+
 
             <div class="footer">
     <div class="pure-menu pure-menu-horizontal pure-menu-open">

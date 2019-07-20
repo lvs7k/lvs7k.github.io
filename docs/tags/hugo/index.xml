@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hugo on lvs7k&#39;s blog</title>
+    <title>hugo on lvs7k&#39;s blog</title>
     <link>https://lvs7k.github.io/tags/hugo/</link>
-    <description>Recent content in Hugo on lvs7k&#39;s blog</description>
+    <description>Recent content in hugo on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Mon, 31 Dec 2018 22:58:53 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jul 2019 18:53:00 +0900</lastBuildDate>
     
 	<atom:link href="https://lvs7k.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019年7月 開発環境構築メモ(Windows7)</title>
+      <link>https://lvs7k.github.io/posts/2019/07/set-up-dev-env/</link>
+      <pubDate>Sat, 20 Jul 2019 18:53:00 +0900</pubDate>
+      
+      <guid>https://lvs7k.github.io/posts/2019/07/set-up-dev-env/</guid>
+      <description>しばらくプログラミングをしていなかったので環境を見直してみる。どうせ大してやらないので最小限やることだけ書く。
+ユーザ環境変数 SCOOP = D:\scoop MSYS2_PATH_TYPE = inherit  インストール  Scoop MSYS2 Visual Studio Code  MSYS2とVisual Studio CodeもScoopでインストールしても良いかもしれない。
+インストール後に  scoop install git scoop install haskell scoop install hugo  Visual Studio Code  settings.json  // 既定の設定を上書きするには、このファイル内に設定を挿入します { /* editor */ &amp;quot;editor.fontSize&amp;quot;: 20, &amp;quot;editor.rulers&amp;quot;: [80], &amp;quot;editor.wordWrap&amp;quot;: &amp;quot;off&amp;quot;, &amp;quot;editor.multiCursorModifier&amp;quot;: &amp;quot;ctrlCmd&amp;quot;, &amp;quot;editor.acceptSuggestionOnEnter&amp;quot;: &amp;quot;off&amp;quot;, &amp;quot;files.trimTrailingWhitespace&amp;quot;: true, &amp;quot;workbench.editor.enablePreview&amp;quot;: false, &amp;quot;workbench.startupEditor&amp;quot;: &amp;quot;none&amp;quot;, &amp;quot;workbench.colorTheme&amp;quot;: &amp;quot;Abyss&amp;quot;, &amp;quot;extensions.autoUpdate&amp;quot;: false, &amp;quot;zenMode.hideStatusBar&amp;quot;: false, /* shell */ &amp;quot;terminal.</description>
+    </item>
     
     <item>
       <title>2018年12月 開発環境構築メモ(Windows7)</title>

@@ -7,7 +7,7 @@
 
     <meta name="description" content="">
 
-    <meta name="generator" content="Hugo 0.52" />
+    <meta name="generator" content="Hugo 0.55.6" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="HaskellでFFIを書く準備 &middot; lvs7k&#39;s blog">
@@ -123,21 +123,19 @@
 <p><a href="https://github.com/lvs7k/haskell-ffi-example">GitHubに上げました</a></p>
 
 <ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>app
-  - Main.hs
+- Main.hs
 cbits
-  - person.c
+- person.c
 include
-  - person.h
+- person.h
 src
-  - Person.hsc
-</code></pre>
+- Person.hsc
+</code></pre></li>
 
-<ul>
-<li><code>package.yaml</code></li>
+<li><p><code>package.yaml</code></p></li>
 </ul>
 
 <pre><code class="language-yaml">extra-source-files:
@@ -163,26 +161,22 @@ library:
 <p>例えばRWH17章のように<code>PCRE</code>のバインディングを書くなら</p>
 
 <ul>
-<li>準備</li>
-</ul>
+<li><p>準備</p>
 
 <pre><code>pacman -S mingw64/mingw-w64-x86_64-pcre
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>app
-  - Main.hs
+- Main.hs
 include
-  - pcre.h    -- mingw64/includeからコピー
+- pcre.h    -- mingw64/includeからコピー
 src
-  - Pcre.hsc
-</code></pre>
+- Pcre.hsc
+</code></pre></li>
 
-<ul>
-<li><code>package.yaml</code></li>
+<li><p><code>package.yaml</code></p></li>
 </ul>
 
 <pre><code class="language-yaml">extra-source-files:

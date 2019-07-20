@@ -7,7 +7,7 @@
 
     <meta name="description" content="Just a Memo">
 
-    <meta name="generator" content="Hugo 0.52" />
+    <meta name="generator" content="Hugo 0.55.6" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="lvs7k&#39;s blog &middot; lvs7k&#39;s blog">
@@ -84,6 +84,129 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">20 Jul 2019, 18:53</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2019/07/set-up-dev-env/" class="post-title">2019年7月 開発環境構築メモ(Windows7)</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                <a class="post-category post-category-programming" href='https://lvs7k.github.io/categories/programming'>programming</a>
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a><a class="post-category post-category-hugo" href='https://lvs7k.github.io/tags/hugo'>hugo</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>しばらくプログラミングをしていなかったので環境を見直してみる。どうせ大してやらないので最小限やることだけ書く。</p>
+
+<h2 id="ユーザ環境変数">ユーザ環境変数</h2>
+
+<pre><code>SCOOP = D:\scoop
+MSYS2_PATH_TYPE = inherit
+</code></pre>
+
+<h2 id="インストール">インストール</h2>
+
+<ul>
+<li><a href="https://scoop.sh/">Scoop</a></li>
+<li><a href="https://www.msys2.org/">MSYS2</a></li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+</ul>
+
+<p>MSYS2とVisual Studio CodeもScoopでインストールしても良いかもしれない。</p>
+
+<h2 id="インストール後に">インストール後に</h2>
+
+<ul>
+<li><code>scoop install git</code></li>
+<li><code>scoop install haskell</code></li>
+<li><code>scoop install hugo</code></li>
+</ul>
+
+<h2 id="visual-studio-code">Visual Studio Code</h2>
+
+<ul>
+<li><code>settings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定の設定を上書きするには、このファイル内に設定を挿入します
+{
+    /* editor */
+    &quot;editor.fontSize&quot;: 20,
+    &quot;editor.rulers&quot;: [80],
+    &quot;editor.wordWrap&quot;: &quot;off&quot;,
+    &quot;editor.multiCursorModifier&quot;: &quot;ctrlCmd&quot;,
+    &quot;editor.acceptSuggestionOnEnter&quot;: &quot;off&quot;,
+    &quot;files.trimTrailingWhitespace&quot;: true,
+    &quot;workbench.editor.enablePreview&quot;: false,
+    &quot;workbench.startupEditor&quot;: &quot;none&quot;,
+    &quot;workbench.colorTheme&quot;: &quot;Abyss&quot;,
+    &quot;extensions.autoUpdate&quot;: false,
+    &quot;zenMode.hideStatusBar&quot;: false,
+
+    /* shell */
+    &quot;terminal.integrated.shell.windows&quot;: &quot;D:\\msys64\\msys2_shell.cmd&quot;,
+    &quot;terminal.integrated.shellArgs.windows&quot;: [
+        &quot;-mingw64&quot;, &quot;-defterm&quot;, &quot;-no-start&quot;, &quot;-here&quot;, &quot;-full-path&quot;
+    ],
+    &quot;terminal.integrated.setLocaleVariables&quot;: true,
+
+    /* vim */
+    &quot;vim.hlsearch&quot;: true,
+    &quot;vim.handleKeys&quot;: {
+        &quot;&lt;C-d&gt;&quot;: false,
+        &quot;&lt;C-k&gt;&quot;: false,
+    },
+    &quot;vim.insertModeKeyBindings&quot;: [
+        {
+            &quot;before&quot;: [&quot;f&quot;, &quot;d&quot;],
+            &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
+        }
+    ],
+}
+</code></pre>
+
+<ul>
+<li><code>keybindings.json</code></li>
+</ul>
+
+<pre><code class="language-json">// 既定値を上書きするには、このファイル内にキー バインドを挿入します
+[
+// ctrl+enterで行末へ移動
+{
+  &quot;key&quot;: &quot;ctrl+enter&quot;,
+  &quot;command&quot;: &quot;cursorEnd&quot;,
+  &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+},
+]
+</code></pre>
+
+<h2 id="参考リンク">参考リンク</h2>
+
+<ul>
+<li><a href="http://www.mingw.org/wiki/FAQ">FAQ | MinGW</a></li>
+<li><a href="https://github.com/msys2/msys2/wiki">Home · msys2/msys2 Wiki</a>
+
+<ul>
+<li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
+</ul></li>
+<li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
+</ul>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">14 Jan 2019, 11:30</h1>
                 <section class="post">
                     <header class="post-header">
@@ -110,6 +233,12 @@
 
 <p>初めてCMake使ったからメモ</p>
 
+<h2 id="これより読むべき公式より分かりやすいチュートリアル">これより読むべき公式より分かりやすいチュートリアル</h2>
+
+<ul>
+<li><a href="https://medium.com/@onur.dundar1/cmake-tutorial-585dd180109b">CMake Tutorial – Onur Dündar – Medium</a></li>
+</ul>
+
 <h2 id="参考リンク">参考リンク</h2>
 
 <ul>
@@ -123,23 +252,21 @@
 <h2 id="hello-world">Hello, world!</h2>
 
 <ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>hello.h
 hello.c
 CMakeLists.txt
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li><code>CMakeLists.txt</code></li>
-</ul>
+<li><p><code>CMakeLists.txt</code></p>
 
 <pre><code>cmake_minimum_required(VERSION 3.0)
 project (hello)
 include_directories(${PROJECT_SOURCE_DIR})
 add_executable(${PROJECT_NAME} hello.c)
-</code></pre>
+</code></pre></li>
+</ul>
 
 <h2 id="ビルド">ビルド</h2>
 
@@ -174,7 +301,24 @@ make VERBOSE=1
 
 <h2 id="もう少し複雑な例">もう少し複雑な例</h2>
 
-<p><a href="https://github.com/lvs7k/cmake-template">GitHubに上げました</a></p>
+<p>Haskell stackのnew-templateっぽいのを作ってみた</p>
+
+<p><a href="https://github.com/lvs7k/cmake-template-c">My C project template</a></p>
+
+<h2 id="libfoo-dll-aって何">libfoo.dll.aって何？</h2>
+
+<ul>
+<li>よくわからんが参考になりそうなStackOverflowの回答を見つけた</li>
+<li><a href="https://stackoverflow.com/questions/17601949/building-a-shared-library-using-gcc-on-linux-and-mingw-on-windows">Building a shared library using gcc on Linux and MinGW on Windows - Stack Overflow</a></li>
+</ul>
+
+<blockquote>
+<p>On Windows, you need to create an import library for the DLL. An import library looks like a static library, in that it defines all of the needed symbols, but it doesn&rsquo;t have the actual function implementations, it just has stubs. The import library will resolve the &ldquo;undefined reference&rdquo; errors while avoiding static linking.</p>
+
+<p>To create an import library with MinGW, follow the instructions here. The key is that when building the DLL, you must pass the option -Wl,&ndash;out-implib,libexample_dll.a to the linker to generate the import library libexample_dll.a.</p>
+
+<p>Then, when you compile your main executable, you use the -lexample_dll option (along with -L.) to link against the import library.</p>
+</blockquote>
 
                     </div>
                 </section>
@@ -215,21 +359,19 @@ make VERBOSE=1
 <p><a href="https://github.com/lvs7k/haskell-ffi-example">GitHubに上げました</a></p>
 
 <ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>app
-  - Main.hs
+- Main.hs
 cbits
-  - person.c
+- person.c
 include
-  - person.h
+- person.h
 src
-  - Person.hsc
-</code></pre>
+- Person.hsc
+</code></pre></li>
 
-<ul>
-<li><code>package.yaml</code></li>
+<li><p><code>package.yaml</code></p></li>
 </ul>
 
 <pre><code class="language-yaml">extra-source-files:
@@ -255,26 +397,22 @@ library:
 <p>例えばRWH17章のように<code>PCRE</code>のバインディングを書くなら</p>
 
 <ul>
-<li>準備</li>
-</ul>
+<li><p>準備</p>
 
 <pre><code>pacman -S mingw64/mingw-w64-x86_64-pcre
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>app
-  - Main.hs
+- Main.hs
 include
-  - pcre.h    -- mingw64/includeからコピー
+- pcre.h    -- mingw64/includeからコピー
 src
-  - Pcre.hsc
-</code></pre>
+- Pcre.hsc
+</code></pre></li>
 
-<ul>
-<li><code>package.yaml</code></li>
+<li><p><code>package.yaml</code></p></li>
 </ul>
 
 <pre><code class="language-yaml">extra-source-files:
@@ -758,201 +896,6 @@ local-programs-path: D:\stack\
 <li><a href="https://github.com/msys2/msys2/wiki/Terminals">About terminals, consoles and shells</a></li>
 </ul></li>
 <li><a href="https://wiki.archlinux.jp/index.php/Pacman">pacman - ArchWiki</a></li>
-</ul>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">29 Nov 2018, 22:06</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://lvs7k.github.io/posts/2018/11/pccb-easy-7/" class="post-title">Haskellで蟻本（初級編） - GCJの問題に挑戦してみよう（１）</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                categories
-                                <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
-                            
-                        </p>
-                        <p class="post-meta">
-                            
-                                tags
-                                <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<p>※蟻本の入力例でしかテストしていません</p>
-
-<p>下2つはコンテストで出たとして解けなそう…。</p>
-
-<h2 id="minimum-scalar-product">Minimum Scalar Product</h2>
-
-<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
-
-import Control.Monad
-import Control.Monad.ST
-import Data.Array
-import Data.Array.ST
-import Data.STRef
-import Data.List
-
--- Minimum Scalar Product (2008 Round1A A)
-q1 :: Int -&gt; [Int] -&gt; [Int] -&gt; Int
-q1 n xs ys = sum $ zipWith (*) xs' ys'
-  where
-    xs' = sort xs
-    ys' = sortBy (flip compare) ys
-</code></pre>
-
-<ul>
-<li>蟻本の解説参照</li>
-</ul>
-
-<hr />
-
-<h2 id="crazy-rows">Crazy Rows</h2>
-
-<pre><code class="language-haskell">-- Crazy Rows (2009 Round2 A)
-q2 :: Int -&gt; [String] -&gt; Int
-q2 n xss = runST $ do
-    a &lt;- newListArray (1, n) (fmap last1 xss) :: ST s (STUArray s Int Int)
-    ans &lt;- newSTRef 0
-    forM_ [1 .. n] $ \i -&gt; do
-        ai &lt;- readArray a i
-        when (ai &gt; i) $ do
-            js &lt;- flip filterM [i + 1 .. n] $ \j -&gt; do
-                aj &lt;- readArray a j
-                return $ aj &lt;= i
-            when (not $ null js) (swap ans a i (head js))
-    readSTRef ans
-  where
-    last1 xs = length $ dropWhile (/= '1') (reverse xs)
-    swap ans a i j
-        | i == j    = return ()
-        | otherwise = do
-            aj  &lt;- readArray a j
-            writeArray a j =&lt;&lt; readArray a (j - 1)
-            writeArray a (j - 1) aj
-            modifySTRef' ans (+ 1)
-            swap ans a i (j - 1)
-</code></pre>
-
-<ul>
-<li><code>MArray</code>面倒くさい</li>
-</ul>
-
-<hr />
-
-<h2 id="bribe-the-prisoners">Bribe the Prisoners</h2>
-
-<pre><code class="language-haskell">-- Bribe the Prisoners (2009 Round 1C C)
-q3 :: Int -&gt; Int -&gt; [Int] -&gt; Int
-q3 p q as = runST $ do
-    dp &lt;- newArray ((0, 0), (q + 1, (q + 1))) maxBound :: ST s (STUArray s (Int, Int) Int)
-    sequence_ [writeArray dp (i, i + 1) 0 | i &lt;- [0 .. q]]
-    forM_ [2 .. q + 1] $ \w -&gt; do
-        forM_ [0 .. (q + 1) - w] $ \i -&gt; do
-            let j = i + w
-            t &lt;- fmap minimum $ forM [i + 1 .. j - 1] $ \k -&gt; do
-                dpik &lt;- readArray dp (i, k)
-                dpkj &lt;- readArray dp (k, j)
-                return (dpik + dpkj)
-            writeArray dp (i, j) (t + a ! j - a ! i - 1 - 1)
-    readArray dp (0, q + 1)
-  where
-    a = listArray (0, q + 1) (0 : as ++ [p + 1])
-</code></pre>
-
-<ul>
-<li><code>dp[i][j] := (i, j)を解放するのに必要な金貨</code>
-
-<ul>
-<li><code>例2) P = 20, Q = 3, A = {3, 6, 14}</code>
-
-<ul>
-<li>配列Aを作る時に両端を追加して<code>A = [0, 3, 6, 14, 21]</code></li>
-<li>例えば<code>dp[0][3]</code>は左端と囚人14は解放済みとして、囚人3と囚人6を解放するのに必要な金貨の最小枚数</li>
-</ul></li>
-</ul></li>
-<li>まず幅が1の時を0で初期化する
-
-<ul>
-<li>幅が1、例えば<code>dp[2][3]</code>は間に解放すべき囚人がいないため金貨不要</li>
-</ul></li>
-<li>幅が2（間に1人解放すべき囚人が存在する）から幅Q+1までループ</li>
-<li>最初に解放する囚人をすべて試し、最小コストのものを探す
-
-<ul>
-<li>例えば<code>dp[0][3]</code>は<code>dp[0][1] + dp[1][3]</code>と<code>dp[0][2] + dp[2][3]</code>の小さい方</li>
-<li>先に囚人3と囚人6のどちらを解放するにしても<code>14 - 0 - 1 - 1</code>の金貨は必要</li>
-</ul></li>
-</ul>
-
-<hr />
-
-<h2 id="millionaire">Millionaire</h2>
-
-<pre><code class="language-haskell">-- Millionaire (2008 APAC local onsites C)
-q4 :: Int -&gt; Double -&gt; Int -&gt; Double
-q4 m p x = go m gx
-  where
-    m2 = 2 ^ m
-    go 0 j
-        | j == m2   = 1.0
-        | otherwise = 0.0
-    go i j = maximum $ do
-        v &lt;- [0 .. min j (m2 - j)]
-        return $ p * (memo ! (i - 1, j + v)) + (1 - p) * (memo ! (i - 1, j - v))
-    memo = listArray ((0, 0), (m, m2)) [go i j | i &lt;- [0 .. m], j &lt;- [0 .. m2]]
-    gx = (x * m2) `div` 1000000
-</code></pre>
-
-<ul>
-<li>例として<code>M = 2, P = 0.5, X = 500000</code>を考える</li>
-<li><code>dp[i][j] := 残りラウンドがiで、所持金がグループjのとき、最善の戦略をとってお金を持って帰れる確率</code></li>
-<li>所持金のグループ
-
-<ul>
-<li>ラウンド数が2のとき
-
-<ul>
-<li><code>j = 0,         0 ~ 249,999</code></li>
-<li><code>j = 1,   250,000 ~ 499,999</code></li>
-<li><code>j = 2,   500,000 ~ 749,999</code></li>
-<li><code>j = 3,   750,000 ~ 999,999</code></li>
-<li><code>j = 4, 1,000,000 ~</code></li>
-</ul></li>
-</ul></li>
-
-<li><p>配列を埋め終わった状態はこんな感じになる</p>
-
-<pre><code>        [0]    [1]    [2]    [3]    [4]
-dp[0] | 0.00 | 0.00 | 0.00 | 0.00 | 1.00 |
-dp[1] | 0.00 | 0.00 | 0.50 | 0.50 | 1.00 |
-dp[2] | 0.00 | 0.25 | 0.50 | 0.75 | 1.00 |
-</code></pre></li>
-
-<li><p>例えば<code>dp[1][2]</code>を更新するときはどうなるか</p>
-
-<ul>
-<li>イメージ的には<code>dp[1][2]</code>から見てV字の先の値が必要になって、掛けた金額に応じてV字の角度が変化する（意味不明）</li>
-<li>掛けた金額が0なら、勝とうが負けようが<code>dp[0][2]</code>の状態になって</li>
-<li>全額かけたなら、勝てば<code>dp[0][4]</code>の状態になって負ければ<code>dp[0][0]</code>の状態になって</li>
-<li>その間の金額をかけたら、<code>dp[0][1]</code>, <code>dp[0][3]</code>みたいな…</li>
-</ul></li>
-
-<li><p>最初に持っている金額500,000はグループ2なので答えは<code>dp[2][2]</code>の<code>0.50</code></p>
-
-<ul>
-<li>蟻本の<code>int i = (ll)X * n / 1000000;</code>の部分で最初の所持金がどのグループか判別している</li>
-<li><code>500,000 / (1,000,000 / 2^2) == 500,000 * 2^2 / 1,000,000 == 2</code></li>
-</ul></li>
 </ul>
 
                     </div>

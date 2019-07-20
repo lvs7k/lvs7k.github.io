@@ -8,6 +8,10 @@ tags: ["c"]
 
 初めてCMake使ったからメモ
 
+## これより読むべき公式より分かりやすいチュートリアル
+
+- [CMake Tutorial – Onur Dündar – Medium](https://medium.com/@onur.dundar1/cmake-tutorial-585dd180109b)
+
 ## 参考リンク
 
 - [cmake-commands(7)](https://cmake.org/cmake/help/git-master/manual/cmake-commands.7.html)
@@ -66,4 +70,18 @@ Hello, world!
 
 ## もう少し複雑な例
 
-[GitHubに上げました](https://github.com/lvs7k/cmake-template)
+Haskell stackのnew-templateっぽいのを作ってみた
+
+[My C project template](https://github.com/lvs7k/cmake-template-c)
+
+
+## libfoo.dll.aって何？
+
+- よくわからんが参考になりそうなStackOverflowの回答を見つけた
+- [Building a shared library using gcc on Linux and MinGW on Windows - Stack Overflow](https://stackoverflow.com/questions/17601949/building-a-shared-library-using-gcc-on-linux-and-mingw-on-windows)
+
+> On Windows, you need to create an import library for the DLL. An import library looks like a static library, in that it defines all of the needed symbols, but it doesn't have the actual function implementations, it just has stubs. The import library will resolve the "undefined reference" errors while avoiding static linking.
+
+> To create an import library with MinGW, follow the instructions here. The key is that when building the DLL, you must pass the option -Wl,--out-implib,libexample_dll.a to the linker to generate the import library libexample_dll.a.
+
+> Then, when you compile your main executable, you use the -lexample_dll option (along with -L.) to link against the import library.
