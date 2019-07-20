@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Competitive on lvs7k&#39;s blog</title>
+    <title>competitive on lvs7k&#39;s blog</title>
     <link>https://lvs7k.github.io/categories/competitive/</link>
-    <description>Recent content in Competitive on lvs7k&#39;s blog</description>
+    <description>Recent content in competitive on lvs7k&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
     <lastBuildDate>Thu, 29 Nov 2018 22:06:10 +0900</lastBuildDate>
@@ -41,7 +41,8 @@ Minimum Scalar Product {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Co
       <description>※蟻本の入力例でしかテストしていません
 TODO: コードをもっと綺麗にする
 入力の形式について 標準入力は下記の形式で与えられるものとする。
- n: 頂点数 m: 辺の数 c: 重み  n m f1 t1 f2 t2 ... fn tn  n m f1 t1 c1 f2 t2 c2 ... fn tn cn  グラフの表現 隣接行列も隣接リストもaccumArrayを使えば良い。
+ n: 頂点数 m: 辺の数 c: 重み
+n m f1 t1 f2 t2 ... fn tn  n m f1 t1 c1 f2 t2 c2 ... fn tn cn   グラフの表現 隣接行列も隣接リストもaccumArrayを使えば良い。
 隣接行列 {-# LANGUAGE BangPatterns, FlexibleContexts #-} import Control.Monad import Control.Monad.ST import Data.Array.ST import Data.Array import Data.STRef import Data.List -- 隣接行列 buildGMatrix :: (Int, Int) -&amp;gt; [(Int, Int)] -&amp;gt; Array (Int, Int) Int buildGMatrix (i, j) es = accumArray (flip const) 0 ((i, i), (j, j)) (zip es (repeat 1))  隣接リスト -- 隣接リスト buildGList :: (Int, Int) -&amp;gt; [(Int, a)] -&amp;gt; Array Int [a] buildGList (i, j) es = accumArray (flip (:)) [] (i, j) es   containersのData.</description>
     </item>
     

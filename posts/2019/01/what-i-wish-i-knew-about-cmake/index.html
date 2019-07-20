@@ -7,7 +7,7 @@
 
     <meta name="description" content="">
 
-    <meta name="generator" content="Hugo 0.52" />
+    <meta name="generator" content="Hugo 0.55.6" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="初めてのCMake &middot; lvs7k&#39;s blog">
@@ -113,6 +113,12 @@
 
 <p>初めてCMake使ったからメモ</p>
 
+<h2 id="これより読むべき公式より分かりやすいチュートリアル">これより読むべき公式より分かりやすいチュートリアル</h2>
+
+<ul>
+<li><a href="https://medium.com/@onur.dundar1/cmake-tutorial-585dd180109b">CMake Tutorial – Onur Dündar – Medium</a></li>
+</ul>
+
 <h2 id="参考リンク">参考リンク</h2>
 
 <ul>
@@ -126,23 +132,21 @@
 <h2 id="hello-world">Hello, world!</h2>
 
 <ul>
-<li>フォルダ構成</li>
-</ul>
+<li><p>フォルダ構成</p>
 
 <pre><code>hello.h
 hello.c
 CMakeLists.txt
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li><code>CMakeLists.txt</code></li>
-</ul>
+<li><p><code>CMakeLists.txt</code></p>
 
 <pre><code>cmake_minimum_required(VERSION 3.0)
 project (hello)
 include_directories(${PROJECT_SOURCE_DIR})
 add_executable(${PROJECT_NAME} hello.c)
-</code></pre>
+</code></pre></li>
+</ul>
 
 <h2 id="ビルド">ビルド</h2>
 
@@ -177,7 +181,24 @@ make VERBOSE=1
 
 <h2 id="もう少し複雑な例">もう少し複雑な例</h2>
 
-<p><a href="https://github.com/lvs7k/cmake-template">GitHubに上げました</a></p>
+<p>Haskell stackのnew-templateっぽいのを作ってみた</p>
+
+<p><a href="https://github.com/lvs7k/cmake-template-c">My C project template</a></p>
+
+<h2 id="libfoo-dll-aって何">libfoo.dll.aって何？</h2>
+
+<ul>
+<li>よくわからんが参考になりそうなStackOverflowの回答を見つけた</li>
+<li><a href="https://stackoverflow.com/questions/17601949/building-a-shared-library-using-gcc-on-linux-and-mingw-on-windows">Building a shared library using gcc on Linux and MinGW on Windows - Stack Overflow</a></li>
+</ul>
+
+<blockquote>
+<p>On Windows, you need to create an import library for the DLL. An import library looks like a static library, in that it defines all of the needed symbols, but it doesn&rsquo;t have the actual function implementations, it just has stubs. The import library will resolve the &ldquo;undefined reference&rdquo; errors while avoiding static linking.</p>
+
+<p>To create an import library with MinGW, follow the instructions here. The key is that when building the DLL, you must pass the option -Wl,&ndash;out-implib,libexample_dll.a to the linker to generate the import library libexample_dll.a.</p>
+
+<p>Then, when you compile your main executable, you use the -lexample_dll option (along with -L.) to link against the import library.</p>
+</blockquote>
 
                     </div>
                     <div id="disqus_thread"></div>

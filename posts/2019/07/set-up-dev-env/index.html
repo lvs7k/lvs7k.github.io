@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2018年12月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog</title>
+    <title>2019年7月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog</title>
 
     <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.55.6" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="2018年12月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
+    <meta name="twitter:title" content="2019年7月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
     <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="2018年12月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
+    <meta property="og:title" content="2019年7月 開発環境構築メモ(Windows7) &middot; lvs7k&#39;s blog">
     <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -83,11 +83,11 @@
         <div>
             
             <div class="posts">
-                <h1 class="content-subhead">31 Dec 2018, 22:58</h1>
+                <h1 class="content-subhead">20 Jul 2019, 18:53</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://lvs7k.github.io/posts/2018/12/set-up-dev-env/" class="post-title">2018年12月 開発環境構築メモ(Windows7)</a>
+                        <a href="https://lvs7k.github.io/posts/2019/07/set-up-dev-env/" class="post-title">2019年7月 開発環境構築メモ(Windows7)</a>
 
                         <p class="post-meta">
                             
@@ -113,70 +113,31 @@
                     <div class="post-description">
                         
 
+<p>しばらくプログラミングをしていなかったので環境を見直してみる。どうせ大してやらないので最小限やることだけ書く。</p>
+
 <h2 id="ユーザ環境変数">ユーザ環境変数</h2>
 
 <pre><code>SCOOP = D:\scoop
-STACK_ROOT = D:\sr
+MSYS2_PATH_TYPE = inherit
 </code></pre>
 
 <h2 id="インストール">インストール</h2>
 
 <ul>
-<li><a href="https://git-scm.com/download/win">PortableGit</a></li>
-<li><a href="https://www.msys2.org/">MSYS2</a></li>
 <li><a href="https://scoop.sh/">Scoop</a></li>
-<li><a href="https://docs.haskellstack.org/en/stable/README/">The Haskell Tool Stack</a></li>
+<li><a href="https://www.msys2.org/">MSYS2</a></li>
 <li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
 </ul>
 
-<h2 id="msys2">MSYS2</h2>
+<p>MSYS2とVisual Studio CodeもScoopでインストールしても良いかもしれない。</p>
+
+<h2 id="インストール後に">インストール後に</h2>
 
 <ul>
-<li><code>~/.bash_profile</code></li>
+<li><code>scoop install git</code></li>
+<li><code>scoop install haskell</code></li>
+<li><code>scoop install hugo</code></li>
 </ul>
-
-<pre><code class="language-bash">P1=&quot;/c/PortableGit/cmd&quot;
-P2=&quot;/d/stack/local/bin&quot;
-P3=&quot;/d/scoop/shims&quot;
-PATH=&quot;${PATH}:${P1}:${P2}:${P3}&quot;
-
-if [ -f &quot;${HOME}/.bashrc&quot; ] ; then
-  source &quot;${HOME}/.bashrc&quot;
-fi
-</code></pre>
-
-<ul>
-<li><code>~/.bashrc</code></li>
-</ul>
-
-<pre><code class="language-bash">source ~/git-completion.bash
-eval &quot;$(stack --bash-completion-script stack)&quot;
-</code></pre>
-
-<ul>
-<li><code>git</code>と<code>stack.exe</code>でTAB補完が効くようにする</li>
-<li><code>stack.exe</code>でないと補完が効かない（<code>stack</code>ではダメ）</li>
-<li><a href="https://github.com/git/git/tree/master/contrib/completion">git-completion.bash</a></li>
-</ul>
-
-<h2 id="stack">Stack</h2>
-
-<ul>
-<li><code>$STACK_ROOT/config.yaml</code></li>
-</ul>
-
-<pre><code class="language-yaml">templates:
-  params:
-    author-name: lvs7k
-    author-email: lvs7k@example.com
-    category: Your Projects Category
-    copyright: 'Copyright (c) 2019 lvs7k'
-    github-username: lvs7k
-
-skip-msys: true
-local-bin-path: D:\stack\local\bin
-local-programs-path: D:\stack\
-</code></pre>
 
 <h2 id="visual-studio-code">Visual Studio Code</h2>
 
@@ -218,14 +179,6 @@ local-programs-path: D:\stack\
             &quot;after&quot; : [&quot;&lt;Esc&gt;&quot;]
         }
     ],
-
-    /* Haskell */
-    &quot;ghcSimple.bareStartupCommands&quot;: [],
-    &quot;ghcSimple.workspaceType&quot;: &quot;bare-stack&quot;,
-    &quot;[haskell]&quot;: {
-        &quot;editor.tabSize&quot;: 2,
-        &quot;editor.detectIndentation&quot;: false
-    },
 }
 </code></pre>
 
@@ -241,44 +194,8 @@ local-programs-path: D:\stack\
   &quot;command&quot;: &quot;cursorEnd&quot;,
   &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
 },
-// ターミナルの切り替え
-{
-  &quot;key&quot;: &quot;ctrl+shift+j&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusNext&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-},
-{
-  &quot;key&quot;: &quot;ctrl+shift+k&quot;,
-  &quot;command&quot;: &quot;workbench.action.terminal.focusPrevious&quot;,
-  &quot;when&quot;: &quot;terminalFocus&quot;
-}
 ]
 </code></pre>
-
-<h2 id="その他">その他</h2>
-
-<ul>
-<li><code>pacman -Syu</code></li>
-<li><code>pacman -S base-devel</code></li>
-<li><code>pacman -S mingw-w64-x86_64-toolchain</code></li>
-<li><code>stack setup</code></li>
-<li><code>scoop install hugo</code></li>
-</ul>
-
-<h2 id="ghciでctrl-cが動作しない">GHCiでctrl-cが動作しない</h2>
-
-<ul>
-<li><code>stack exec -- ghcii.sh</code>は<code>invalid argument</code>エラーで使えない</li>
-<li><code>pacman -S winpty</code></li>
-<li><code>winpty stack ghci</code></li>
-</ul>
-
-<h2 id="vscode拡張のsimple-ghcが動作しない">VSCode拡張のSimple GHCが動作しない</h2>
-
-<ul>
-<li>ファイルパスにスペースが含まれていると動作しないバグあり</li>
-<li><a href="https://github.com/dramforever/vscode-ghc-simple/issues/14">Space in file path causes breakage</a></li>
-</ul>
 
 <h2 id="参考リンク">参考リンク</h2>
 

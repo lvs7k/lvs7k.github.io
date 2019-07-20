@@ -7,7 +7,7 @@
 
     <meta name="description" content="Just a Memo">
 
-    <meta name="generator" content="Hugo 0.52" />
+    <meta name="generator" content="Hugo 0.55.6" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="Posts &middot; lvs7k&#39;s blog">
@@ -83,6 +83,108 @@
         <div>
             
             <div class="posts">
+                
+                <h1 class="content-subhead">18 Nov 2018, 12:39</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://lvs7k.github.io/posts/2018/11/pccb-easy-2/" class="post-title">Haskellで蟻本（初級編） - 貪欲法</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                categories
+                                
+                                    <a class="post-category post-category-competitive" href='https://lvs7k.github.io/categories/competitive'>competitive</a>
+                                
+                            
+                        </p>
+                        <p class="post-meta">
+                            
+                                tags
+                                
+                                    <a class="post-category post-category-haskell" href='https://lvs7k.github.io/tags/haskell'>haskell</a>
+                                
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        <p>※蟻本の入力例でしかテストしていません</p>
+
+<pre><code class="language-haskell">{-# LANGUAGE BangPatterns, FlexibleContexts #-}
+
+import Control.Monad
+import Data.List
+
+import Control.Monad.ST
+import Data.Array.ST
+import Data.STRef
+import Data.Array         (Array)
+import Data.Array.Unboxed (UArray)
+import Data.Array.IArray
+import qualified Data.Set as S
+
+-- 硬貨の問題
+q1 :: Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int
+q1 n c1 c5 c10 c50 c100 c500 = go 0 n cs
+  where
+    cs = zip [500, 100, 50, 10, 5, 1] [c500, c100, c50, c10, c5, c1]
+    go !k a [] = k
+    go !k a ((s, t):ds)
+        | a &gt;= s &amp;&amp; t &gt; 0 = go (k + 1) (a - s) ((s, t - 1):ds)
+        | otherwise       = go k a ds
+</code></pre>
+
+<pre><code class="language-haskell">-- 区間スケジューリング問題
+q2 :: Int -&gt; [(Int, Int)] -&gt; Int
+q2 n ss = go 0 (sortOn snd ss)
+  where
+    go !k [] = k
+    go !k ((s, t):ts) = go (k + 1) (filter ((&gt;= t) . fst) ts)
+</code></pre>
+
+<pre><code class="language-haskell">-- Best Cow Line (POJ 3617)
+q3 :: Int -&gt; String -&gt; String
+q3 n ss = reverse $ go &quot;&quot; ss
+  where
+    go !ts &quot;&quot; = ts
+    go !ts us
+        | us &lt;= us' = go (head us  : ts) (tail us)
+        | otherwise = go (head us' : ts) (tail us')
+      where
+        us' = reverse us
+</code></pre>
+
+<pre><code class="language-haskell">-- Saruman's Army (POJ 3069)
+q4 :: Int -&gt; Int -&gt; [Int] -&gt; Int
+q4 n r xs = go 0 (sort xs)
+  where
+    go !k []     = k
+    go !k (y:ys) = go (k + 1) cs
+      where
+        (as, bs) = span (&lt;= y + r) (y:ys)
+        cs = dropWhile (&lt;= last as + r) bs
+</code></pre>
+
+<pre><code class="language-haskell">-- Fence Repair (POJ 3253)
+q5 :: Int -&gt; [Int] -&gt; Int
+q5 n ls = go 0 n (S.fromList $ zip ls [1 ..])
+  where
+    go !k m s
+        | Just ((v1, _), s')  &lt;- S.minView s
+        , Just ((v2, _), s'') &lt;- S.minView s'
+            = go (k + v1 + v2) (m + 1) (S.insert (v1 + v2, m + 1) s'')
+        | otherwise = k
+</code></pre>
+
+<ul>
+<li><code>Data.Set</code>を優先度付きキューとして使用している</li>
+<li>値が重複しないように<code>(&lt;値&gt;, &lt;識別番号&gt;)</code>を入れている</li>
+</ul>
+
+                    </div>
+                </section>
                 
                 <h1 class="content-subhead">17 Nov 2018, 20:40</h1>
                 <section class="post">
@@ -659,19 +761,16 @@ git subtree push --prefix docs/ origin master
 <ul>
 <li><code>deploy.ps1 [&quot;&lt;commit message&gt;&quot;]</code></li>
 </ul></li>
-</ul></li>
+</ul>
 
-<li><p>記事を書く</p>
+<ol>
+<li>記事を書く</li>
 
-<ul>
-<li><code>hugo new posts/2018/kiji-wo-kaku.md</code></li>
-</ul></li>
+<li><p><code>hugo new posts/2018/kiji-wo-kaku.md</code></p></li>
 
-<li><p>デプロイ</p>
+<li><p>デプロイ</p></li>
 
-<ul>
-<li><code>deploy.ps1 &quot;initial commit&quot;</code></li>
-</ul></li>
+<li><p><code>deploy.ps1 &quot;initial commit&quot;</code></p></li>
 </ol>
 
 <h3 id="どうしてsourceブランチを作ったりmasterブランチを削除したりしているか">どうしてsourceブランチを作ったりmasterブランチを削除したりしているか</h3>
@@ -692,7 +791,8 @@ git subtree push --prefix docs/ origin master
 <li><a href="https://myuon.github.io/posts/blog-simplicity/">ブログのテーマ(とGitの管理方法)を変えた</a></li>
 <li><a href="http://kohki.hatenablog.jp/entry/hugo-portfolio">Hugo + GitHub Pagesでポートフォリオを作る</a></li>
 <li><a href="https://qiita.com/kwappa/items/03ffdeb89039a7249619">GitHub PagesのUser Pagesでドキュメントルートを変更するにはmasterを殺す</a></li>
-</ul>
+</ul></li>
+</ol>
 
                     </div>
                 </section>
